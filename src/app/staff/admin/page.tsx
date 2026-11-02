@@ -1,4 +1,7 @@
-import { PriceRules, SettingsForm, SubsidyRules, TariffRules } from "@/components/staff/rule-editors";
+import { PriceRules } from "@/components/staff/rules/price";
+import { SettingsForm } from "@/components/staff/rules/settings";
+import { SubsidyRules } from "@/components/staff/rules/subsidy";
+import { TariffRules } from "@/components/staff/rules/tariff";
 import { istDate } from "@/domain/format";
 import { loadRules } from "@/server/estimate";
 import { requireAdmin } from "@/server/guards";
