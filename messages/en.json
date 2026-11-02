@@ -7,12 +7,16 @@
     "signIn": "Sign in",
     "mySolar": "My solar",
     "signOut": "Sign out",
+    "staff": "Staff area",
     "language": "Language"
   },
   "home": {
     "title": "Will solar pay off on your roof?",
     "lead": "Answer a few questions and add a photo of your electricity bill. You'll see the right system size for your home, usually within two minutes.",
-    "stepOf": "Step {step} of {total}"
+    "stepOf": "Step {step} of {total}",
+    "stepAnswer": "Answer a few questions",
+    "stepBill": "Add your electricity bill",
+    "stepResult": "See your system size and savings"
   },
   "form": {
     "ownershipLegend": "Do you own this property?",

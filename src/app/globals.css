@@ -24,13 +24,14 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-teal-tint: var(--teal-tint);
+  --color-sun: var(--sun);
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 10px;
   --radius-xl: 12px;
 }
 
-/* One accent (deep teal), a neutral grey scale, and red reserved for "stuck" and errors. */
+/* One accent (deep teal), a neutral grey scale, red reserved for "stuck" and errors, and amber only for the sun. */
 :root {
   --background: #ffffff;
   --foreground: #17201f;
@@ -47,6 +48,7 @@
   --accent: #f3f5f5;
   --accent-foreground: #17201f;
   --teal-tint: #e7f1f0;
+  --sun: #d9962b;
   --destructive: #b3261e;
   --border: #e3e7e6;
   --input: #cfd6d4;
@@ -79,6 +81,13 @@
 
 @utility tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/* A warm sky near the sun and a cool horizon. Faint enough that text keeps its contrast. */
+.sun-backdrop {
+  background:
+    radial-gradient(46rem 34rem at 92% 6%, color-mix(in srgb, var(--sun) 13%, transparent), transparent 70%),
+    linear-gradient(to top, color-mix(in srgb, var(--teal-tint) 75%, transparent), transparent 34%);
 }
 
 /* The one piece of unprompted motion: the sun's path drawing up to today's stage. */
