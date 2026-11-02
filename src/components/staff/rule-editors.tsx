@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { formatINR } from "@/domain/format";
+import { FINAL_STAGE, STAGES } from "@/domain/project";
 import type { PriceRule, SubsidyRule } from "@/domain/rules";
 import type { Settings } from "@/domain/settings";
 
@@ -317,8 +318,8 @@ export function SettingsForm({ settings }: { settings: Settings }) {
 
       <fieldset className="grid gap-4 sm:grid-cols-4">
         <legend className="mb-2 text-sm font-medium">Days allowed in each stage before a project counts as stuck</legend>
-        {Object.entries(draft.stageSlaDays).map(([stage, days]) =>
-          number(`sla-${stage}`, STAGE_LABELS[stage], days, (n) => setDraft({ ...draft, stageSlaDays: { ...draft.stageSlaDays, [stage]: n } })),
+        {STAGES.filter((stage) => stage !== FINAL_STAGE).map((stage) =>
+          number(`sla-${stage}`, STAGE_LABELS[stage], draft.stageSlaDays[stage], (n) => setDraft({ ...draft, stageSlaDays: { ...draft.stageSlaDays, [stage]: n } })),
         )}
       </fieldset>
 

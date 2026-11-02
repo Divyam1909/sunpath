@@ -33,7 +33,7 @@ export default async function ProjectsPage() {
           <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {stuck.map((row) => (
               <li key={row.id}>
-                <Link href={`/staff/projects/${row.id}`} data-testid="stuck-project" className="block rounded-lg border border-destructive/40 p-4 transition-colors hover:border-destructive">
+                <Link href={`/staff/projects/${row.id}`} data-testid="stuck-project" className="block h-full rounded-lg border border-destructive/40 p-4 transition-colors hover:border-destructive">
                   <span className="flex items-baseline justify-between gap-3">
                     <span className="font-medium">{row.lead.name}</span>
                     <span className="tabular text-sm font-medium text-destructive">{row.check.overdueBy} days over</span>

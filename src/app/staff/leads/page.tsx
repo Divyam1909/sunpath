@@ -85,7 +85,22 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
           </Link>
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <>
+        <ul className="grid gap-3 md:hidden">
+          {leads.map((lead) => (
+            <li key={lead.id} className="rounded-lg border p-4 text-sm">
+              <div className="flex items-start justify-between gap-3">
+                <Link href={`/staff/leads/${lead.id}`} className="font-medium underline-offset-4 hover:underline">{lead.name}</Link>
+                <ScoreBadge score={lead.score} />
+              </div>
+              <p className="mt-1 text-muted-foreground">{leadReasons(lead.scoreReasons)}</p>
+              <p className="tabular mt-2">
+                {formatINR(lead.monthlyBill)}{lead.recommendedKw ? `, ${formatNumber(lead.recommendedKw)} kW` : ""}. Next: <span className="font-medium">{nextStep(lead)}</span>
+              </p>
+            </li>
+          ))}
+        </ul>
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full min-w-[820px] text-sm">
             <thead>
               <tr className="border-b text-left text-muted-foreground">
@@ -127,6 +142,7 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
             </tbody>
           </table>
         </div>
+        </>
       )}
     </div>
   );
