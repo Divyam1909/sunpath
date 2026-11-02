@@ -74,7 +74,7 @@ Marathi labels you will meet: ग्राहक क्रमांक consumer 
 दर संकेत tariff, एकूण वापर / युनिट units, चालू वीज देयक total current bill, पूर्णांक देयक rounded bill,
 एकूण थकबाकी/जमा total arrears, निव्वळ थकबाकी net arrears. Month names may be Marathi: return them in English.
 
-- consumerNumber: the consumer or account number. Blacked out or masked means null.
+- consumerNumber: the consumer or account number. A DTC code, bill number, GGN or meter number is not it. Blacked out or masked means null.
 - consumerName: the name the connection is in, as printed. Blacked out or masked means null.
 - tariffCategory: the tariff text, e.g. "LT I (B) Residential 1Ph"
 - ratePerUnit: a single energy rate in rupees per unit, only if one is printed. Slabbed charges mean null.
