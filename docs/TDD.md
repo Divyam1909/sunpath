@@ -227,7 +227,7 @@ The AI does one job: it reads a bill. It never sets a price, a subsidy, generati
 | Model wrong but confident | A person sees every value before it is used, and corrections are stored |
 | Low score | A short call replaces the visit. Only a person can close a lead |
 
-A fallback chain keeps the demo alive: if Gemini fails on a known sample, the deterministic `MockBillReader` answers and the record says `mock`. It recognises samples by SHA-256 and refuses anything else, so it can never invent values for a real bill. Model confidence is uncalibrated, so the 75% threshold (A13) is a starting point.
+The deterministic `MockBillReader` runs first and answers the sample bills from a saved reading, and the record says `mock`. It recognises samples by SHA-256 and refuses anything else, so it can never invent values for a real bill. Trying the demo therefore spends no model quota, and a Gemini outage cannot break it. Each address gets 5 real reads a day, and past that a bill goes to manual entry with the file kept. Model confidence is uncalibrated, so the 75% threshold (A13) is a starting point.
 
 ## 6. Subsidy and payback maths
 
@@ -340,7 +340,7 @@ Every screen was captured at 390 px and 1280 px, then reviewed and corrected. Th
 
 **Access.** Auth.js with hashed passwords and three roles. The proxy gives a fast redirect, and every server action, route and page checks the role again on the server. Homeowners only ever read leads linked to their own account. Public links carry 192 random bits. Signing in a homeowner never links a lead by phone number alone, because the number is unverified.
 
-**Input.** Zod validates every input, sharing one schema between form and server. Uploads are limited to 4 MB, and the type comes from the file's bytes, not its name. Lead, login, upload and payment routes are rate limited in Postgres. The `next` login redirect accepts same-site paths only.
+**Input.** Zod validates every input, sharing one schema between form and server. Uploads are limited to 4 MB, and the type comes from the file's bytes, not its name. Lead, login, upload and payment routes are rate limited in Postgres, by the client address Vercel sets. A faked `X-Forwarded-For` was tried on production and did not get past the limit. The `next` login redirect accepts same-site paths only.
 
 **Personal data under the DPDP Act 2023.**
 

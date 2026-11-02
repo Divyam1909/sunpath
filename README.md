@@ -16,7 +16,7 @@ From a rooftop solar enquiry to the subsidy landing in the bank. Built for a Vid
 
 ## How to review this in 60 seconds
 
-1. **Be a homeowner.** Open the [live app](https://sunpath-virid.vercel.app) on your phone. Answer the questions, then pick **Clear home bill** under "Trying this out?". Real Gemini reads it in about 10 seconds. Confirm the values and see the result. Try **Tilted, stained photo** to see doubtful fields highlighted, and **Blurry photo** for the re-upload prompt.
+1. **Be a homeowner.** Open the [live app](https://sunpath-virid.vercel.app) on your phone. Answer the questions, then pick **Clear home bill** under "Trying this out?". Samples answer at once from a saved reading, so they use no AI quota. To see Gemini read a bill live, in about 10 seconds, upload your own instead (5 a day per network). Confirm the values and see the result. Try **Tilted, stained photo** to see doubtful fields highlighted, and **Blurry photo** for the re-upload prompt.
 2. **See the quote story.** Open [a sample quote](https://sunpath-virid.vercel.app/en/q/demo-quote-ld-31007), then the same one [in Marathi](https://sunpath-virid.vercel.app/mr/q/demo-quote-ld-31007). Open "How we calculated this" and download the PDF.
 3. **Be sales.** [Sign in](https://sunpath-virid.vercel.app/en/login) as Sales and open **Prashant Wankhede**. Change the tariff and watch the numbers update, then send the quote. Check **Messages** for the mock WhatsApp, and **Projects** for the stuck dashboard.
 4. **See a customer's project.** Open [a status page](https://sunpath-virid.vercel.app/mr/s/demo-status-pr-1002).
