@@ -371,7 +371,7 @@ The riskiest logic gets the most tests.
 
 | Layer | Tool | Count | Covers |
 |---|---|---|---|
-| Domain and reader | Vitest | 218 | Everything before, plus real-bill tariff reproduction, usage years, bill projection, blockers and name matching, the savings promise, forecasts, roof geometry, photo check and accuracy scoring |
+| Domain and reader | Vitest | 223 | Everything before, plus real-bill tariff reproduction, usage years, bill projection, blockers and name matching, the savings promise, forecasts, roof geometry, photo check and accuracy scoring |
 | End to end | Playwright | 31 | Everything before, plus a Marathi bill to a year of bills, a peak May bill, blockers for homeowner and staff, the photo check and two-sided upload, roof map to surveyor, the family card, a bill after solar through to staff, forecasts, and tariff overlap |
 | CI | GitHub Actions | On every push | Lint, typecheck, unit tests, migrations, seed, build and E2E against Postgres with the mock reader |
 

@@ -19,6 +19,8 @@ async function shoot(page: Page, name: string, path?: string) {
     await page.setViewportSize({ width, height });
     if (path) await page.goto(path);
     await page.waitForTimeout(1300);
+    // A full-page capture would stop a fixed backdrop at the first screen.
+    await page.addStyleTag({ content: ".sun-backdrop { position: absolute !important; }" });
     await page.screenshot({ path: `${OUT}/${name}-${label}.png`, fullPage: true });
   }
 }
