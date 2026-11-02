@@ -107,6 +107,8 @@ model Lead {
   ownership   Ownership
   roofType    RoofType
   roofAreaSqm Float
+  // Set when the homeowner measured the roof on the map: [{ lat, lng }]. Exact home location, staff only.
+  roofOutline Json?
   monthlyBill Int
   pincode     String
   locale      String    @default("en")
@@ -124,6 +126,8 @@ model Lead {
   recommendedKw Float?
   sizingReasons Json?
   scoredAt      DateTime?
+  // Worked out when the bill is confirmed: what would stop the subsidy or net meter later.
+  blockers      Json?
 
   callLoggedAt DateTime?
   callNotes    String?
@@ -153,6 +157,8 @@ model Lead {
 model BillReading {
   id           String     @id @default(cuid())
   leadId       String
+  // INTAKE is the bill the quote is built on. AFTER_SOLAR is a later bill checked against the quote.
+  purpose      String     @default("INTAKE")
   storageKey   String
   mimeType     String
   sizeBytes    Int
@@ -203,6 +209,26 @@ model PriceRule {
   note          String
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  @@index([segment, effectiveFrom])
+}
+
+model TariffRule {
+  id                 String    @id @default(cuid())
+  name               String
+  segment            String    @default("RESIDENTIAL")
+  // [{ upToUnits, energyPerUnit, facPerUnit }], ascending; the last slab has upToUnits null.
+  slabs              Json
+  fixedSinglePhase   Float
+  fixedThreePhase    Float
+  wheelingPerUnit    Float
+  dutyPercent        Float
+  effectiveFrom      DateTime  @db.Date
+  effectiveTo        DateTime? @db.Date
+  sourceNote         String
+  verifyBeforeLaunch Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 
   @@index([segment, effectiveFrom])
 }
@@ -259,8 +285,34 @@ model Project {
   events    ProjectEvent[]
   documents ProjectDocument[]
   outbox    MessageOutbox[]
+  savings   SavingsCheck[]
 
   @@index([stage])
+}
+
+/// One bill after solar, compared with what the quote promised for that month.
+model SavingsCheck {
+  id             String   @id @default(cuid())
+  projectId      String
+  // YYYY-MM. One check per month: a corrected bill replaces the earlier one.
+  month          String
+  billAmount     Int
+  importUnits    Int?
+  exportUnits    Int?
+  bankedUnits    Int?
+  billedUnits    Int?
+  beforeBill     Int
+  promisedBill   Int
+  promisedSaving Int
+  actualSaving   Int
+  ratio          Float
+  verdict        String
+  createdAt      DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, month])
+  @@index([verdict])
 }
 
 model ProjectEvent {

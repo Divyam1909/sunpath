@@ -3,6 +3,8 @@ import { z } from "zod";
 const field = <T extends z.ZodType>(value: T) =>
   z.object({ value: value.nullable(), confidence: z.number().min(0).max(1) });
 
+const optional = <T extends z.ZodType>(value: T) => field(value).default({ value: null, confidence: 0 });
+
 /** The exact shape the vision model must return. Anything else is treated as a failed read. */
 export const billExtractionSchema = z.object({
   isElectricityBill: z.boolean(),
@@ -15,6 +17,17 @@ export const billExtractionSchema = z.object({
   billAmount: field(z.number().min(0)),
   billingMonth: field(z.string()),
   monthlyUnitsHistory: z.array(z.number().min(0)).default([]),
+  // Added for real MSEDCL bills. They default to "not read", so older reads stay valid.
+  consumerName: optional(z.string()),
+  arrearsAmount: optional(z.number()),
+  currentBillAmount: optional(z.number().min(0)),
+  connectionPhase: optional(z.number()),
+  meterStatus: optional(z.string()),
+  solarImportUnits: optional(z.number().min(0)),
+  solarExportUnits: optional(z.number().min(0)),
+  solarBankedUnits: optional(z.number().min(0)),
+  solarBilledUnits: optional(z.number().min(0)),
+  monthlyUsage: z.array(z.object({ month: z.string().nullable(), units: z.number().min(0) })).default([]),
 });
 
 export type BillExtraction = z.infer<typeof billExtractionSchema>;
@@ -31,10 +44,13 @@ export const BILL_FIELDS = [
 
 export type BillField = (typeof BILL_FIELDS)[number];
 
+/** Printed on only some bills, so a blank here never lowers the read's confidence. */
+export const EXTRA_BILL_FIELDS = ["consumerName", "arrearsAmount"] as const;
+
 export type PoorReason = "notBill" | "blurry" | "cropped" | "dark" | "unreadable";
 
 export type BillParseResult =
-  | { kind: "ok"; extraction: BillExtraction; confidence: number; lowConfidence: BillField[] }
+  | { kind: "ok"; extraction: BillExtraction; confidence: number; lowConfidence: (BillField | (typeof EXTRA_BILL_FIELDS)[number])[] }
   | { kind: "poor"; reason: PoorReason }
   | { kind: "invalid"; error: string };
 
@@ -68,7 +84,8 @@ export function parseBillResponse(raw: string, lowConfidenceBelow: number): Bill
   const expected = BILL_FIELDS.filter((f) => f !== "ratePerUnit" || extraction.ratePerUnit.value !== null);
   const score = (f: BillField) => (extraction[f].value === null ? 0 : extraction[f].confidence);
   const confidence = Number((expected.reduce((sum, f) => sum + score(f), 0) / expected.length).toFixed(2));
-  const lowConfidence = expected.filter((f) => score(f) < lowConfidenceBelow);
+  const shaky = EXTRA_BILL_FIELDS.filter((f) => extraction[f].value !== null && extraction[f].confidence < lowConfidenceBelow);
+  const lowConfidence = [...expected.filter((f) => score(f) < lowConfidenceBelow), ...shaky];
   return { kind: "ok", extraction, confidence, lowConfidence };
 }
 
@@ -82,6 +99,13 @@ export const confirmedBillSchema = z.object({
   billAmount: z.number().int().min(1).max(10000000),
   billingMonth: z.string().trim().max(30).nullable(),
   averageMonthlyUnits: z.number().min(1).max(100000),
+  consumerName: z.string().trim().max(120).nullable().default(null),
+  arrearsAmount: z.number().min(-10000000).max(10000000).nullable().default(null),
+  // Carried through from the read. Not shown as form fields.
+  connectionPhase: z.number().nullable().default(null),
+  meterStatus: z.string().max(60).nullable().default(null),
+  solarExportUnits: z.number().min(0).nullable().default(null),
+  monthlyUsage: z.array(z.object({ month: z.string().max(10), units: z.number().min(0) })).max(14).default([]),
 });
 
 export type ConfirmedBill = z.infer<typeof confirmedBillSchema>;
