@@ -1,0 +1,15 @@
+# Local Postgres for development and E2E tests. Production uses Neon.
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: sunpath-db
+    environment:
+      POSTGRES_USER: sunpath
+      POSTGRES_PASSWORD: sunpath
+      POSTGRES_DB: sunpath
+    ports:
+      - "5433:5432"
+    volumes:
+      - sunpath-db:/var/lib/postgresql/data
+volumes:
+  sunpath-db:

@@ -1,0 +1,321 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  HOMEOWNER
+  SALES
+  ADMIN
+}
+
+enum Ownership {
+  OWNER
+  TENANT
+}
+
+enum RoofType {
+  RCC_FLAT
+  METAL_SHEET
+  TILED
+  OTHER
+}
+
+enum Shading {
+  NONE
+  PARTIAL
+  HEAVY
+}
+
+enum Score {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum NextAction {
+  SURVEY_VISIT
+  QUALIFICATION_CALL
+}
+
+enum LeadStage {
+  NEW
+  SCORED
+  SURVEY_BOOKED
+  SURVEYED
+  QUOTED
+  WON
+  CLOSED
+}
+
+enum BillStatus {
+  PENDING
+  READ
+  POOR_PHOTO
+  UNAVAILABLE
+  CONFIRMED
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+}
+
+enum ProjectStage {
+  ADVANCE_RECEIVED
+  DOCUMENTS
+  INSTALLATION_SCHEDULED
+  INSTALLED
+  NET_METERING_APPLIED
+  NET_METER_INSTALLED
+  SUBSIDY_APPLIED
+  SUBSIDY_CREDITED
+}
+
+enum Channel {
+  WHATSAPP
+  SMS
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  // Staff sign in with email, homeowners with their phone number.
+  login        String   @unique
+  passwordHash String
+  role         Role
+  createdAt    DateTime @default(now())
+
+  leads  Lead[]
+  quotes Quote[]
+  events ProjectEvent[]
+}
+
+model Lead {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  // Unguessable: the homeowner's way back into their bill check and result.
+  accessToken String    @unique
+  userId      String?
+  name        String
+  phone       String
+  ownership   Ownership
+  roofType    RoofType
+  roofAreaSqm Float
+  monthlyBill Int
+  pincode     String
+  locale      String    @default("en")
+
+  // DPDP Act 2023: what was agreed to, and when.
+  consentAt      DateTime
+  consentPurpose String
+  consentVersion String
+
+  stage         LeadStage   @default(NEW)
+  score         Score?
+  scorePoints   Int?
+  scoreReasons  Json?
+  nextAction    NextAction?
+  recommendedKw Float?
+  sizingReasons Json?
+  scoredAt      DateTime?
+
+  callLoggedAt DateTime?
+  callNotes    String?
+  closedReason String?
+
+  surveyBookedFor DateTime?
+  surveyedAt      DateTime?
+  // Set by the surveyor: was this visit worth making? Feeds the unqualified-survey metric.
+  surveyQualified Boolean?
+  surveyRoofSqm   Float?
+  surveyShading   Shading?
+  surveyNotes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User?           @relation(fields: [userId], references: [id])
+  bills   BillReading[]
+  quotes  Quote[]
+  project Project?
+  outbox  MessageOutbox[]
+
+  @@index([stage, score])
+  @@index([createdAt])
+}
+
+model BillReading {
+  id           String     @id @default(cuid())
+  leadId       String
+  storageKey   String
+  mimeType     String
+  sizeBytes    Int
+  sha256       String
+  status       BillStatus @default(PENDING)
+  reader       String?
+  model        String?
+  // Reason code shown to the homeowner with re-upload tips.
+  poorReason   String?
+  // AI output, untouched. `confirmed` holds what a person agreed to. Both are kept for accuracy tracking.
+  ai           Json?
+  confirmed    Json?
+  editedFields String[]   @default([])
+  confirmedBy  String?
+  confirmedAt  DateTime?
+  createdAt    DateTime   @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, createdAt])
+}
+
+model SubsidyRule {
+  id                 String    @id @default(cuid())
+  schemeName         String
+  segment            String    @default("RESIDENTIAL")
+  // [{ fromKw, toKw, ratePerKw }]
+  slabs              Json
+  capAmount          Int
+  effectiveFrom      DateTime  @db.Date
+  effectiveTo        DateTime? @db.Date
+  sourceNote         String
+  verifyBeforeLaunch Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([segment, effectiveFrom])
+}
+
+model PriceRule {
+  id            String    @id @default(cuid())
+  name          String
+  segment       String    @default("RESIDENTIAL")
+  // [{ upToKw, pricePerKw }], ascending; the last band has upToKw null.
+  bands         Json
+  effectiveFrom DateTime  @db.Date
+  effectiveTo   DateTime? @db.Date
+  note          String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([segment, effectiveFrom])
+}
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Quote {
+  id          String      @id @default(cuid())
+  // Unguessable public link. Exposes no address or consumer number.
+  token       String      @unique
+  leadId      String
+  quoteDate   DateTime    @db.Date
+  status      QuoteStatus @default(DRAFT)
+  inputs      Json
+  options     Json
+  selectedKw  Float
+  // Copies of the rules and settings used, so editing a rule never changes an old quote.
+  snapshot    Json
+  sentAt      DateTime?
+  createdById String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  createdBy User?    @relation(fields: [createdById], references: [id])
+  project   Project?
+
+  @@index([leadId])
+}
+
+model Project {
+  id               String       @id @default(cuid())
+  code             String       @unique
+  // Unguessable public status link. The page shows the first name only.
+  token            String       @unique
+  leadId           String       @unique
+  quoteId          String       @unique
+  systemKw         Float
+  netCost          Int
+  advanceAmount    Int
+  advanceReference String
+  stage            ProjectStage @default(ADVANCE_RECEIVED)
+  stageEnteredAt   DateTime     @default(now())
+  statusViews      Int          @default(0)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  lead      Lead              @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  quote     Quote             @relation(fields: [quoteId], references: [id])
+  events    ProjectEvent[]
+  documents ProjectDocument[]
+  outbox    MessageOutbox[]
+
+  @@index([stage])
+}
+
+model ProjectEvent {
+  id        String        @id @default(cuid())
+  projectId String
+  fromStage ProjectStage?
+  toStage   ProjectStage
+  actorId   String?
+  note      String?
+  createdAt DateTime      @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actor   User?   @relation(fields: [actorId], references: [id])
+
+  @@index([projectId, createdAt])
+}
+
+model ProjectDocument {
+  id         String   @id @default(cuid())
+  projectId  String
+  docType    String
+  fileName   String
+  mimeType   String
+  storageKey String
+  uploadedBy String
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model MessageOutbox {
+  id          String   @id @default(cuid())
+  leadId      String
+  projectId   String?
+  channel     Channel  @default(WHATSAPP)
+  toPhone     String
+  locale      String
+  templateKey String
+  body        String
+  // Mock transport: the row is the delivery. A real WhatsApp Business API sender would drain this table.
+  status      String   @default("SENT_MOCK")
+  createdAt   DateTime @default(now())
+
+  lead    Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+}
+
+model RateLimit {
+  key         String
+  windowStart DateTime
+  count       Int      @default(1)
+
+  @@id([key, windowStart])
+}
