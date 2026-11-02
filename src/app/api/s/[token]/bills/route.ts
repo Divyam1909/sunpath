@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ALLOWED_UPLOAD_TYPES, MAX_UPLOAD_BYTES } from "@/lib/validation";
 import { db } from "@/server/db";
-import { sniffMimeType, uploadBill } from "@/server/leads";
+import { uploadBill } from "@/server/leads";
 import { allowRequest, clientIp } from "@/server/rate-limit";
 import { canCheckSavings } from "@/server/savings";
+import { readBillUpload } from "@/server/uploads";
 
 export const maxDuration = 60;
 
@@ -17,15 +17,9 @@ export async function POST(request: NextRequest, { params }: RouteContext<"/api/
   if (!canCheckSavings(project.stage)) return fail("tooEarly", 409);
   if (!(await allowRequest(`bill:ip:${await clientIp()}`, 20, 600))) return fail("rateLimited", 429);
 
-  const form = await request.formData().catch(() => null);
-  const file = form?.get("file");
-  if (!(file instanceof File)) return fail("noFile", 400);
-  if (file.size > MAX_UPLOAD_BYTES) return fail("tooLarge", 413);
+  const upload = await readBillUpload(request);
+  if (!upload.ok) return fail(upload.error, upload.status);
 
-  const bytes = Buffer.from(await file.arrayBuffer());
-  const mimeType = sniffMimeType(bytes);
-  if (!mimeType || !(ALLOWED_UPLOAD_TYPES as readonly string[]).includes(mimeType)) return fail("badType", 415);
-
-  const reading = await uploadBill(project.leadId, bytes, mimeType, "AFTER_SOLAR");
+  const reading = await uploadBill(project.leadId, upload.bytes, upload.mimeType, "AFTER_SOLAR");
   return NextResponse.json({ status: reading.status });
 }

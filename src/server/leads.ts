@@ -12,6 +12,7 @@ import { db } from "@/server/db";
 import { queueMessage } from "@/server/outbox";
 import { getSettings } from "@/server/settings";
 import { fileStore } from "@/server/storage";
+import { FILE_EXTENSIONS } from "@/server/uploads";
 import { newLeadCode, newToken } from "@/server/tokens";
 
 const json = (value: unknown) => value as Prisma.InputJsonValue;
@@ -78,27 +79,11 @@ export async function createLead(input: LeadInput) {
   }
 }
 
-const EXTENSIONS: Record<string, string> = {
-  "image/jpeg": "jpg",
-  "image/png": "png",
-  "image/webp": "webp",
-  "application/pdf": "pdf",
-};
-
-/** Trusts the file's bytes, not the name or the browser's claimed type. */
-export function sniffMimeType(bytes: Buffer) {
-  if (bytes.subarray(0, 3).equals(Buffer.from([0xff, 0xd8, 0xff]))) return "image/jpeg";
-  if (bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return "image/png";
-  if (bytes.subarray(0, 4).toString("latin1") === "RIFF" && bytes.subarray(8, 12).toString("latin1") === "WEBP") return "image/webp";
-  if (bytes.subarray(0, 5).toString("latin1") === "%PDF-") return "application/pdf";
-  return null;
-}
-
 /** Stores the bill, then reads it. Whatever the reader does, the lead and the file are kept. */
 export async function uploadBill(leadId: string, bytes: Buffer, mimeType: string, purpose: "INTAKE" | "AFTER_SOLAR" = "INTAKE") {
   const settings = await getSettings();
   const sha256 = createHash("sha256").update(bytes).digest("hex");
-  const storageKey = `bills/${leadId}/${newToken()}.${EXTENSIONS[mimeType]}`;
+  const storageKey = `bills/${leadId}/${newToken()}.${FILE_EXTENSIONS[mimeType]}`;
   await fileStore.put(storageKey, bytes, mimeType);
 
   const outcome = await readBill({ bytes, mimeType, sha256 }, settings.score.lowConfidenceBelow);

@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { formatNumber } from "@/domain/format";
 import { isSimpleOutline, pincodeCentre, polygonAreaSqm, type LatLng } from "@/domain/geo";
+import { MAP_CREDIT, MAP_TILES } from "@/lib/map-tiles";
 import { SQM_PER_SQFT } from "@/lib/validation";
 
-const TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const MAX_ROOF_SQ_FT = 20000;
-const ATTRIBUTION = "Imagery © Esri, Maxar, Earthstar Geographics. Search © OpenStreetMap contributors";
+const ATTRIBUTION = `${MAP_CREDIT}. Search © OpenStreetMap contributors`;
 
 interface Props {
   pincode: string;
@@ -39,7 +39,7 @@ export function RoofMap({ pincode, onDone, onCancel }: Props) {
       leaflet.current = L;
       const centre = pincodeCentre(pincode);
       const created = L.map(holder.current, { center: [centre.lat, centre.lng], zoom: 16, maxZoom: 20, doubleClickZoom: false });
-      L.tileLayer(TILES, { maxNativeZoom: 19, maxZoom: 20, attribution: ATTRIBUTION }).addTo(created);
+      L.tileLayer(MAP_TILES, { maxNativeZoom: 19, maxZoom: 20, attribution: ATTRIBUTION }).addTo(created);
       created.on("click", (event) => setPoints((p) => (p.length >= 40 ? p : [...p, { lat: event.latlng.lat, lng: event.latlng.lng }])));
       layers.current.dots = L.layerGroup().addTo(created);
       map.current = created;
