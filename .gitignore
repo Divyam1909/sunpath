@@ -51,3 +51,7 @@ submission.zip
 .playwright-mcp/
 /TDD.pdf
 docs/.tdd.html
+
+# public PDFs keep real names in their text layer: never commit them
+eval/raw/
+*.pdf.raw
