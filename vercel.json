@@ -1,0 +1,4 @@
+{
+  "buildCommand": "pnpm db:deploy && pnpm build",
+  "regions": ["iad1"]
+}
