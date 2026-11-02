@@ -81,6 +81,19 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* The one piece of unprompted motion: the sun's path drawing up to today's stage. */
+.sun-arc-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sun-arc-draw 900ms cubic-bezier(0.3, 0, 0.2, 1) 120ms forwards;
+}
+
+@keyframes sun-arc-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
