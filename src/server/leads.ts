@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { findBlockers } from "@/domain/blockers";
-import { BILL_FIELDS, EXTRA_BILL_FIELDS, segmentFromTariff, type BillExtraction, type ConfirmedBill } from "@/domain/bill";
+import { BILL_FIELDS, billForThisMonth, EXTRA_BILL_FIELDS, segmentFromTariff, type BillExtraction, type ConfirmedBill } from "@/domain/bill";
 import { polygonAreaSqm } from "@/domain/geo";
 import { assessLead, type LeadAssessment, type LeadFacts } from "@/domain/score";
 import type { Settings } from "@/domain/settings";
@@ -138,7 +138,7 @@ export function factsFromConfirmed(
 ): LeadFacts {
   return {
     ownership: lead.ownership,
-    monthlyBill: bill.billAmount,
+    monthlyBill: billForThisMonth(bill),
     monthlyUnits: bill.averageMonthlyUnits,
     roofAreaSqm: lead.roofAreaSqm,
     pincode: lead.pincode,
@@ -200,7 +200,7 @@ export async function confirmBill(leadId: string, readingId: string | null, bill
       data: {
         ...assessmentFields(assessment),
         blockers: json(blockers),
-        monthlyBill: bill.billAmount,
+        monthlyBill: billForThisMonth(bill),
         stage: lead.stage === "NEW" ? "SCORED" : lead.stage,
       },
     });

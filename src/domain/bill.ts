@@ -110,6 +110,12 @@ export const confirmedBillSchema = z.object({
 
 export type ConfirmedBill = z.infer<typeof confirmedBillSchema>;
 
+/** A real bill's total includes old dues, which say nothing about this month's electricity. */
+export function billForThisMonth(bill: { billAmount: number; arrearsAmount?: number | null }) {
+  const amount = bill.billAmount - (bill.arrearsAmount ?? 0);
+  return amount > 0 ? Math.round(amount) : bill.billAmount;
+}
+
 /** A24: the average of the history evens out seasons; the latest month alone is a fallback. */
 export function averageUnits(latest: number, history: number[]) {
   const months = history.filter((u) => u > 0);

@@ -10,7 +10,7 @@ import { QuoteBuilder } from "@/components/staff/quote-builder";
 import { RoofOutline } from "@/components/staff/roof-outline";
 import { StaffBillCheck } from "@/components/staff/staff-bill-check";
 import { buttonVariants } from "@/components/ui/button";
-import { maskConsumerNumber, segmentFromTariff, type ConfirmedBill } from "@/domain/bill";
+import { billForThisMonth, maskConsumerNumber, segmentFromTariff, type ConfirmedBill } from "@/domain/bill";
 import type { Blocker } from "@/domain/blockers";
 import type { LatLng } from "@/domain/geo";
 import { formatINR, formatNumber, istDate } from "@/domain/format";
@@ -237,7 +237,7 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
               defaults={{
                 monthlyUnits,
                 tariffPerUnit: resolveTariff(
-                  { ratePerUnit: billValues.ratePerUnit, billAmount: billValues.billAmount, units: billValues.unitsLatestMonth },
+                  { ratePerUnit: billValues.ratePerUnit, billAmount: billForThisMonth(billValues), units: billValues.unitsLatestMonth },
                   settings,
                 ),
                 segment: segmentFromTariff(billValues.tariffCategory) as "RESIDENTIAL" | "COMMERCIAL",

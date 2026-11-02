@@ -4,7 +4,7 @@ import path from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { createTranslator } from "next-intl";
-import { billExtractionSchema, parseBillResponse, segmentFromTariff, type ConfirmedBill } from "../src/domain/bill";
+import { billExtractionSchema, billForThisMonth, parseBillResponse, segmentFromTariff, type ConfirmedBill } from "../src/domain/bill";
 import { findBlockers } from "../src/domain/blockers";
 import { istDate } from "../src/domain/format";
 import { REQUIRED_DOCS, STAGES, type Stage } from "../src/domain/project";
@@ -101,7 +101,7 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
   const assessment = assessLead(
     {
       ownership: row.ownership,
-      monthlyBill: row.bill,
+      monthlyBill: billForThisMonth(bill),
       monthlyUnits: bill.averageMonthlyUnits,
       roofAreaSqm,
       pincode: row.pincode,
@@ -196,7 +196,7 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
   const kw = sizing.recommendedKw!;
   const inputs: QuoteInputs = {
     monthlyUnits: bill.averageMonthlyUnits,
-    tariffPerUnit: resolveTariff({ ratePerUnit: null, billAmount: bill.billAmount, units: bill.unitsLatestMonth }, settings),
+    tariffPerUnit: resolveTariff({ ratePerUnit: null, billAmount: billForThisMonth(bill), units: bill.unitsLatestMonth }, settings),
     maxKw: sizing.maxKw,
     segment: "RESIDENTIAL",
   };
@@ -318,6 +318,7 @@ async function main() {
 
   // Replaces only the demo records, so re-seeding never touches leads people have submitted.
   await db.lead.deleteMany({ where: { code: { in: SEED_LEADS.map((l) => l.code) } } });
+  await db.rateLimit.deleteMany();
 
   for (const row of SEED_LEADS) {
     await seedLead(row, ids.SALES, "subsidy-central-residential", "price-2026");

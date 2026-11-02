@@ -4,8 +4,8 @@ import type { BillProjection } from "@/domain/projection";
 import type { UsageBasis } from "@/domain/usage";
 
 const WIDTH = 640;
-const HEIGHT = 190;
-const BASELINE = 160;
+const HEIGHT = 200;
+const BASELINE = 165;
 const TOP = 12;
 const USE_COLOUR = "#2a8c85";
 const SUN_COLOUR = "#b8740c";
@@ -45,7 +45,7 @@ export function YearPlan({ projection, estimated, basis }: Props) {
               <title>{t("monthTip", { month: monthName(m.index, "long"), use: formatNumber(m.use), sun: formatNumber(m.generation) })}</title>
               <rect x={step * i} y="0" width={step} height={HEIGHT} fill="transparent" />
               <rect x={x} y={y(m.use)} width={barWidth} height={Math.max(BASELINE - y(m.use), 1)} rx="3" fill={USE_COLOUR} fillOpacity={isEstimate ? 0.4 : 1} />
-              <text x={step * i + step / 2} y={HEIGHT - 12} textAnchor="middle" className="fill-muted-foreground text-[13px]">{monthName(m.index)}</text>
+              <text x={step * i + step / 2} y={HEIGHT - 10} textAnchor="middle" className="fill-muted-foreground text-[19px]">{monthName(m.index)}</text>
             </g>
           );
         })}

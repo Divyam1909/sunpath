@@ -46,11 +46,11 @@ function drawCard(canvas: HTMLCanvasElement, facts: CardFacts, t: (key: string, 
   context.lineWidth = 6;
   context.lineCap = "round";
   context.beginPath();
-  context.ellipse(540, 300, 440, 210, 0, Math.PI, Math.PI * 1.72);
+  context.ellipse(820, 230, 180, 150, 0, Math.PI, Math.PI * 2);
   context.stroke();
   context.fillStyle = SUN;
   context.beginPath();
-  context.arc(740, 113, 26, 0, Math.PI * 2);
+  context.arc(820 + 180 * Math.cos(Math.PI * 1.68), 230 + 150 * Math.sin(Math.PI * 1.68), 26, 0, Math.PI * 2);
   context.fill();
 
   text(facts.brand, 80, 100, 600, 38, TEAL);

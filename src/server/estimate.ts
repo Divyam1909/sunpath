@@ -1,6 +1,6 @@
 import { buildOption, resolveTariff } from "@/domain/quote";
 import { pickActiveRule, type Dated, type PriceRule, type SubsidyRule } from "@/domain/rules";
-import { segmentFromTariff, type ConfirmedBill } from "@/domain/bill";
+import { billForThisMonth, segmentFromTariff, type ConfirmedBill } from "@/domain/bill";
 import { istDate } from "@/domain/format";
 import { projectBills } from "@/domain/projection";
 import type { Settings } from "@/domain/settings";
@@ -67,7 +67,7 @@ export async function estimateFor(systemKw: number, bill: ConfirmedBill | null, 
   const { subsidy, price } = rulesFor(rules, istDate(), segment);
   if (!price) return null;
   const tariffPerUnit = resolveTariff(
-    { ratePerUnit: bill?.ratePerUnit ?? null, billAmount: bill?.billAmount ?? null, units: bill?.unitsLatestMonth ?? null },
+    { ratePerUnit: bill?.ratePerUnit ?? null, billAmount: bill ? billForThisMonth(bill) : null, units: bill?.unitsLatestMonth ?? null },
     settings,
   );
   return buildOption(systemKw, { monthlyUnits, tariffPerUnit, maxKw: systemKw, segment }, { subsidy, price }, settings);
