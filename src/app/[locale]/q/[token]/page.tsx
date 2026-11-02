@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/public/site-shell";
 import { QuoteStory } from "@/components/quote/quote-story";
+import { formatDate } from "@/domain/format";
 import { db } from "@/server/db";
 import { readQuote } from "@/server/quotes";
 
@@ -44,13 +45,13 @@ export default async function QuotePage({ params }: PageProps<"/[locale]/q/[toke
             snapshot.subsidyRule && {
               name: snapshot.subsidyRule.schemeName,
               capAmount: snapshot.subsidyRule.capAmount,
-              effectiveFrom: snapshot.subsidyRule.effectiveFrom,
+              effectiveFrom: formatDate(snapshot.subsidyRule.effectiveFrom, locale),
             }
           }
           advancePercent={snapshot.advancePercent}
           projectToken={quote.project?.token ?? null}
           customerName={quote.lead.name.split(" ")[0]}
-          quoteDate={quote.quoteDate.toISOString().slice(0, 10)}
+          quoteDate={formatDate(quote.quoteDate.toISOString().slice(0, 10), locale)}
         />
       </div>
     </SiteShell>

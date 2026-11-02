@@ -12,3 +12,9 @@ export function istDate(at: Date = new Date()) {
 }
 
 export const daysAgo = (days: number, from: Date = new Date()) => new Date(from.getTime() - days * 86_400_000);
+
+/** 31 Oct 2026, in the reader's language. Dates are stored and compared as YYYY-MM-DD. */
+export function formatDate(iso: string, locale = "en") {
+  const date = new Date(`${iso}T12:00:00+05:30`);
+  return new Intl.DateTimeFormat(`${locale}-IN-u-nu-latn`, { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" }).format(date);
+}

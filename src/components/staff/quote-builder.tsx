@@ -85,7 +85,7 @@ export function QuoteBuilder({ leadId, defaults, rulesBySegment, settings, hasPr
             id="q-segment"
             value={segment}
             onChange={(e) => setSegment(e.target.value as Segment)}
-            className="h-11 rounded-lg border border-input bg-background px-3"
+            className="h-11 w-full min-w-0 rounded-lg border border-input bg-background px-3"
           >
             <option value="RESIDENTIAL">Residential</option>
             <option value="COMMERCIAL">Commercial (no subsidy)</option>

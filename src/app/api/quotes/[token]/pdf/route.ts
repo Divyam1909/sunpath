@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { formatDate } from "@/domain/format";
 import { routing, type Locale } from "@/i18n/routing";
 import { db } from "@/server/db";
 import { renderQuotePdf } from "@/server/pdf/quote-pdf";
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest, { params }: RouteContext<"/api/q
     messages,
     brand: messages.brand.name,
     customerFirstName: quote.lead.name.split(" ")[0],
-    quoteDate: quote.quoteDate.toISOString().slice(0, 10),
+    quoteDate: formatDate(quote.quoteDate.toISOString().slice(0, 10), locale),
     quote: readQuote(quote),
     selectedKw: quote.selectedKw,
   });

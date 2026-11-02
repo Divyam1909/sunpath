@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/public/site-shell";
 import { DocumentUpload } from "@/components/status/document-upload";
 import { SunArc } from "@/components/status/sun-arc";
-import { formatNumber, istDate } from "@/domain/format";
+import { formatDate, formatNumber, istDate } from "@/domain/format";
 import { REQUIRED_DOCS, STAGES, type Stage } from "@/domain/project";
 import { cn } from "@/lib/utils";
 import { db } from "@/server/db";
@@ -82,7 +82,7 @@ export default async function StatusPage({ params }: PageProps<"/[locale]/s/[tok
                 {done ? <Check className="size-3" aria-hidden /> : null}
               </span>
               <span className={cn(current && "font-medium", !done && !current && "text-muted-foreground")}>{t(`stages.${item}`)}</span>
-              <span className="tabular text-sm text-muted-foreground">{on && (done || current) ? istDate(on) : ""}</span>
+              <span className="tabular text-sm text-muted-foreground">{on && (done || current) ? formatDate(istDate(on), locale) : ""}</span>
             </li>
           );
         })}

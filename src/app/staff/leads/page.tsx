@@ -20,9 +20,11 @@ function nextStep(lead: { stage: string; nextAction: string | null }) {
   return "None";
 }
 
-const leadReason = (reasons: unknown) => {
+/** Up to two reasons, most useful first: problems, then caveats, then the bill. */
+const leadReasons = (reasons: unknown) => {
   const list = (reasons ?? []) as ScoreReason[];
-  return (list.find((r) => r.tone === "problem") ?? list.find((r) => r.tone === "note") ?? list[0])?.text ?? "";
+  const rank = (r: ScoreReason) => (r.tone === "problem" ? 0 : r.tone === "note" ? 1 : r.code === "strongBill" ? 2 : 3);
+  return [...list].sort((a, b) => rank(a) - rank(b)).slice(0, 2).map((r) => r.text).join(". ");
 };
 
 export default async function LeadsPage({ searchParams }: PageProps<"/staff/leads">) {
@@ -112,7 +114,7 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
                     <td className="py-3 pr-4">
                       <ScoreBadge score={lead.score} />
                     </td>
-                    <td className="max-w-56 py-3 pr-4 text-muted-foreground">{leadReason(lead.scoreReasons)}</td>
+                    <td className="max-w-64 py-3 pr-4 text-muted-foreground">{leadReasons(lead.scoreReasons)}</td>
                     <td className="tabular py-3 pr-4 text-right">{formatINR(lead.monthlyBill)}</td>
                     <td className="tabular py-3 pr-4 text-right">{lead.recommendedKw ? `${formatNumber(lead.recommendedKw)} kW` : "-"}</td>
                     <td className="tabular py-3 pr-4 text-muted-foreground">{bill ? maskConsumerNumber(bill.consumerNumber) : "-"}</td>

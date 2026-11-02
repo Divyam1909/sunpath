@@ -203,15 +203,15 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
             <p className="rounded-xl bg-muted px-5 py-4 text-sm text-muted-foreground">The quote builder opens once the survey is recorded.</p>
           ) : null}
 
-          <section className="grid gap-3">
-            <h2 className="text-lg font-medium">Bill values</h2>
-            <p className="text-sm text-muted-foreground">
+          <details className="group" open={!confirmed}>
+            <summary className="cursor-pointer text-lg font-medium">Bill values</summary>
+            <p className="mt-3 mb-3 text-sm text-muted-foreground">
               {reading?.reader ? `Read by ${reading.reader}${reading.model ? ` (${reading.model})` : ""}.` : "Not read yet."}
               {reading?.editedFields.length ? ` Corrected by a person: ${reading.editedFields.join(", ")}.` : ""}
               {reading?.confirmedAt ? ` Confirmed ${istDate(reading.confirmedAt)}.` : " Not confirmed yet."}
             </p>
             <StaffBillCheck leadId={lead.id} initial={billValues} lowConfidence={ai && !confirmed ? ai.lowConfidence : []} messages={messages} />
-          </section>
+          </details>
         </div>
       </div>
     </div>
