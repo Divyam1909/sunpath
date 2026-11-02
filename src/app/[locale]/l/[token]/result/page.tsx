@@ -35,7 +35,8 @@ export default async function ResultPage({ params }: PageProps<"/[locale]/l/[tok
     );
   }
 
-  const isLow = lead.score === "LOW";
+  // No size fits, for example a 0.5 kW sanctioned load, so a person takes it from here whatever the score.
+  const isLow = lead.score === "LOW" || !lead.recommendedKw;
   const reading = await latestBill(lead.id);
   const bill = (reading?.confirmed ?? null) as ConfirmedBill | null;
   const settings = await getSettings();

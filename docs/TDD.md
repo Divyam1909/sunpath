@@ -209,6 +209,8 @@ The AI does one job: it reads a bill. It never sets a price, a subsidy, generati
 
 **Finding the bills.** MSEDCL publishes real bills as format guides, and a college published one for accreditation. No homeowner's forum post was used. MSEDCL's masks cover the page image only: the real customer's name and address are still in those PDFs' text layer. So the test set is flattened pixels, redacted further by hand, and the PDFs are never committed or sent to the model.
 
+**What real bills broke.** Fake data had hidden two bugs. A bill's total includes old dues, which inflated one sample's rate to ₹20 a unit and its payback to 1.4 years (A42). The real Marathi bill has a 0.5 kW sanctioned load, too small for any system, and the result page said "a 0 kW system looks right". It now goes to a call and gives the reason.
+
 **Prompt lessons from real bills.** Real bills print three totals (prompt-payment, due, late), carry arrears inside the headline amount, and print meter readings beside the units. The first run confused these, so the prompt now names each, and the arrears are taken out before any rate is worked out (A42). That raised the real-bill score from 93% to 95%.
 
 **Poor photos.** People photograph bills on a table, in dim rooms, one side only. Three things handle this. The browser checks the photo for blur, darkness and size before it is sent, and only advises, because Gemini still reads surprisingly soft photos. A second photo of the back can be added, and the two are joined into one image, as arrears and charges are usually on the back. The model is told to expect tilt, folds and stamps, and simulated tilted, dim and soft shots score the same as clean ones in the lookalike set.
@@ -370,7 +372,7 @@ The riskiest logic gets the most tests.
 | Layer | Tool | Count | Covers |
 |---|---|---|---|
 | Domain and reader | Vitest | 218 | Everything before, plus real-bill tariff reproduction, usage years, bill projection, blockers and name matching, the savings promise, forecasts, roof geometry, photo check and accuracy scoring |
-| End to end | Playwright | 30 | Everything before, plus a Marathi bill to a year of bills, a peak May bill, blockers for homeowner and staff, the photo check and two-sided upload, roof map to surveyor, the family card, a bill after solar through to staff, forecasts, and tariff overlap |
+| End to end | Playwright | 31 | Everything before, plus a Marathi bill to a year of bills, a peak May bill, blockers for homeowner and staff, the photo check and two-sided upload, roof map to surveyor, the family card, a bill after solar through to staff, forecasts, and tariff overlap |
 | CI | GitHub Actions | On every push | Lint, typecheck, unit tests, migrations, seed, build and E2E against Postgres with the mock reader |
 
 Bill reading is measured by `pnpm eval:bills`, outside CI, as it needs a key and uses daily quota. Real Gemini is also exercised by `scripts/try-gemini.ts` and was also checked through production, not in CI, because CI must not depend on a live API or use a key. Marathi and Hindi PDFs were rendered and inspected by eye, since a test cannot judge glyph shaping.

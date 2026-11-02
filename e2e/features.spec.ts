@@ -57,6 +57,15 @@ test("a bill in another name with arrears is caught before anyone visits", async
   await expect(page.getByTestId("staff-blockers")).toContainText("is overdue on this bill");
 });
 
+test("a real 0.5 kW sanctioned load fits no system, so it goes to a call with the reason", async ({ page }) => {
+  await fillLeadForm(page, { name: "Tiny Load", phone: uniquePhone(), bill: "4000" });
+  await uploadBill(page, "marathi-home-bill.jpg");
+  await page.getByLabel(/Sanctioned load/).fill("0.5");
+  await confirmBill(page);
+  await expect(page.getByTestId("result-title")).toHaveText("We'll give you a quick call");
+  await expect(page.getByTestId("blockers").locator('[data-blocker="loadLow"]')).toContainText("0.5 kW");
+});
+
 test("when solar will not pay back in time, the homeowner is told so", async ({ page }) => {
   await page.goto("/en/l/demo-lead-ld-30915/result");
   await expect(page.getByTestId("poor-worth")).toHaveCount(0);
