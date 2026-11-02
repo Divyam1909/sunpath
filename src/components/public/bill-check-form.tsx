@@ -8,20 +8,22 @@ import { Input } from "@/components/ui/input";
 import { confirmedBillSchema, type ConfirmedBill } from "@/domain/bill";
 import { cn } from "@/lib/utils";
 
-const TEXT_FIELDS = ["consumerNumber", "tariffCategory", "billingMonth"] as const;
+const TEXT_FIELDS = ["consumerNumber", "consumerName", "tariffCategory", "billingMonth"] as const;
 const REQUIRED = ["unitsLatestMonth", "averageMonthlyUnits", "billAmount"] as const;
-const ORDER: (keyof ConfirmedBill)[] = [
+const ORDER = [
   "consumerNumber",
+  "consumerName",
   "tariffCategory",
   "sanctionedLoadKw",
   "unitsLatestMonth",
   "averageMonthlyUnits",
   "billAmount",
+  "arrearsAmount",
   "billingMonth",
   "ratePerUnit",
-];
+] as const;
 
-type Draft = Record<keyof ConfirmedBill, string>;
+type Draft = Record<(typeof ORDER)[number], string>;
 
 function toDraft(bill: ConfirmedBill): Draft {
   return Object.fromEntries(ORDER.map((k) => [k, bill[k]?.toString() ?? ""])) as Draft;
@@ -52,7 +54,8 @@ export function BillCheckForm({ initial, lowConfidence, onConfirm, submitLabel }
 
   function submit(event: React.FormEvent) {
     event.preventDefault();
-    const parsed = confirmedBillSchema.safeParse(fromDraft(draft));
+    // Values the form does not show, such as the monthly history, travel through unchanged.
+    const parsed = confirmedBillSchema.safeParse({ ...initial, ...fromDraft(draft) });
     if (!parsed.success) {
       setInvalid(parsed.error.issues.map((issue) => String(issue.path[0])));
       setFailed(true);

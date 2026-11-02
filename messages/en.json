@@ -31,13 +31,16 @@
     "phone": "Mobile number",
     "phoneHint": "10 digits. We'll send updates here on WhatsApp.",
     "consentLabel": "I agree that Company A can use my details for this purpose.",
-    "consentNotice": "Company A uses your name, phone, address details and electricity bill to check if solar suits your home, prepare your quote, and update you on your project. You can ask us to delete them at any time.",
+    "consentNotice": "Company A uses your name, phone, address details, electricity bill and any roof you mark on the map to check if solar suits your home, prepare your quote, and update you on your project. You can ask us to delete them at any time.",
     "next": "Continue",
     "back": "Back",
     "submit": "Continue to bill photo",
     "submitting": "Saving your details",
     "tooMany": "Too many tries from this connection. Wait a few minutes, then try again.",
-    "failed": "Your details did not save. Check your connection and try again."
+    "failed": "Your details did not save. Check your connection and try again.",
+    "measureRoof": "Not sure? Measure your roof on a map",
+    "roofMeasured": "Measured on the map: {area} sq ft",
+    "measureAgain": "Measure again"
   },
   "errors": {
     "choose": "Choose one to continue.",
@@ -50,7 +53,7 @@
   },
   "upload": {
     "title": "Add your electricity bill",
-    "lead": "A photo of the first page is enough. We read your units, tariff and sanctioned load from it, so there's less to type.",
+    "lead": "A photo of the front is enough. Add the back if you can, as the arrears and charges are usually there.",
     "choose": "Take a photo or choose a file",
     "formats": "JPG, PNG, WEBP or PDF, up to 4 MB",
     "reading": "Reading your bill",
@@ -68,7 +71,25 @@
       "shop-bill": "Shop on a commercial tariff",
       "tilted-phone-photo": "Tilted, stained photo",
       "blurry-photo": "Blurry photo",
-      "not-a-bill": "Not a bill"
+      "not-a-bill": "Not a bill",
+      "marathi-home-bill": "Marathi home bill, in the real layout",
+      "peak-may-bill": "May bill, far above a normal month",
+      "name-and-arrears-bill": "Bill in another name, with arrears",
+      "after-solar-bill": "Bill after solar, with a net meter"
+    },
+    "addBack": "Add the back",
+    "addBackHint": "Optional. Arrears and charges are often here.",
+    "frontPreview": "Front of the bill",
+    "backPreview": "Back of the bill",
+    "removeBack": "Remove the back",
+    "photoGood": "This photo looks clear.",
+    "readNow": "Read my bill",
+    "useAnyway": "Use this photo anyway",
+    "retake": "Take a new photo",
+    "issue": {
+      "blurry": "This photo looks blurry. Hold the phone still and tap the bill to focus.",
+      "dark": "This photo looks dark. Move near a window or a light.",
+      "small": "This photo is very small. Move closer so the bill fills the frame."
     }
   },
   "check": {
@@ -107,7 +128,9 @@
     "tip1": "Lay the bill flat on a table, in good light.",
     "tip2": "Fit the whole first page in the frame.",
     "tip3": "Hold the phone steady and tap to focus before you shoot.",
-    "typeInstead": "Type the details instead"
+    "typeInstead": "Type the details instead",
+    "consumerName": "Name on the bill",
+    "arrearsAmount": "Arrears on the bill (₹)"
   },
   "result": {
     "highTitle": "You're a great fit for a {kw} kW system",
@@ -214,7 +237,22 @@
     "noDocs": "Nothing is needed from you right now.",
     "updatedOn": "Updated {date}",
     "stageOf": "Stage {stage} of {total}",
-    "help": "Questions? Your project code is {code}."
+    "help": "Questions? Your project code is {code}.",
+    "forecastTitle": "When it should finish",
+    "forecastRange": "Between {likely} and {late}",
+    "forecastHistory": "Based on {count} finished projects like yours.",
+    "forecastLimits": "Based on our usual time for each stage.",
+    "savingsTitle": "Your savings so far",
+    "savingsLead": "Add a bill and we'll check it against your quote.",
+    "savingsEmpty": "No bills added yet.",
+    "savingsAdd": "Add a bill after solar",
+    "savingsRow": "{month}: bill {bill}, you saved {saved}",
+    "savingsPromised": "We said {promised}",
+    "verdict": {
+      "ON_TRACK": "On track",
+      "WATCH": "A little behind",
+      "BEHIND": "Behind. We're looking into it."
+    }
   },
   "stages": {
     "ADVANCE_RECEIVED": "Advance received",
@@ -250,7 +288,8 @@
   "outbox": {
     "leadReceived": "Hello {name}, thanks for your details. Company A Solar will call you within one working day.",
     "quoteSent": "Hello {name}, your solar quote for {kw} kW is ready. See it here: {link}",
-    "stage": "Hello {name}, your solar project has moved to: {stage}. Next: {next} Track it here: {link}"
+    "stage": "Hello {name}, your solar project has moved to: {stage}. Next: {next} Track it here: {link}",
+    "savingsBehind": "Hello {name}, your {month} bill is higher than we promised. We're checking your system and will call you."
   },
   "login": {
     "title": "Sign in",
@@ -281,5 +320,115 @@
     "title": "Something went wrong on our side",
     "lead": "Your details are safe. Try again in a moment.",
     "retry": "Try again"
+  },
+  "roofMap": {
+    "searchPlaceholder": "Your area or a landmark",
+    "search": "Find",
+    "locate": "Use my location",
+    "tapCorners": "Find your house, then tap each corner of the roof.",
+    "notFound": "We couldn't find that place. Try a nearby landmark, or move the map yourself.",
+    "cornersSoFar": "{count} corners marked. Mark at least 3.",
+    "area": "About {area} sq ft",
+    "crossed": "The lines cross. Undo the last corner and go round the roof in order.",
+    "use": "Use this area",
+    "undo": "Undo last corner",
+    "cancel": "Type it instead",
+    "tooBig": "That is larger than a house roof. Zoom in until you can see your roof, then mark it again."
+  },
+  "year": {
+    "title": "Your bills, before and after solar",
+    "before": "Average bill today",
+    "after": "Average bill with solar",
+    "savingLine": "That saves about {amount} a year on the published MSEDCL slabs.",
+    "surplusLine": "This includes {amount} for spare units left on 31 March.",
+    "legendUse": "Units you use",
+    "legendSun": "Units your panels make",
+    "chartLabel": "Your electricity use each month against what the panels would make",
+    "monthTip": "{month}: you use {use} units, panels make {sun}",
+    "tableView": "See every month",
+    "colMonth": "Month",
+    "colUse": "Use",
+    "colSun": "Solar",
+    "colBefore": "Bill today",
+    "colAfter": "With solar",
+    "estimateNote": "Your bill did not print this month, so we estimated it from the season.",
+    "basis": {
+      "BILL_HISTORY": "Based on the months printed on your bill.",
+      "PARTIAL_HISTORY": "Based on the months on your bill. Lighter bars are our estimate for the rest.",
+      "ONE_MONTH": "Based on one bill. Lighter bars are our estimate from the seasons."
+    },
+    "tariffNote": "Slab rates from {tariff}, in force from {date}. Fixed charges stay, so a bill never reaches zero.",
+    "quoteNote": "The figures above use one simple rate per unit, so they stay easy to check. This is the same system on your real slabs.",
+    "seasonAbove": "This bill is {percent}% above your normal month, so we sized your system on the whole year.",
+    "seasonBelow": "This bill is {percent}% below your normal month, so we sized your system on the whole year.",
+    "poorTitle": "Solar may not be worth it for you",
+    "poorLead": "Your use is low, so you pay the cheapest rates. Solar would take about {years} years to pay for itself. We would rather tell you now. A short call can check if your use will grow."
+  },
+  "blockers": {
+    "title": "Fix these before we start",
+    "lead": "These can hold up your subsidy or net meter. Sorting them now saves weeks later.",
+    "nameMismatch": {
+      "title": "The bill is in the name of {onBill}",
+      "fix": "The subsidy goes to the person named on the connection. Apply in that name, or change the name with MSEDCL first."
+    },
+    "arrears": {
+      "title": "{amount} is overdue on this bill",
+      "fix": "Clear this first. MSEDCL can hold a net meter application while dues are unpaid."
+    },
+    "loadLow": {
+      "title": "Your sanctioned load is {loadKw} kW, but you could use {wantedKw} kW",
+      "fix": "Your system can't be larger than your load. You can ask MSEDCL to raise the load, and we can help with the form."
+    },
+    "nonResidential": {
+      "title": "This is not a home tariff",
+      "fix": "The central subsidy is for homes, so we will quote without it."
+    },
+    "tenant": {
+      "title": "You are renting this property",
+      "fix": "The owner must agree in writing, and the bill must be in the right name for a subsidy."
+    },
+    "alreadySolar": {
+      "title": "This bill already shows solar export",
+      "fix": "This connection seems to have a net meter. We will check before planning any more panels."
+    },
+    "meterFault": {
+      "title": "Meter status on the bill: {status}",
+      "fix": "Ask MSEDCL to check the meter first, as billed units may not be accurate."
+    }
+  },
+  "card": {
+    "title": "Share with your family",
+    "lead": "One picture with the numbers that matter, to send on WhatsApp.",
+    "imageLabel": "A summary of your solar quote as an image",
+    "save": "Save the picture",
+    "share": "Share",
+    "shareLink": "Send the link on WhatsApp",
+    "shareText": "Our solar quote: {link}",
+    "heading": "Solar plan for {name}",
+    "systemLine": "Rooftop solar system",
+    "billToday": "Bill today",
+    "billWithSolar": "With solar",
+    "perMonth": "Average per month",
+    "cost": "Cost after subsidy",
+    "payback": "Pays for itself in",
+    "saving25": "Saved in 25 years",
+    "footer": "Quote of {date}. Prices are confirmed after the roof survey."
+  },
+  "savingsBill": {
+    "title": "Add a bill after solar",
+    "lead": "A photo of a bill with your net meter details is enough.",
+    "checkTitle": "Check what we read",
+    "checkLead": "Correct anything that doesn't match your bill.",
+    "manualLead": "We couldn't read this bill, so please type in what you can see.",
+    "month": "Bill month",
+    "billAmount": "This month's bill, without arrears (₹)",
+    "importUnits": "Import units",
+    "exportUnits": "Export units",
+    "bankedUnits": "Banked units",
+    "billedUnits": "Billed units",
+    "save": "Check against my quote",
+    "saving": "Checking",
+    "invalid": "Check the month and the amount, then try again.",
+    "back": "Back to my project"
   }
 }

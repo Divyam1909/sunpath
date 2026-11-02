@@ -66,8 +66,13 @@ function QuotePdf({ locale, messages, brand, customerFirstName, quoteDate, quote
     key: string,
     values?: Record<string, string | number>,
   ) => string;
+  const y = createTranslator({ locale, messages: messages as never, namespace: "year" as never }) as unknown as (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
   const selected = quote.options.find((o) => o.systemKw === selectedKw) ?? quote.options[0];
   const { snapshot, inputs } = quote;
+  const projection = snapshot.billView?.byKw[String(selected.systemKw)] ?? null;
   const rows: [string, (o: QuoteOption) => string][] = [
     ["gross", (o) => formatINR(o.grossCost)],
     ["subsidy", (o) => `− ${formatINR(o.subsidy)}`],
@@ -171,6 +176,14 @@ function QuotePdf({ locale, messages, brand, customerFirstName, quoteDate, quote
             {t("howLifetime", { savings: formatINR(selected.yearlySavings), net: formatINR(selected.netCost), total: formatINR(selected.savings25Years) })}
           </Text>
         </View>
+        {projection ? (
+          <View style={styles.how}>
+            <Text style={styles.h2}>{y("title")}</Text>
+            <Text style={styles.howLine}>{y("before")}: {formatINR(projection.monthlyBefore)}. {y("after")}: {formatINR(projection.monthlyAfter)}.</Text>
+            <Text style={styles.howLine}>{y("savingLine", { amount: formatINR(projection.yearlySaving) })}</Text>
+            <Text style={styles.howLine}>{y("quoteNote")}</Text>
+          </View>
+        ) : null}
         <Text style={styles.footer} fixed>
           {brand}
         </Text>

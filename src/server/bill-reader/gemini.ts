@@ -80,14 +80,15 @@ Marathi labels you will meet: ग्राहक क्रमांक consumer 
 - ratePerUnit: a single energy rate in rupees per unit, only if one is printed. Slabbed charges mean null.
 - sanctionedLoadKw: sanctioned load, only if printed in kW or KW. Printed in HP or hidden means null.
 - unitsLatestMonth: units consumed in this bill (total consumption, or billed units on a solar bill)
-- billAmount: the rounded total payable by the due date, in rupees
+- billAmount: the rounded total of this bill, the headline "Bill Amount" or "Rounded Bill". Not the lower prompt-payment amount, and not the higher amount payable after the due date.
 - currentBillAmount: the bill for this month alone, before arrears ("Total Current Bill")
-- arrearsAmount: total arrears carried into this bill. A credit is negative. None printed means null.
+- arrearsAmount: the "Total Arrears" line, after adjustments, or "Principal Arrears" if that is the only one. A credit is negative. Printed as 0.00 means 0. No such line means null.
 - billingMonth: the month the bill is for, as "Sep 2026"
 - connectionPhase: 1 or 3 if the tariff or bill states the phase, otherwise null
 - meterStatus: the meter status text if printed, e.g. "Normal"
 - solarImportUnits, solarExportUnits, solarBankedUnits, solarBilledUnits: from a net meter section or a line such as
-  "Rooftop Solar Units: Export:62 Import:359 Adjusted:89 Bank:0". Use null on a bill with no solar section.
+  "Rooftop Solar Units: Export:62 Import:359 Adjusted:89 Bank:0". These are units for this month, never the meter readings.
+  Use null on a bill with no solar section.
 - monthlyUsage: each month in the consumption history, table or bar chart, as { "month": "Aug 2026", "units": 89 }, in printed order. [] if none.
   Do not add the current month unless it is printed in the history.
 

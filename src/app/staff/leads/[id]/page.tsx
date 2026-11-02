@@ -1,21 +1,28 @@
 import Link from "next/link";
+import { createTranslator } from "next-intl";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { BillImage } from "@/components/public/bill-image";
+import { blockerValues } from "@/components/public/blocker-list";
 import { LEAD_STAGE_LABELS, ScoreBadge } from "@/components/staff/labels";
 import { BookSurveyForm, EraseLead, LogCallForm, RecordSurveyForm } from "@/components/staff/lead-actions";
 import { QuoteBuilder } from "@/components/staff/quote-builder";
+import { RoofOutline } from "@/components/staff/roof-outline";
 import { StaffBillCheck } from "@/components/staff/staff-bill-check";
 import { buttonVariants } from "@/components/ui/button";
 import { maskConsumerNumber, segmentFromTariff, type ConfirmedBill } from "@/domain/bill";
+import type { Blocker } from "@/domain/blockers";
+import type { LatLng } from "@/domain/geo";
 import { formatINR, formatNumber, istDate } from "@/domain/format";
 import { isVidarbhaPincode } from "@/domain/pincode";
 import { optionSizes, resolveTariff } from "@/domain/quote";
 import type { ScoreReason } from "@/domain/score";
 import { sizeSystem, usableRoofSqm } from "@/domain/sizing";
+import { calculateBill } from "@/domain/tariff";
+import { checkSeason } from "@/domain/usage";
 import { SQM_PER_SQFT } from "@/lib/validation";
 import { db } from "@/server/db";
-import { loadRules, rulesFor } from "@/server/estimate";
+import { loadRules, phaseOf, rulesFor, tariffFor } from "@/server/estimate";
 import { requireStaff } from "@/server/guards";
 import { estimateUnits, latestBill, prefillBill, type StoredAiRead } from "@/server/leads";
 import { readQuote } from "@/server/quotes";
@@ -67,6 +74,14 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
     return { subsidy, price };
   };
 
+  const blockers = (lead.blockers ?? []) as unknown as Blocker[];
+  const tBlocker = createTranslator({ locale: "en", messages, namespace: "blockers" }) as unknown as (key: string, values: object) => string;
+  const season = confirmed ? checkSeason(confirmed.unitsLatestMonth, confirmed.averageMonthlyUnits, settings.seasonalMisleadingAt) : null;
+  const sizedOnBillAlone = confirmed ? sizeSystem({ monthlyUnits: confirmed.unitsLatestMonth, roofAreaSqm: usableSqm, sanctionedLoadKw: billValues.sanctionedLoadKw }, settings).recommendedKw : null;
+  const tariff = confirmed ? tariffFor(rules, today, segmentFromTariff(confirmed.tariffCategory)) : null;
+  const tariffBill = confirmed && tariff ? Math.round(calculateBill(confirmed.unitsLatestMonth, tariff, { phase: phaseOf(confirmed) }).total) : null;
+  const outline = (lead.roofOutline ?? null) as unknown as LatLng[] | null;
+
   const canCall = lead.stage === "SCORED" && lead.nextAction === "QUALIFICATION_CALL";
   const canBook = lead.stage === "SCORED" && lead.nextAction === "SURVEY_VISIT";
   const canSurvey = lead.stage === "SURVEY_BOOKED";
@@ -100,6 +115,29 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
             </p>
           </section>
 
+          {blockers.length > 0 ? (
+            <section data-testid="staff-blockers" className="grid gap-3 rounded-xl border border-destructive/40 p-5">
+              <h2 className="text-lg font-medium">Fix before the survey</h2>
+              <ul className="grid gap-3 text-sm">
+                {blockers.map((blocker) => (
+                  <li key={blocker.code}>
+                    <p className="font-medium">{tBlocker(`${blocker.code}.title`, blockerValues(blocker))}</p>
+                    <p className="text-muted-foreground">{tBlocker(`${blocker.code}.fix`, blockerValues(blocker))}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {season?.misleading ? (
+            <section data-testid="staff-season" className="grid gap-1 rounded-xl bg-muted p-5 text-sm">
+              <h2 className="text-base font-medium">Unusual month</h2>
+              <p className="tabular leading-relaxed">
+                {formatNumber(confirmed!.unitsLatestMonth)} units is {Math.abs(Math.round((season.ratio - 1) * 100))}% {season.direction === "ABOVE" ? "above" : "below"} this home&apos;s {formatNumber(confirmed!.averageMonthlyUnits)}-unit average. Sized on the year: {formatNumber(lead.recommendedKw ?? 0)} kW. On this bill alone it would be {sizedOnBillAlone === null ? "none" : `${formatNumber(sizedOnBillAlone)} kW`}.
+              </p>
+            </section>
+          ) : null}
+
           <section className="grid gap-3">
             <h2 className="text-lg font-medium">Customer</h2>
             <Facts
@@ -111,10 +149,20 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
                 ["Bill", formatINR(lead.monthlyBill)],
                 ["Consumer no.", maskConsumerNumber(billValues.consumerNumber)],
                 ["Recommended", lead.recommendedKw ? `${formatNumber(lead.recommendedKw)} kW` : "None yet"],
+                ...(confirmed?.consumerName ? ([["Name on bill", confirmed.consumerName]] as [string, ReactNode][]) : []),
+                ...(tariffBill ? ([["At today's tariff", `${formatINR(tariffBill)} for ${formatNumber(confirmed!.unitsLatestMonth)} units`]] as [string, ReactNode][]) : []),
                 ["Consent", `${lead.consentVersion}, ${istDate(lead.consentAt)}`],
               ]}
             />
           </section>
+
+          {outline ? (
+            <section className="grid gap-3">
+              <h2 className="text-lg font-medium">Roof marked by the customer</h2>
+              <RoofOutline outline={outline} />
+              <p className="tabular text-sm text-muted-foreground">{formatNumber(Math.round(lead.roofAreaSqm / SQM_PER_SQFT))} sq ft measured on the map.</p>
+            </section>
+          ) : null}
 
           {imageUrl && reading?.mimeType !== "application/pdf" ? (
             <section className="grid gap-3">

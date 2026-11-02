@@ -1,4 +1,4 @@
-import { PriceRules, SettingsForm, SubsidyRules } from "@/components/staff/rule-editors";
+import { PriceRules, SettingsForm, SubsidyRules, TariffRules } from "@/components/staff/rule-editors";
 import { istDate } from "@/domain/format";
 import { loadRules } from "@/server/estimate";
 import { requireAdmin } from "@/server/guards";
@@ -37,6 +37,12 @@ export default async function AdminPage() {
         <h2 id="price-heading" className="text-lg font-medium">Prices</h2>
         <p className="text-sm text-muted-foreground">These prices are assumptions (A05) until Company A supplies its rate card.</p>
         <PriceRules rules={rules.price} today={today} />
+      </section>
+
+      <section aria-labelledby="tariff-heading" className="grid gap-3">
+        <h2 id="tariff-heading" className="text-lg font-medium">Electricity tariffs</h2>
+        <p className="max-w-prose text-sm text-muted-foreground">The slabs behind each customer&apos;s bill before and after solar. FAC changes monthly, so copy it from a recent bill.</p>
+        <TariffRules rules={rules.tariff} today={today} />
       </section>
 
       <section aria-labelledby="settings-heading" className="grid gap-3">

@@ -5,6 +5,7 @@ import { SiteShell } from "@/components/public/site-shell";
 import { QuoteStory } from "@/components/quote/quote-story";
 import { formatDate } from "@/domain/format";
 import { db } from "@/server/db";
+import { appUrl } from "@/server/projects";
 import { readQuote } from "@/server/quotes";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -27,6 +28,7 @@ export default async function QuotePage({ params }: PageProps<"/[locale]/q/[toke
   });
   if (!quote) notFound();
   const t = await getTranslations("quote");
+  const brand = await getTranslations("brand");
   const { inputs, options, snapshot } = readQuote(quote);
   const kw = quote.project?.systemKw ?? quote.selectedKw;
   return (
@@ -52,6 +54,9 @@ export default async function QuotePage({ params }: PageProps<"/[locale]/q/[toke
           projectToken={quote.project?.token ?? null}
           customerName={quote.lead.name.split(" ")[0]}
           quoteDate={formatDate(quote.quoteDate.toISOString().slice(0, 10), locale)}
+          billView={snapshot.billView ?? null}
+          brand={brand("name")}
+          quoteUrl={`${appUrl()}/${locale}/q/${token}`}
         />
       </div>
     </SiteShell>

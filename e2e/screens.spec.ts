@@ -59,7 +59,10 @@ test("public screens", async ({ page }) => {
   await shoot(page, "04b-result-low", "/en/l/demo-lead-ld-30902/result");
   await shoot(page, "05-quote", "/en/q/demo-quote-ld-31007");
   await shoot(page, "05b-quote-marathi", "/mr/q/demo-quote-ld-31007");
+  await shoot(page, "05c-result-marathi-bill", "/mr/l/demo-lead-ld-31022/result");
+  await shoot(page, "05d-result-blockers", "/en/l/demo-lead-ld-31023/result");
   await shoot(page, "06-status", "/en/s/demo-status-pr-1005");
+  await shoot(page, "06d-status-savings", "/en/s/demo-status-pr-0903");
   await shoot(page, "06b-status-hindi", "/hi/s/demo-status-pr-1006");
   await shoot(page, "06c-status-documents", "/mr/s/demo-status-pr-1002");
   await shoot(page, "07-login", "/en/login");

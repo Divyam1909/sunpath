@@ -5,10 +5,15 @@ import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/public/site-shell";
 import { DocumentUpload } from "@/components/status/document-upload";
 import { SunArc } from "@/components/status/sun-arc";
-import { formatDate, formatNumber, istDate } from "@/domain/format";
+import { formatDate, formatINR, formatNumber, istDate } from "@/domain/format";
 import { REQUIRED_DOCS, STAGES, type Stage } from "@/domain/project";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { db } from "@/server/db";
+import { forecastFor, loadDurations } from "@/server/forecast";
+import { canCheckSavings } from "@/server/savings";
+import { getSettings } from "@/server/settings";
 import { fileStore } from "@/server/storage";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -24,6 +29,9 @@ export default async function StatusPage({ params }: PageProps<"/[locale]/s/[tok
       stage: true,
       systemKw: true,
       updatedAt: true,
+      createdAt: true,
+      stageEnteredAt: true,
+      savings: { select: { month: true, billAmount: true, promisedSaving: true, actualSaving: true, verdict: true }, orderBy: { month: "desc" } },
       // Only the first name leaves this query. No phone, address or consumer number.
       lead: { select: { name: true } },
       events: { select: { toStage: true, createdAt: true }, orderBy: { createdAt: "asc" } },
@@ -35,6 +43,9 @@ export default async function StatusPage({ params }: PageProps<"/[locale]/s/[tok
 
   const t = await getTranslations();
   const stage = project.stage as Stage;
+  const [settings, durations] = await Promise.all([getSettings(), loadDurations()]);
+  const forecast = forecastFor(project, durations, settings, new Date());
+  const monthLabel = (month: string) => new Intl.DateTimeFormat(`${locale}-IN-u-nu-latn`, { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${month}-15`));
   const index = STAGES.indexOf(stage);
   const reachedOn = new Map(project.events.map((e) => [e.toStage as string, e.createdAt]));
   const firstName = project.lead.name.split(" ")[0];
@@ -70,6 +81,14 @@ export default async function StatusPage({ params }: PageProps<"/[locale]/s/[tok
         <h2 className="font-medium">{t("status.next")}</h2>
         <p className="mt-1 leading-relaxed">{t(`stageNext.${stage}`)}</p>
       </section>
+
+      {forecast ? (
+        <section data-testid="forecast" className="mt-4 rounded-xl border p-5">
+          <h2 className="font-medium">{t("status.forecastTitle")}</h2>
+          <p className="tabular mt-1 text-lg">{t("status.forecastRange", { likely: formatDate(forecast.likely, locale), late: formatDate(forecast.late, locale) })}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{forecast.samples > 0 ? t("status.forecastHistory", { count: forecast.samples }) : t("status.forecastLimits")}</p>
+        </section>
+      ) : null}
 
       <ol className="mt-9 grid">
         {STAGES.map((item, i) => {
@@ -118,6 +137,28 @@ export default async function StatusPage({ params }: PageProps<"/[locale]/s/[tok
           </ul>
         )}
       </section>
+
+      {canCheckSavings(stage) ? (
+        <section data-testid="savings" className="mt-9 border-t pt-7">
+          <h2 className="text-lg font-medium">{t("status.savingsTitle")}</h2>
+          <p className="mt-1 text-muted-foreground">{t("status.savingsLead")}</p>
+          {project.savings.length === 0 ? (
+            <p className="mt-3 text-sm text-muted-foreground">{t("status.savingsEmpty")}</p>
+          ) : (
+            <ul className="mt-3 grid">
+              {project.savings.map((check) => (
+                <li key={check.month} data-testid="savings-row" className="border-b py-3 last:border-0">
+                  <p className="tabular">{t("status.savingsRow", { month: monthLabel(check.month), bill: formatINR(check.billAmount), saved: formatINR(check.actualSaving) })}</p>
+                  <p className="tabular text-sm text-muted-foreground">
+                    {t("status.savingsPromised", { promised: formatINR(check.promisedSaving) })}. <span className={check.verdict === "BEHIND" ? "font-medium text-destructive" : ""}>{t(`status.verdict.${check.verdict}` as "status.verdict.ON_TRACK")}</span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+          <Link href={`/s/${token}/bill`} className={`${buttonVariants({ variant: "outline" })} mt-4 w-full`}>{t("status.savingsAdd")}</Link>
+        </section>
+      ) : null}
 
       <p className="mt-8 text-sm text-muted-foreground">{t("status.help", { code: project.code })}</p>
     </SiteShell>

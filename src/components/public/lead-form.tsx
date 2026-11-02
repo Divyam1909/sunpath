@@ -1,15 +1,21 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { MapPinned } from "lucide-react";
 import { submitLead } from "@/app/[locale]/actions";
 import { describedBy, Field } from "@/components/field";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { formatNumber } from "@/domain/format";
+import type { LatLng } from "@/domain/geo";
 import { useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { leadInputSchema, OWNERSHIPS, ROOF_TYPES } from "@/lib/validation";
+
+const RoofMap = dynamic(() => import("@/components/public/roof-map").then((m) => m.RoofMap), { ssr: false });
 
 const STEP_FIELDS = [
   ["ownership", "roofType"],
@@ -74,6 +80,8 @@ export function LeadForm({ totalSteps }: { totalSteps: number }) {
   const [values, setValues] = useState<Values>({});
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const [mapOpen, setMapOpen] = useState(false);
+  const [outline, setOutline] = useState<LatLng[] | undefined>(undefined);
   const [pending, startTransition] = useTransition();
   const stepHeading = useRef<HTMLParagraphElement>(null);
   const firstRender = useRef(true);
@@ -110,7 +118,7 @@ export function LeadForm({ totalSteps }: { totalSteps: number }) {
       return;
     }
     startTransition(async () => {
-      const result = await submitLead({ ...values, locale });
+      const result = await submitLead({ ...values, roofOutline: outline, locale });
       if (result.ok) router.push(`/l/${result.token}/upload`);
       else setFormError(t(result.error));
     });
@@ -167,7 +175,23 @@ export function LeadForm({ totalSteps }: { totalSteps: number }) {
 
       {step === 1 ? (
         <div className="grid gap-5">
-          {textField("roofAreaSqFt", t("roofArea"), { inputMode: "numeric", autoComplete: "off" }, t("roofAreaHint"))}
+          {textField("roofAreaSqFt", t("roofArea"), { inputMode: "numeric", autoComplete: "off", readOnly: Boolean(outline) }, outline ? t("roofMeasured", { area: formatNumber(Number(values.roofAreaSqFt)) }) : t("roofAreaHint"))}
+          {mapOpen ? (
+            <RoofMap
+              pincode={String(values.pincode ?? "")}
+              onCancel={() => setMapOpen(false)}
+              onDone={(points, areaSqFt) => {
+                setOutline(points);
+                set("roofAreaSqFt", String(areaSqFt));
+                setMapOpen(false);
+              }}
+            />
+          ) : (
+            <Button type="button" variant="outline" className="-mt-2 justify-self-start" onClick={() => { setOutline(undefined); setMapOpen(true); }}>
+              <MapPinned aria-hidden />
+              {outline ? t("measureAgain") : t("measureRoof")}
+            </Button>
+          )}
           {textField("monthlyBill", t("monthlyBill"), { inputMode: "numeric", autoComplete: "off" })}
           {textField("pincode", t("pincode"), { inputMode: "numeric", autoComplete: "postal-code", maxLength: 6 })}
         </div>

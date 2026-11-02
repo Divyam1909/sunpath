@@ -1,6 +1,26 @@
 import { expect, test } from "@playwright/test";
 import { signInAsHomeowner, signInAsSales } from "./helpers";
 
+test("a bill after solar is refused before the net meter is in", async ({ request }) => {
+  const response = await request.post("/api/s/demo-status-pr-1001/bills", {
+    multipart: { file: { name: "b.jpg", mimeType: "image/jpeg", buffer: Buffer.from([0xff, 0xd8, 0xff, 0xe0]) } },
+  });
+  expect(response.status()).toBe(409);
+});
+
+test("the public quote and status pages carry no map location or consumer number", async ({ page }) => {
+  const pages = [
+    ["/en/q/demo-quote-ld-31007", "410000031007"],
+    ["/en/s/demo-status-pr-1008", "410000031021"],
+  ];
+  for (const [url, consumerNumber] of pages) {
+    await page.goto(url);
+    const html = await page.content();
+    expect(html).not.toContain(consumerNumber);
+    expect(html).not.toContain("roofOutline");
+  }
+});
+
 test("staff pages redirect signed-out visitors to sign in", async ({ page }) => {
   for (const path of ["/staff/leads", "/staff/projects", "/staff/messages", "/staff/admin"]) {
     await page.goto(path);

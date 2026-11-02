@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { findOverlap, priceRuleSchema, subsidyRuleSchema } from "@/domain/rules";
 import { settingsSchema } from "@/domain/settings";
+import { tariffRuleSchema } from "@/domain/tariff";
 import { db } from "@/server/db";
 import { loadRules } from "@/server/estimate";
 import { requireAdmin } from "@/server/guards";
@@ -46,6 +47,23 @@ export async function savePriceRule(raw: unknown) {
   const data = { ...fields, ...dates(rule) };
   if (id) await db.priceRule.update({ where: { id }, data });
   else await db.priceRule.create({ data });
+  revalidatePath("/staff/admin");
+  return { ok: true };
+}
+
+export async function saveTariffRule(raw: unknown) {
+  await requireAdmin();
+  const parsed = tariffRuleSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Check the fields." };
+  const rule = parsed.data;
+  const { tariff } = await loadRules();
+  const clash = findOverlap(rule, tariff);
+  if (clash) return { ok: false, error: overlapMessage(clash.name, clash.effectiveFrom, clash.effectiveTo) };
+
+  const { id, ...fields } = rule;
+  const data = { ...fields, ...dates(rule) };
+  if (id) await db.tariffRule.update({ where: { id }, data });
+  else await db.tariffRule.create({ data });
   revalidatePath("/staff/admin");
   return { ok: true };
 }

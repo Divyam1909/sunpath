@@ -213,9 +213,10 @@ export function lookalikeTruth(bill: Lookalike, tariff: BillTariff) {
     unitsLatestMonth: bill.units,
     billAmount: payable,
     currentBillAmount: current,
-    arrearsAmount: bill.arrears === 0 ? null : bill.arrears,
+    arrearsAmount: bill.arrears,
     billingMonth: english(bill.month),
-    meterStatus: bill.meterStatus,
+    // The solar layout, like the real one, prints no meter status.
+    meterStatus: bill.solar ? null : bill.meterStatus,
     solarImportUnits: bill.solar?.import ?? null,
     solarExportUnits: bill.solar?.export ?? null,
     solarBankedUnits: bill.solar?.banked ?? null,

@@ -20,7 +20,7 @@ export default async function UploadPage({ params }: PageProps<"/[locale]/l/[tok
       </div>
       <h1 className="text-[1.75rem] leading-tight font-medium tracking-tight">{t("upload.title")}</h1>
       <p className="mt-2 mb-7 leading-relaxed text-muted-foreground">{t("upload.lead")}</p>
-      <BillUpload token={token} />
+      <BillUpload url={`/api/leads/${token}/bill`} next={`/l/${token}/check`} manualHref={`/l/${token}/check?manual=1`} />
     </SiteShell>
   );
 }

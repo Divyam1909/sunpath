@@ -1,14 +1,19 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { BillBeforeAfter } from "@/components/public/bill-before-after";
+import { BlockerList } from "@/components/public/blocker-list";
 import { SaveAccess } from "@/components/public/save-access";
 import { SiteShell } from "@/components/public/site-shell";
 import { buttonVariants } from "@/components/ui/button";
 import type { ConfirmedBill } from "@/domain/bill";
+import type { Blocker } from "@/domain/blockers";
 import { formatINR, formatNumber } from "@/domain/format";
+import { checkWorth } from "@/domain/projection";
 import type { ScoreReason } from "@/domain/score";
+import { checkSeason } from "@/domain/usage";
 import { Link } from "@/i18n/navigation";
 import { db } from "@/server/db";
-import { estimateFor } from "@/server/estimate";
+import { billViewFor, estimateFor } from "@/server/estimate";
 import { latestBill } from "@/server/leads";
 import { getSettings } from "@/server/settings";
 
@@ -36,6 +41,11 @@ export default async function ResultPage({ params }: PageProps<"/[locale]/l/[tok
   const settings = await getSettings();
   const kw = lead.recommendedKw;
   const estimate = !isLow && kw ? await estimateFor(kw, bill, bill?.averageMonthlyUnits ?? 0, settings) : null;
+  const view = kw && bill ? await billViewFor(kw, bill, bill.averageMonthlyUnits, settings) : null;
+  const cost = kw && view ? await estimateFor(kw, bill, bill?.averageMonthlyUnits ?? 0, settings) : null;
+  const worth = view && cost ? checkWorth(cost.netCost, view.projection.yearlySaving, settings.poorPaybackYears) : null;
+  const season = bill ? checkSeason(bill.unitsLatestMonth, bill.averageMonthlyUnits, settings.seasonalMisleadingAt) : null;
+  const blockers = (lead.blockers ?? []) as unknown as Blocker[];
   const reasons = ((lead.scoreReasons ?? []) as unknown as ScoreReason[]).filter((r) => r.tone !== "note" || !isLow);
   const lowLead = lead.ownership === "TENANT" ? "lowTenantLead" : lead.monthlyBill < settings.score.smallBillBelow ? "lowSmallLead" : "lowOtherLead";
 
@@ -61,6 +71,21 @@ export default async function ResultPage({ params }: PageProps<"/[locale]/l/[tok
         <p className="mt-3 leading-relaxed text-muted-foreground">{t(`result.${lowLead}`)}</p>
       ) : null}
 
+      {worth?.poor ? (
+        <section data-testid="poor-worth" className="mt-6 rounded-xl border p-5">
+          <h2 className="font-medium">{t("year.poorTitle")}</h2>
+          <p className="mt-1 leading-relaxed">{t("year.poorLead", { years: formatNumber(worth.paybackYears ?? 25) })}</p>
+        </section>
+      ) : null}
+
+      {season?.misleading ? (
+        <p data-testid="season-note" className="mt-6 rounded-xl bg-muted p-4 leading-relaxed">
+          {t(season.direction === "ABOVE" ? "year.seasonAbove" : "year.seasonBelow", { percent: Math.abs(Math.round((season.ratio - 1) * 100)) })}
+        </p>
+      ) : null}
+
+      <BlockerList blockers={blockers} />
+
       {!isLow ? (
         <ul className="mt-7 grid gap-2 border-t pt-6 text-[0.9375rem]">
           {reasons
@@ -79,6 +104,17 @@ export default async function ResultPage({ params }: PageProps<"/[locale]/l/[tok
         <p className="mt-1.5 leading-relaxed">{isLow ? t("result.nextCall") : t("result.nextSurvey")}</p>
         <p className="mt-1.5 text-sm text-muted-foreground">{t("result.sentTo", { phone: lead.phone })}</p>
       </section>
+
+      {view ? (
+        <BillBeforeAfter
+          projection={view.projection}
+          estimated={view.year.months.filter((m) => m.estimated).map((m) => m.index)}
+          basis={view.year.basis}
+          tariffName={view.tariff.name}
+          tariffFrom={view.tariff.effectiveFrom}
+          locale={locale}
+        />
+      ) : null}
 
       {lead.userId ? null : (
         <section className="mt-10 border-t pt-6">

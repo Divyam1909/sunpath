@@ -21,6 +21,8 @@ function nextStep(lead: { stage: string; nextAction: string | null }) {
 }
 
 /** Up to two reasons, most useful first: problems, then caveats, then the bill. */
+const stopsCount = (blockers: unknown) => ((blockers ?? []) as { severity: string }[]).filter((b) => b.severity === "STOPS").length;
+
 const leadReasons = (reasons: unknown) => {
   const list = (reasons ?? []) as ScoreReason[];
   const rank = (r: ScoreReason) => (r.tone === "problem" ? 0 : r.tone === "note" ? 1 : r.code === "strongBill" ? 2 : 3);
@@ -125,6 +127,7 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
                         {lead.name}
                       </Link>
                       <div className="text-[0.8125rem] text-muted-foreground">{lead.code}</div>
+                      {stopsCount(lead.blockers) > 0 ? <div data-testid="lead-blocked" className="text-[0.8125rem] font-medium text-destructive">{stopsCount(lead.blockers)} to fix first</div> : null}
                     </td>
                     <td className="py-3 pr-4">
                       <ScoreBadge score={lead.score} />

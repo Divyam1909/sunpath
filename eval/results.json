@@ -1,0 +1,1928 @@
+[
+  {
+    "file": "lt-residential-2022.jpg",
+    "group": "real",
+    "source": "MSEDCL, Know your Bill Format, LT bill (Sep 2022), a real bill MSEDCL masked for publication",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "LT-I (B) Residential 1Ph",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 202,
+        "truth": 202
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 1930,
+        "truth": 1930
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 1926.69,
+        "truth": 1926.69
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": -1.46,
+        "truth": -1.46
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Sep 2022",
+        "truth": "Sep 2022"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "NORMAL",
+        "truth": "NORMAL"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 12,
+      "total": 12
+    }
+  },
+  {
+    "file": "lt-residential-2026-marathi.jpg",
+    "group": "real",
+    "source": "MSEDCL, Know your Bill Format, LT bill (Oct 2026), in Marathi",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 0.5,
+        "truth": 0.5
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 146,
+        "truth": 146
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 1470,
+        "truth": 1470
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 1473.66,
+        "truth": 1473.66
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "WRONG",
+        "read": 5.85,
+        "truth": -1.9
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Oct 2026",
+        "truth": "Oct 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "lt-solar-2026-08.jpg",
+    "group": "real",
+    "source": "MSEDCL, Know your Bill Format, LTIP bill with net meter (Aug 2026)",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "LT-III A",
+        "truth": "LT III A"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 270,
+        "truth": 270
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 4520,
+        "truth": 4520
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 1526.66,
+        "truth": 1526.66
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 2998.17,
+        "truth": 2998.17
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Aug 2026",
+        "truth": "Aug 2026"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": 359,
+        "truth": 359
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": 62,
+        "truth": 62
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "WRONG",
+        "read": 89,
+        "truth": 270
+      }
+    ],
+    "history": {
+      "correct": 13,
+      "total": 13
+    }
+  },
+  {
+    "file": "lt-solar-2026-10.jpg",
+    "group": "real",
+    "source": "MSEDCL, Know your Bill Format, LTIP bill with net meter (Oct 2026)",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 160,
+        "truth": 160
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 1220,
+        "truth": 1220
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 1237.31,
+        "truth": 1237.31
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": -21.18,
+        "truth": -21.18
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Oct-2026",
+        "truth": "Oct 2026"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": 160,
+        "truth": 160
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "WRONG",
+        "read": 436,
+        "truth": 0
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": 135,
+        "truth": 135
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": 160,
+        "truth": 160
+      }
+    ],
+    "history": {
+      "correct": 13,
+      "total": 13
+    }
+  },
+  {
+    "file": "institution-solar-scan-2023.jpg",
+    "group": "real",
+    "source": "A scanned, hand-annotated MSEDCL net meter bill a college published for accreditation (May 2023), first page only",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "LT-VII B I",
+        "truth": "LT VII B"
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 109010,
+        "truth": 109010
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "May 2023",
+        "truth": "May 2023"
+      }
+    ],
+    "history": {
+      "correct": 12,
+      "total": 12
+    }
+  },
+  {
+    "file": "lt-residential-2026-marathi-phone.jpg",
+    "group": "real",
+    "source": "MSEDCL, Know your Bill Format, LT bill (Oct 2026), in Marathi, as a simulated phone photo",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 0.5,
+        "truth": 0.5
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 146,
+        "truth": 146
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 1470,
+        "truth": 1470
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 1473.66,
+        "truth": 1473.66
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": -1.9,
+        "truth": -1.9
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Oct 2026",
+        "truth": "Oct 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "lt-solar-2026-08-phone.jpg",
+    "group": "real",
+    "source": "MSEDCL, Know your Bill Format, LTIP bill with net meter (Aug 2026), as a simulated phone photo",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "INVENTED",
+        "read": "4124132",
+        "truth": null
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "35 LT-III A",
+        "truth": "LT III A"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 270,
+        "truth": 270
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 4520,
+        "truth": 4520
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 1526.66,
+        "truth": 1526.66
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 2998.17,
+        "truth": 2998.17
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Aug-2026",
+        "truth": "Aug 2026"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": 359,
+        "truth": 359
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": 62,
+        "truth": 62
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": 270,
+        "truth": 270
+      }
+    ],
+    "history": {
+      "correct": 13,
+      "total": 13
+    }
+  },
+  {
+    "file": "typical-marathi.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900012345",
+        "truth": "999900012345"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "PRASAD M DESHPANDE",
+        "truth": "PRASAD M DESHPANDE"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 5,
+        "truth": 5
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 310,
+        "truth": 310
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 4020,
+        "truth": 4020
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 4018.01,
+        "truth": 4018.01
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 4.62,
+        "truth": 4.62
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Sep 2026",
+        "truth": "Sep 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "typical-marathi-tilted.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900012345",
+        "truth": "999900012345"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "PRASAD M DESHPANDE",
+        "truth": "PRASAD M DESHPANDE"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 5,
+        "truth": 5
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 310,
+        "truth": 310
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 4020,
+        "truth": 4020
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 4018.01,
+        "truth": 4018.01
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 4.62,
+        "truth": 4.62
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Sep 2026",
+        "truth": "Sep 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "peak-may-marathi.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900023456",
+        "truth": "999900023456"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "SHRI VINOD S BOBDE",
+        "truth": "SHRI VINOD S BOBDE"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 6,
+        "truth": 6
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 610,
+        "truth": 610
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 10360,
+        "truth": 10360
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 10356.83,
+        "truth": 10356.83
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "May 2026",
+        "truth": "May 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "peak-may-marathi-dim.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900023456",
+        "truth": "999900023456"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "SHRI VINOD S BOBDE",
+        "truth": "SHRI VINOD S BOBDE"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 6,
+        "truth": 6
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 610,
+        "truth": 610
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 10360,
+        "truth": 10360
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 10356.83,
+        "truth": 10356.83
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "May 2026",
+        "truth": "May 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "arrears-other-name.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900034567",
+        "truth": "999900034567"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "RAMESH K TIWARI",
+        "truth": "RAMESH K TIWARI"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 2,
+        "truth": 2
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 420,
+        "truth": 420
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 9210,
+        "truth": 9210
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 6222.94,
+        "truth": 6222.94
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 2986.44,
+        "truth": 2986.44
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Sep 2026",
+        "truth": "Sep 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "arrears-other-name-soft.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900034567",
+        "truth": "999900034567"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "RAMESH K TIWARI",
+        "truth": "RAMESH K TIWARI"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 2,
+        "truth": 2
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 420,
+        "truth": 420
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 9210,
+        "truth": 9210
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 6222.94,
+        "truth": 6222.94
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 2986.44,
+        "truth": 2986.44
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Sep 2026",
+        "truth": "Sep 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "Normal",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "three-phase-english.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900045678",
+        "truth": "999900045678"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "DR MEERA A JOSHI",
+        "truth": "Dr Meera A Joshi"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "91/LT I Res 3-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 9,
+        "truth": 9
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 480,
+        "truth": 480
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 7770,
+        "truth": 7770
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 7779.42,
+        "truth": 7779.42
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": -12.3,
+        "truth": -12.3
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "AUG 2026",
+        "truth": "Aug 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "NORMAL",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "three-phase-english-tilted.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900045678",
+        "truth": "999900045678"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "DR MEERA A JOSHI",
+        "truth": "Dr Meera A Joshi"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "91/LT I Res 3-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 9,
+        "truth": 9
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 480,
+        "truth": 480
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 7770,
+        "truth": 7770
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 7779.42,
+        "truth": 7779.42
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": -12.3,
+        "truth": -12.3
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Aug 2026",
+        "truth": "Aug 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "NORMAL",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "small-user.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900056789",
+        "truth": "999900056789"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "SUNANDA P KHOBRAGADE",
+        "truth": "Sunanda P Khobragade"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 1,
+        "truth": 1
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 78,
+        "truth": 78
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 680,
+        "truth": 680
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 676.49,
+        "truth": 676.49
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Sep 2026",
+        "truth": "Sep 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "NORMAL",
+        "truth": "Normal"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 10,
+      "total": 11
+    }
+  },
+  {
+    "file": "faulty-meter.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900067890",
+        "truth": "999900067890"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "ASHOK T MESHRAM",
+        "truth": "Ashok T Meshram"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90/LT I Res 1-Phase",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 4,
+        "truth": 4
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 240,
+        "truth": 240
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 2920,
+        "truth": 2920
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 2919.72,
+        "truth": 2919.72
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Jul 2026",
+        "truth": "Jul 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": "FAULTY",
+        "truth": "Faulty"
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "after-solar-march.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900078901",
+        "truth": "999900078901"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "DEEPAK NAGPURE",
+        "truth": "Deepak Nagpure"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90 LT-I B Residential",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 7,
+        "truth": 7
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 96,
+        "truth": 96
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 800,
+        "truth": 800
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 797.8,
+        "truth": 797.8
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Mar-2026",
+        "truth": "Mar 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": 402,
+        "truth": 402
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": 306,
+        "truth": 306
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": 96,
+        "truth": 96
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "after-solar-march-soft.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900078901",
+        "truth": "999900078901"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "DEEPAK NAGPURE",
+        "truth": "Deepak Nagpure"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90 LT-I B Residential",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 7,
+        "truth": 7
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 96,
+        "truth": 96
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 800,
+        "truth": 800
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 797.8,
+        "truth": 797.8
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Mar 2026",
+        "truth": "Mar 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": 402,
+        "truth": 402
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": 306,
+        "truth": 306
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": 96,
+        "truth": 96
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "after-solar-july.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900089012",
+        "truth": "999900089012"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "SWATI DHOKE",
+        "truth": "Swati Dhoke"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90 LT-I B Residential",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 3,
+        "truth": 3
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 188,
+        "truth": 188
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 2450,
+        "truth": 2450
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 2141.59,
+        "truth": 2141.59
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 310,
+        "truth": 310
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Jul-2026",
+        "truth": "Jul 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": 281,
+        "truth": 281
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": 93,
+        "truth": 93
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": 188,
+        "truth": 188
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  },
+  {
+    "file": "after-solar-july-dim.jpg",
+    "group": "lookalike",
+    "source": "Fictional",
+    "status": "read",
+    "outcomes": [
+      {
+        "field": "consumerNumber",
+        "outcome": "CORRECT",
+        "read": "999900089012",
+        "truth": "999900089012"
+      },
+      {
+        "field": "consumerName",
+        "outcome": "CORRECT",
+        "read": "SWATI DHOKE",
+        "truth": "Swati Dhoke"
+      },
+      {
+        "field": "tariffCategory",
+        "outcome": "CORRECT",
+        "read": "90 LT-I B Residential",
+        "truth": "LT I"
+      },
+      {
+        "field": "sanctionedLoadKw",
+        "outcome": "CORRECT",
+        "read": 3,
+        "truth": 3
+      },
+      {
+        "field": "unitsLatestMonth",
+        "outcome": "CORRECT",
+        "read": 188,
+        "truth": 188
+      },
+      {
+        "field": "billAmount",
+        "outcome": "CORRECT",
+        "read": 2450,
+        "truth": 2450
+      },
+      {
+        "field": "currentBillAmount",
+        "outcome": "CORRECT",
+        "read": 2141.59,
+        "truth": 2141.59
+      },
+      {
+        "field": "arrearsAmount",
+        "outcome": "CORRECT",
+        "read": 310,
+        "truth": 310
+      },
+      {
+        "field": "billingMonth",
+        "outcome": "CORRECT",
+        "read": "Jul-2026",
+        "truth": "Jul 2026"
+      },
+      {
+        "field": "meterStatus",
+        "outcome": "CORRECT",
+        "read": null,
+        "truth": null
+      },
+      {
+        "field": "solarImportUnits",
+        "outcome": "CORRECT",
+        "read": 281,
+        "truth": 281
+      },
+      {
+        "field": "solarExportUnits",
+        "outcome": "CORRECT",
+        "read": 93,
+        "truth": 93
+      },
+      {
+        "field": "solarBankedUnits",
+        "outcome": "CORRECT",
+        "read": 0,
+        "truth": 0
+      },
+      {
+        "field": "solarBilledUnits",
+        "outcome": "CORRECT",
+        "read": 188,
+        "truth": 188
+      }
+    ],
+    "history": {
+      "correct": 11,
+      "total": 11
+    }
+  }
+]

@@ -36,4 +36,5 @@ export async function fillLeadForm(page: Page, { name, phone, bill = "3200" }: {
 
 export async function uploadBill(page: Page, file: string) {
   await page.getByTestId("bill-file").setInputFiles(path.join(SAMPLES, file));
+  await page.getByRole("button", { name: /Read my bill|Use this photo anyway/ }).click();
 }

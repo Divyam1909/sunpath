@@ -18,6 +18,7 @@ export default defineConfig({
     { name: "desktop", testMatch: /flows\.spec\.ts/, use: { viewport: { width: 1280, height: 900 } } },
     { name: "mobile", testMatch: /mobile\.spec\.ts/, use: { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true } },
     { name: "security", testMatch: /security\.spec\.ts/ },
+    { name: "features", testMatch: /features\.spec\.ts/, use: { viewport: { width: 1280, height: 900 } } },
     { name: "screens", testMatch: /screens\.spec\.ts/ },
   ],
   webServer: {

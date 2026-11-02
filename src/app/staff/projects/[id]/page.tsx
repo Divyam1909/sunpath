@@ -8,9 +8,12 @@ import { formatINR, formatNumber, istDate } from "@/domain/format";
 import { checkStuck, nextStage, REQUIRED_DOCS, STAGES, type Stage } from "@/domain/project";
 import { cn } from "@/lib/utils";
 import { db } from "@/server/db";
+import { forecastFor, loadDurations } from "@/server/forecast";
 import { requireStaff } from "@/server/guards";
 import { getSettings } from "@/server/settings";
 import { fileStore } from "@/server/storage";
+
+const VERDICT_LABELS: Record<string, string> = { ON_TRACK: "On track", WATCH: "Watch", BEHIND: "Behind" };
 
 export default async function ProjectDetailPage({ params }: PageProps<"/staff/projects/[id]">) {
   await requireStaff();
@@ -22,11 +25,13 @@ export default async function ProjectDetailPage({ params }: PageProps<"/staff/pr
       documents: { orderBy: { createdAt: "desc" } },
       events: { orderBy: { createdAt: "desc" }, include: { actor: { select: { name: true } } } },
       outbox: { orderBy: { createdAt: "desc" } },
+      savings: { orderBy: { month: "desc" } },
     },
   });
   if (!project) notFound();
 
-  const settings = await getSettings();
+  const [settings, durations] = await Promise.all([getSettings(), loadDurations()]);
+  const forecast = forecastFor(project, durations, settings, new Date());
   const stage = project.stage as Stage;
   const index = STAGES.indexOf(stage);
   const next = nextStage(stage);
@@ -71,6 +76,49 @@ export default async function ProjectDetailPage({ params }: PageProps<"/staff/pr
           Open customer status page
         </Link>
       </section>
+
+      {forecast ? (
+        <section data-testid="project-forecast" className={cn("grid gap-1 rounded-xl border p-5 text-sm", forecast.slips && "border-foreground/30")}>
+          <h2 className="text-lg font-medium">Likely finish: <span className="tabular">{forecast.likely}</span></h2>
+          <p className="tabular text-muted-foreground">
+            Could run to {forecast.late}. Promised by {forecast.promised}{forecast.slips ? `, so ${forecast.slipDays} days late on current pace` : ""}.
+          </p>
+          <p className="text-muted-foreground">
+            {forecast.samples > 0 ? `From ${forecast.samples} finished projects.` : "From stage limits, until more projects finish."}
+            {forecast.slowest ? ` ${STAGE_LABELS[forecast.slowest.stage]} usually takes ${forecast.slowest.typicalDays} days against a ${forecast.slowest.slaDays}-day limit.` : ""}
+          </p>
+        </section>
+      ) : null}
+
+      {project.savings.length > 0 ? (
+        <section aria-labelledby="savings-heading">
+          <h2 id="savings-heading" className="text-lg font-medium">Bills after solar</h2>
+          <div className="mt-2 overflow-x-auto">
+            <table className="w-full min-w-[560px] text-sm">
+              <thead>
+                <tr className="border-b text-left text-muted-foreground">
+                  <th scope="col" className="py-2 pr-4 font-normal">Month</th>
+                  <th scope="col" className="py-2 pr-4 text-right font-normal">Bill</th>
+                  <th scope="col" className="py-2 pr-4 text-right font-normal">Promised saving</th>
+                  <th scope="col" className="py-2 pr-4 text-right font-normal">Actual saving</th>
+                  <th scope="col" className="py-2 font-normal">Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                {project.savings.map((check) => (
+                  <tr key={check.id} className="border-b">
+                    <td className="tabular py-2 pr-4">{check.month}</td>
+                    <td className="tabular py-2 pr-4 text-right">{formatINR(check.billAmount)}</td>
+                    <td className="tabular py-2 pr-4 text-right">{formatINR(check.promisedSaving)}</td>
+                    <td className="tabular py-2 pr-4 text-right">{formatINR(check.actualSaving)}</td>
+                    <td className={cn("py-2", check.verdict === "BEHIND" && "font-medium text-destructive")}>{VERDICT_LABELS[check.verdict]} ({Math.round(check.ratio * 100)}%)</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
 
       <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
         <section aria-labelledby="checklist-heading">

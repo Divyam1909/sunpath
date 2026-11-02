@@ -83,6 +83,8 @@ export interface BillView {
   tariff: BillTariff;
   basis: UsageBasis;
   monthlyUnits: number[];
+  /** Calendar months the bill did not print. */
+  estimatedMonths: number[];
   byKw: Record<string, BillProjection>;
 }
 
@@ -94,7 +96,8 @@ export function buildBillView(
   const year = buildUsageYear(usage, averageUnits, settings);
   const monthlyUnits = year.months.map((m) => m.units);
   const byKw = Object.fromEntries(sizes.map((systemKw) => [String(systemKw), projectBills({ monthlyUnits, systemKw, tariff, phase }, settings)]));
-  return { tariff, basis: year.basis, monthlyUnits, byKw };
+  const estimatedMonths = year.months.filter((m) => m.estimated).map((m) => m.index);
+  return { tariff, basis: year.basis, monthlyUnits, estimatedMonths, byKw };
 }
 
 export interface WorthCheck {

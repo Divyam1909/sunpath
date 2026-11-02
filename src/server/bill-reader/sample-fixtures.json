@@ -356,8 +356,8 @@
         "confidence": 0.96
       },
       "arrearsAmount": {
-        "value": null,
-        "confidence": 0
+        "value": 0,
+        "confidence": 0.96
       },
       "billingMonth": {
         "value": "May 2026",
@@ -716,16 +716,16 @@
         "confidence": 0.96
       },
       "arrearsAmount": {
-        "value": null,
-        "confidence": 0
+        "value": 0,
+        "confidence": 0.96
       },
       "billingMonth": {
         "value": "Mar 2026",
         "confidence": 0.96
       },
       "meterStatus": {
-        "value": "Normal",
-        "confidence": 0.96
+        "value": null,
+        "confidence": 0
       },
       "solarImportUnits": {
         "value": 402,

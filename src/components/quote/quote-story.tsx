@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Download } from "lucide-react";
 import { payAdvanceAction } from "@/app/[locale]/q/actions";
+import { BillBeforeAfter } from "@/components/public/bill-before-after";
+import { FamilyCard } from "@/components/quote/family-card";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { formatINR, formatNumber } from "@/domain/format";
+import type { BillView } from "@/domain/projection";
 import type { QuoteOption } from "@/domain/quote";
 import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
@@ -23,11 +26,15 @@ interface Props {
   projectToken: string | null;
   customerName: string;
   quoteDate: string;
+  billView: BillView | null;
+  brand: string;
+  quoteUrl: string;
 }
 
 export function QuoteStory(props: Props) {
   const { token, options, recommendedKw, tariffPerUnit, surplusRate, generationFactor, scheme, advancePercent, projectToken } = props;
   const t = useTranslations("quote");
+  const tYear = useTranslations("year");
   const locale = useLocale();
   const router = useRouter();
   const [kw, setKw] = useState(props.initialKw);
@@ -36,6 +43,22 @@ export function QuoteStory(props: Props) {
   const option = options.find((o) => o.systemKw === kw) ?? options[0];
   const advance = Math.round((option.netCost * advancePercent) / 100);
   const years = option.paybackYears === null ? null : t("years", { years: formatNumber(option.paybackYears) });
+  const projection = props.billView?.byKw[String(option.systemKw)] ?? null;
+  const cardFacts = useMemo(
+    () => ({
+      name: props.customerName,
+      brand: props.brand,
+      kw: formatNumber(option.systemKw),
+      netCost: formatINR(option.netCost),
+      payback: option.paybackYears === null ? "-" : t("years", { years: formatNumber(option.paybackYears) }),
+      saving25: formatINR(option.savings25Years),
+      before: projection ? formatINR(projection.monthlyBefore) : null,
+      after: projection ? formatINR(projection.monthlyAfter) : null,
+      date: props.quoteDate,
+      link: props.quoteUrl,
+    }),
+    [option, projection, props.brand, props.customerName, props.quoteDate, props.quoteUrl, t],
+  );
 
   const rows: [string, (o: QuoteOption) => string][] = [
     ["gross", (o) => formatINR(o.grossCost)],
@@ -156,6 +179,22 @@ export function QuoteStory(props: Props) {
           {t("downloadPdf")}
         </a>
       </section>
+
+      {props.billView && projection ? (
+        <>
+          <BillBeforeAfter
+            projection={projection}
+            estimated={props.billView.estimatedMonths ?? []}
+            basis={props.billView.basis}
+            tariffName={props.billView.tariff.name}
+            tariffFrom={props.billView.tariff.effectiveFrom}
+            locale={locale}
+          />
+          <p className="mt-2 text-[0.8125rem] leading-relaxed text-muted-foreground">{tYear("quoteNote")}</p>
+        </>
+      ) : null}
+
+      <FamilyCard facts={cardFacts} />
 
       {projectToken ? null : (
         <section className="mt-12 border-t pt-8">
