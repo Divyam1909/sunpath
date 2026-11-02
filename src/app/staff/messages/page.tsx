@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { istDate } from "@/domain/format";
 import { db } from "@/server/db";
 import { requireStaff } from "@/server/guards";
@@ -20,11 +21,11 @@ export default async function MessagesPage() {
       {messages.length === 0 ? (
         <p className="rounded-xl bg-muted px-6 py-10 text-center text-muted-foreground">Messages appear here when a lead is confirmed or a project moves stage.</p>
       ) : (
-        <ul className="grid">
+        <ul className="grid grid-cols-[minmax(0,1fr)]">
           {messages.map((message) => (
-            <li key={message.id} data-testid="outbox-row" className="grid gap-1 border-b py-3 sm:grid-cols-[13rem_1fr] sm:gap-6">
+            <li key={message.id} data-testid="outbox-row" className="grid grid-cols-[minmax(0,1fr)] gap-1 border-b py-3 sm:grid-cols-[13rem_minmax(0,1fr)] sm:gap-6">
               <div className="text-sm">
-                <p className="font-medium">{message.lead.name}</p>
+                <Link href={`/staff/leads/${message.leadId}`} className="py-1 font-medium underline-offset-4 hover:underline">{message.lead.name}</Link>
                 <p className="tabular text-muted-foreground">
                   ••••{message.toPhone.slice(-4)}, {message.locale}, {istDate(message.createdAt)}
                 </p>

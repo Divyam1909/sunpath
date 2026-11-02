@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { createTranslator } from "next-intl";
 import { notFound } from "next/navigation";
@@ -90,7 +91,7 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
   return (
     <div className="grid gap-8">
       <div>
-        <Link href="/staff/leads" className="text-sm text-muted-foreground underline-offset-4 hover:underline">Leads</Link>
+        <Link href="/staff/leads" className="inline-flex items-center gap-1 py-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"><ArrowLeft aria-hidden className="size-3.5" />All leads</Link>
         <div className="mt-1 flex flex-wrap items-center gap-3">
           <h1 className="text-2xl font-medium tracking-tight">{lead.name}</h1>
           <ScoreBadge score={lead.score} />
@@ -142,7 +143,7 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
             <h2 className="text-lg font-medium">Customer</h2>
             <Facts
               items={[
-                ["Phone", lead.phone],
+                ["Phone", <a key="phone" href={`tel:+91${lead.phone}`} className="py-1 font-medium text-primary underline-offset-4 hover:underline">{lead.phone}</a>],
                 ["Property", lead.ownership === "OWNER" ? "Owner" : "Tenant"],
                 ["Roof", `${ROOF_LABELS[lead.roofType]}, ${formatNumber(Math.round(lead.roofAreaSqm / SQM_PER_SQFT))} sq ft`],
                 ["Pincode", `${lead.pincode}${isVidarbhaPincode(lead.pincode) ? "" : " (outside Vidarbha)"}`],

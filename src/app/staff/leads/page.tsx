@@ -35,12 +35,16 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
   const score = SCORES.includes(params.score as string) ? (params.score as Score) : undefined;
   const stage = typeof params.stage === "string" && params.stage in LEAD_STAGE_LABELS ? (params.stage as LeadStage) : undefined;
   const days = WINDOWS[params.days as string];
+  const search = typeof params.q === "string" ? params.q.trim().slice(0, 60) : "";
 
   const leads = await db.lead.findMany({
     where: {
       score,
       stage,
       createdAt: days ? { gte: daysAgo(days) } : undefined,
+      OR: search
+        ? [{ name: { contains: search, mode: "insensitive" } }, { phone: { contains: search } }, { code: { contains: search, mode: "insensitive" } }]
+        : undefined,
     },
     orderBy: [{ score: "asc" }, { createdAt: "desc" }],
     include: { bills: { orderBy: { createdAt: "desc" }, take: 1, select: { confirmed: true } } },
@@ -54,8 +58,11 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
       <ImpactPanel />
 
       <div className="flex flex-wrap items-end justify-between gap-4">
-        <h1 className="text-xl font-medium">Leads</h1>
+        <h1 className="text-xl font-medium">
+          Leads <span className="tabular ml-1 text-muted-foreground">{leads.length}</span>
+        </h1>
         <form className="flex flex-wrap items-center gap-2" method="get">
+          <input type="search" name="q" defaultValue={search} aria-label="Search leads" placeholder="Name, phone or lead code" className={`${selectClass} w-full sm:w-56`} />
           <select name="score" defaultValue={score ?? ""} aria-label="Score" className={selectClass}>
             <option value="">All scores</option>
             <option value="HIGH">High</option>
@@ -76,6 +83,7 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
             <option value="30">Last 30 days</option>
           </select>
           <button className="h-10 rounded-lg border border-input px-3 text-sm font-medium hover:bg-muted">Apply</button>
+          {search || score || stage || days ? <Link href="/staff/leads" className="px-1 py-2 text-sm text-primary underline underline-offset-4">Clear</Link> : null}
         </form>
       </div>
 
@@ -90,9 +98,9 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
         <>
         <ul className="grid gap-3 md:hidden">
           {leads.map((lead) => (
-            <li key={lead.id} className="rounded-lg border p-4 text-sm">
+            <li key={lead.id} className="relative rounded-lg border p-4 text-sm hover:bg-muted/60">
               <div className="flex items-start justify-between gap-3">
-                <Link href={`/staff/leads/${lead.id}`} className="font-medium underline-offset-4 hover:underline">{lead.name}</Link>
+                <Link href={`/staff/leads/${lead.id}`} className="font-medium underline-offset-4 after:absolute after:inset-0 hover:underline">{lead.name}</Link>
                 <ScoreBadge score={lead.score} />
               </div>
               <p className="mt-1 text-muted-foreground">{leadReasons(lead.scoreReasons)}</p>
@@ -121,9 +129,9 @@ export default async function LeadsPage({ searchParams }: PageProps<"/staff/lead
               {leads.map((lead) => {
                 const bill = lead.bills[0]?.confirmed as ConfirmedBill | null | undefined;
                 return (
-                  <tr key={lead.id} data-testid="lead-row" className="border-b align-top hover:bg-muted/60">
+                  <tr key={lead.id} data-testid="lead-row" className="relative border-b align-top hover:bg-muted/60">
                     <td className="py-3 pr-4">
-                      <Link href={`/staff/leads/${lead.id}`} className="font-medium underline-offset-4 hover:underline">
+                      <Link href={`/staff/leads/${lead.id}`} className="font-medium underline-offset-4 after:absolute after:inset-0 hover:underline">
                         {lead.name}
                       </Link>
                       <div className="text-[0.8125rem] text-muted-foreground">{lead.code}</div>

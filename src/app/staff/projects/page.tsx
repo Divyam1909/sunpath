@@ -30,7 +30,7 @@ export default async function ProjectsPage() {
     .sort((a, b) => (b.forecast?.slipDays ?? 0) - (a.forecast?.slipDays ?? 0));
 
   return (
-    <div className="grid gap-9">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-9">
       <section aria-labelledby="stuck-heading">
         <h1 id="stuck-heading" className="text-xl font-medium">
           Stuck projects <span className="tabular ml-1 text-muted-foreground" data-testid="stuck-count">{stuck.length}</span>
@@ -111,7 +111,22 @@ export default async function ProjectsPage() {
         {rows.length === 0 ? (
           <p className="mt-3 rounded-xl bg-muted px-6 py-10 text-center text-muted-foreground">Projects appear here when a customer pays an advance.</p>
         ) : (
-          <div className="mt-2 overflow-x-auto">
+          <>
+          <ul className="mt-3 grid gap-2 md:hidden">
+            {rows.map((row) => (
+              <li key={row.id} className="relative rounded-lg border p-4 text-sm hover:bg-muted/60">
+                <div className="flex items-baseline justify-between gap-3">
+                  <Link href={`/staff/projects/${row.id}`} className="font-medium underline-offset-4 after:absolute after:inset-0 hover:underline">{row.lead.name}</Link>
+                  <span className="text-muted-foreground">{row.code}</span>
+                </div>
+                <p className="mt-1">{STAGE_LABELS[row.stage]} <span className="tabular text-muted-foreground">({row.stageNumber} of {STAGES.length})</span></p>
+                <p className={`tabular mt-1 ${row.check.stuck ? "font-medium text-destructive" : "text-muted-foreground"}`}>
+                  {row.stage === FINAL_STAGE ? "Done" : `${row.check.days} of ${row.check.slaDays} days${row.forecast?.likely ? `, likely ${row.forecast.likely}` : ""}`}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-2 hidden overflow-x-auto md:block">
             <table className="w-full min-w-[820px] text-sm">
               <thead>
                 <tr className="border-b text-left text-muted-foreground">
@@ -125,9 +140,9 @@ export default async function ProjectsPage() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={row.id} className="border-b hover:bg-muted/60">
+                  <tr key={row.id} className="relative border-b hover:bg-muted/60">
                     <td className="py-3 pr-4">
-                      <Link href={`/staff/projects/${row.id}`} className="font-medium underline-offset-4 hover:underline">{row.lead.name}</Link>
+                      <Link href={`/staff/projects/${row.id}`} className="font-medium underline-offset-4 after:absolute after:inset-0 hover:underline">{row.lead.name}</Link>
                       <div className="text-[0.8125rem] text-muted-foreground">{row.code}</div>
                     </td>
                     <td className="py-3 pr-4">
@@ -144,6 +159,7 @@ export default async function ProjectsPage() {
               </tbody>
             </table>
           </div>
+          </>
         )}
       </section>
     </div>

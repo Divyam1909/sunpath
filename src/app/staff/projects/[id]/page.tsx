@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DocumentUpload } from "@/components/status/document-upload";
@@ -45,10 +46,11 @@ export default async function ProjectDetailPage({ params }: PageProps<"/staff/pr
   return (
     <div className="grid gap-8">
       <div>
-        <Link href="/staff/projects" className="text-sm text-muted-foreground underline-offset-4 hover:underline">Projects</Link>
+        <Link href="/staff/projects" className="inline-flex items-center gap-1 py-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"><ArrowLeft aria-hidden className="size-3.5" />All projects</Link>
         <div className="mt-1 flex flex-wrap items-baseline gap-x-3">
           <h1 className="text-2xl font-medium tracking-tight">{project.lead.name}</h1>
           <span className="text-sm text-muted-foreground">{project.code}</span>
+          <Link href={`/staff/leads/${project.leadId}`} className="py-1 text-sm font-medium text-primary underline-offset-4 hover:underline">View lead</Link>
         </div>
         <p className="tabular mt-1 text-sm text-muted-foreground">
           {formatNumber(project.systemKw)} kW, {formatINR(project.netCost)} net cost, {formatINR(project.advanceAmount)} advance ({project.advanceReference}), {project.statusViews} status page views
@@ -140,7 +142,7 @@ export default async function ProjectDetailPage({ params }: PageProps<"/staff/pr
                             {doc.byCustomer ? <span className="text-muted-foreground"> (from customer)</span> : null}
                           </span>
                           {url ? (
-                            <a href={url} target="_blank" rel="noreferrer" className="font-medium text-primary underline-offset-4 hover:underline">View</a>
+                            <a href={url} target="_blank" rel="noreferrer" className="py-1 font-medium text-primary underline-offset-4 hover:underline">View</a>
                           ) : i <= index ? (
                             <DocumentUpload
                               url={`/api/staff/projects/${project.id}/documents`}
