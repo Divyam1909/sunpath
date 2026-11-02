@@ -23,10 +23,17 @@ describe("parseBillResponse", () => {
   });
 
   it("flags values it could not find as low confidence instead of guessing", () => {
+    const result = parse({ ...good, sanctionedLoadKw: { value: null, confidence: 0 } });
+    if (result.kind !== "ok") throw new Error("expected ok");
+    expect(result.lowConfidence).toEqual(["sanctionedLoadKw"]);
+    expect(result.extraction.sanctionedLoadKw.value).toBeNull();
+  });
+
+  it("does not hold a missing printed rate against the read, because most bills use slabs", () => {
     const result = parse(good);
     if (result.kind !== "ok") throw new Error("expected ok");
-    expect(result.lowConfidence).toEqual(["ratePerUnit"]);
-    expect(result.extraction.ratePerUnit.value).toBeNull();
+    expect(result.lowConfidence).toEqual([]);
+    expect(result.confidence).toBeGreaterThan(0.9);
   });
 
   it("flags fields under the confidence threshold", () => {

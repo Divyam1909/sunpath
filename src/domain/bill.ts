@@ -64,9 +64,11 @@ export function parseBillResponse(raw: string, lowConfidenceBelow: number): Bill
   }
 
   // A value the model could not find counts as zero confidence, never as a guess.
-  const scores = BILL_FIELDS.map((f) => (extraction[f].value === null ? 0 : extraction[f].confidence));
-  const confidence = Number((scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(2));
-  const lowConfidence = BILL_FIELDS.filter((f, i) => scores[i] < lowConfidenceBelow);
+  // Most bills print slabs rather than one rate, so a missing rate is normal and not held against the read.
+  const expected = BILL_FIELDS.filter((f) => f !== "ratePerUnit" || extraction.ratePerUnit.value !== null);
+  const score = (f: BillField) => (extraction[f].value === null ? 0 : extraction[f].confidence);
+  const confidence = Number((expected.reduce((sum, f) => sum + score(f), 0) / expected.length).toFixed(2));
+  const lowConfidence = expected.filter((f) => score(f) < lowConfidenceBelow);
   return { kind: "ok", extraction, confidence, lowConfidence };
 }
 

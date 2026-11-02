@@ -1,0 +1,276 @@
+{
+  "f834021e82e2752150a79e7743b044001df6c285f082eeb575898c23159f3a44": {
+    "label": "Clear home bill, 340 units",
+    "file": "clear-home-bill.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "consumerNumber": {
+        "value": "410019900881",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": "LT I - Residential",
+        "confidence": 0.96
+      },
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "sanctionedLoadKw": {
+        "value": 5,
+        "confidence": 0.96
+      },
+      "unitsLatestMonth": {
+        "value": 340,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 3200,
+        "confidence": 0.96
+      },
+      "billingMonth": {
+        "value": "Sep 2026",
+        "confidence": 0.96
+      },
+      "monthlyUnitsHistory": [
+        310,
+        305,
+        265,
+        270,
+        300,
+        365,
+        430,
+        455,
+        380,
+        335,
+        325,
+        340
+      ]
+    }
+  },
+  "2b661dcd21e893de81b639149ba5fcb2ab0f48aa65caf4c5b54bc0a96f63d587": {
+    "label": "Small bill, ₹650",
+    "file": "small-home-bill.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "consumerNumber": {
+        "value": "430029900915",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": "LT I - Residential",
+        "confidence": 0.96
+      },
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "sanctionedLoadKw": {
+        "value": 2,
+        "confidence": 0.96
+      },
+      "unitsLatestMonth": {
+        "value": 85,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 650,
+        "confidence": 0.96
+      },
+      "billingMonth": {
+        "value": "Sep 2026",
+        "confidence": 0.96
+      },
+      "monthlyUnitsHistory": [
+        80,
+        75,
+        70,
+        72,
+        78,
+        88,
+        100,
+        110,
+        96,
+        85,
+        81,
+        85
+      ]
+    }
+  },
+  "99e43028fa561cb226b9b357a2227e60295a160296f7e0159787ef0964145982": {
+    "label": "Shop on a commercial tariff",
+    "file": "shop-bill.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "consumerNumber": {
+        "value": "440039901204",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": "LT II - Commercial",
+        "confidence": 0.96
+      },
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "sanctionedLoadKw": {
+        "value": 8,
+        "confidence": 0.96
+      },
+      "unitsLatestMonth": {
+        "value": 620,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 8400,
+        "confidence": 0.96
+      },
+      "billingMonth": {
+        "value": "Sep 2026",
+        "confidence": 0.96
+      },
+      "monthlyUnitsHistory": [
+        580,
+        560,
+        540,
+        550,
+        590,
+        650,
+        720,
+        740,
+        660,
+        610,
+        600,
+        620
+      ]
+    }
+  },
+  "1bca36454791b2eba89c90a37e89008cea48a33ecdc163638eea13aaf9511192": {
+    "label": "Tilted, stained photo",
+    "file": "tilted-phone-photo.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "consumerNumber": {
+        "value": "450049901377",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": null,
+        "confidence": 0
+      },
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "sanctionedLoadKw": {
+        "value": null,
+        "confidence": 0
+      },
+      "unitsLatestMonth": {
+        "value": 260,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 2350,
+        "confidence": 0.96
+      },
+      "billingMonth": {
+        "value": "Sep 2026",
+        "confidence": 0.96
+      },
+      "monthlyUnitsHistory": [
+        240,
+        225,
+        215,
+        220,
+        235,
+        275,
+        320,
+        340,
+        290,
+        255,
+        250,
+        260
+      ]
+    }
+  },
+  "061f953414d6ccb6391b43a0d86d112d754a28b1fc40577ea54072ecd76e8625": {
+    "label": "Blurry photo",
+    "file": "blurry-photo.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "blurry",
+      "consumerNumber": {
+        "value": null,
+        "confidence": 0
+      },
+      "tariffCategory": {
+        "value": null,
+        "confidence": 0
+      },
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "sanctionedLoadKw": {
+        "value": null,
+        "confidence": 0
+      },
+      "unitsLatestMonth": {
+        "value": null,
+        "confidence": 0
+      },
+      "billAmount": {
+        "value": null,
+        "confidence": 0
+      },
+      "billingMonth": {
+        "value": null,
+        "confidence": 0
+      },
+      "monthlyUnitsHistory": []
+    }
+  },
+  "664551757a2e20aa8041d0b84bd231430ec045e36d16524dfd1e47ed1ea668e9": {
+    "label": "Not a bill",
+    "file": "not-a-bill.jpg",
+    "response": {
+      "isElectricityBill": false,
+      "imageQuality": "good",
+      "consumerNumber": {
+        "value": null,
+        "confidence": 0
+      },
+      "tariffCategory": {
+        "value": null,
+        "confidence": 0
+      },
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "sanctionedLoadKw": {
+        "value": null,
+        "confidence": 0
+      },
+      "unitsLatestMonth": {
+        "value": null,
+        "confidence": 0
+      },
+      "billAmount": {
+        "value": null,
+        "confidence": 0
+      },
+      "billingMonth": {
+        "value": null,
+        "confidence": 0
+      },
+      "monthlyUnitsHistory": []
+    }
+  }
+}
