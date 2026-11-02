@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DEFAULT_SETTINGS } from "./settings";
-import { sizeSystem } from "./sizing";
+import { sizeSystem, usableRoofSqm } from "./sizing";
 
 const size = (monthlyUnits: number, roofAreaSqm = 100, sanctionedLoadKw: number | null = 10) =>
   sizeSystem({ monthlyUnits, roofAreaSqm, sanctionedLoadKw }, DEFAULT_SETTINGS);
@@ -59,5 +59,13 @@ describe("sizeSystem", () => {
   it("follows the editable generation factor", () => {
     const settings = { ...DEFAULT_SETTINGS, generationKwhPerKwYear: 1200 };
     expect(sizeSystem({ monthlyUnits: 340, roofAreaSqm: 100, sanctionedLoadKw: 10 }, settings).recommendedKw).toBe(3.5);
+  });
+});
+
+describe("usableRoofSqm", () => {
+  it("takes shaded roof out of the usable area", () => {
+    expect(usableRoofSqm(50, "NONE")).toBe(50);
+    expect(usableRoofSqm(50, "PARTIAL")).toBe(40);
+    expect(usableRoofSqm(50, "HEAVY")).toBe(25);
   });
 });

@@ -24,6 +24,14 @@ export interface SizingResult {
   reasons: SizingReason[];
 }
 
+export type Shading = "NONE" | "PARTIAL" | "HEAVY";
+
+// A23: shading takes usable roof away. It does not change the fixed generation formula.
+const SHADING_LOSS: Record<Shading, number> = { NONE: 0, PARTIAL: 0.2, HEAVY: 0.5 };
+
+export const usableRoofSqm = (areaSqm: number, shading: Shading) =>
+  Number((areaSqm * (1 - SHADING_LOSS[shading])).toFixed(1));
+
 const roundToStep = (kw: number, step: number) => Math.round(kw / step) * step;
 const floorToStep = (kw: number, step: number) => Math.floor(kw / step + 1e-9) * step;
 
