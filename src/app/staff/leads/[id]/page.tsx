@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { BillImage } from "@/components/public/bill-image";
 import { LEAD_STAGE_LABELS, ScoreBadge } from "@/components/staff/labels";
-import { BookSurveyForm, LogCallForm, RecordSurveyForm } from "@/components/staff/lead-actions";
+import { BookSurveyForm, EraseLead, LogCallForm, RecordSurveyForm } from "@/components/staff/lead-actions";
 import { QuoteBuilder } from "@/components/staff/quote-builder";
 import { StaffBillCheck } from "@/components/staff/staff-bill-check";
 import { buttonVariants } from "@/components/ui/button";
@@ -38,7 +38,7 @@ function Facts({ items }: { items: [string, ReactNode][] }) {
 }
 
 export default async function LeadDetailPage({ params }: PageProps<"/staff/leads/[id]">) {
-  await requireStaff();
+  const user = await requireStaff();
   const { id } = await params;
   const lead = await db.lead.findUnique({
     where: { id },
@@ -212,6 +212,8 @@ export default async function LeadDetailPage({ params }: PageProps<"/staff/leads
             </p>
             <StaffBillCheck leadId={lead.id} initial={billValues} lowConfidence={ai && !confirmed ? ai.lowConfidence : []} messages={messages} />
           </details>
+
+          {user.role === "ADMIN" ? <EraseLead leadId={lead.id} /> : null}
         </div>
       </div>
     </div>

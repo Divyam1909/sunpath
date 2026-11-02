@@ -202,3 +202,21 @@ export function prefillBill(ai: StoredAiRead | null, lead: { monthlyBill: number
     averageMonthlyUnits: averageUnits(units, ai?.extraction.monthlyUnitsHistory ?? []),
   };
 }
+
+/** DPDP erasure on request: removes the lead, its files and everything hanging off it. */
+export async function eraseLead(leadId: string) {
+  const lead = await db.lead.findUniqueOrThrow({
+    where: { id: leadId },
+    include: { bills: true, project: { include: { documents: true } } },
+  });
+  const keys = [...lead.bills.map((b) => b.storageKey), ...(lead.project?.documents.map((d) => d.storageKey) ?? [])].filter(Boolean);
+  await Promise.all(keys.map((key) => fileStore.remove(key)));
+  await db.$transaction(async (tx) => {
+    if (lead.project) await tx.project.delete({ where: { id: lead.project.id } });
+    await tx.lead.delete({ where: { id: leadId } });
+    if (lead.userId) {
+      const otherLeads = await tx.lead.count({ where: { userId: lead.userId } });
+      if (otherLeads === 0) await tx.user.deleteMany({ where: { id: lead.userId, role: "HOMEOWNER" } });
+    }
+  });
+}

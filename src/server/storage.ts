@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { get, issueSignedToken, presignUrl, put } from "@vercel/blob";
+import { del, get, issueSignedToken, presignUrl, put } from "@vercel/blob";
 
 /** Short-lived on purpose: bills and documents are personal data. */
 const SIGNED_URL_TTL_SECONDS = 300;
@@ -10,6 +10,7 @@ export interface FileStore {
   put(key: string, bytes: Buffer, contentType: string): Promise<void>;
   read(key: string): Promise<Buffer>;
   signedUrl(key: string, contentType: string): Promise<string>;
+  remove(key: string): Promise<void>;
 }
 
 /** Private Vercel Blob store. Nothing here is reachable without a signed URL. */
@@ -22,6 +23,10 @@ class BlobFileStore implements FileStore {
     const result = await get(key, { access: "private" });
     if (!result || result.statusCode !== 200) throw new Error(`Blob not found: ${key}`);
     return Buffer.from(await new Response(result.stream).arrayBuffer());
+  }
+
+  async remove(key: string) {
+    await del(key);
   }
 
   async signedUrl(key: string) {
@@ -56,6 +61,10 @@ class DiskFileStore implements FileStore {
 
   read(key: string) {
     return readFile(this.resolve(key));
+  }
+
+  remove(key: string) {
+    return rm(this.resolve(key), { force: true });
   }
 
   async signedUrl(key: string, contentType: string) {

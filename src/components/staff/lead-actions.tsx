@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { bookSurvey, logCall, recordSurvey } from "@/app/staff/actions";
+import { useRouter } from "next/navigation";
+import { bookSurvey, eraseLeadAction, logCall, recordSurvey } from "@/app/staff/actions";
 import { Field } from "@/components/field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -107,5 +108,38 @@ export function RecordSurveyForm({ leadId, roofSqFt }: { leadId: string; roofSqF
       <Failure show={failed} />
       <Button type="submit" disabled={pending} className="justify-self-start">Save survey</Button>
     </form>
+  );
+}
+
+export function EraseLead({ leadId }: { leadId: string }) {
+  const router = useRouter();
+  const [confirming, setConfirming] = useState(false);
+  const [pending, startTransition] = useTransition();
+  return (
+    <section className="grid gap-2 border-t pt-6">
+      <h2 className="text-lg font-medium">Erase customer data</h2>
+      <p className="max-w-prose text-sm text-muted-foreground">
+        For a deletion request under the DPDP Act. This permanently removes the lead, bill, quotes, project, documents and messages.
+      </p>
+      {confirming ? (
+        <div className="flex gap-2">
+          <Button
+            variant="destructive"
+            disabled={pending}
+            onClick={() =>
+              startTransition(async () => {
+                await eraseLeadAction(leadId);
+                router.push("/staff/leads");
+              })
+            }
+          >
+            Yes, erase permanently
+          </Button>
+          <Button variant="ghost" onClick={() => setConfirming(false)}>Keep</Button>
+        </div>
+      ) : (
+        <Button variant="outline" className="justify-self-start" onClick={() => setConfirming(true)}>Erase customer data</Button>
+      )}
+    </section>
   );
 }

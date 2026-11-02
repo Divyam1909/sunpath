@@ -5,8 +5,8 @@ import { z } from "zod";
 import { confirmedBillSchema } from "@/domain/bill";
 import { SQM_PER_SQFT } from "@/lib/validation";
 import { db } from "@/server/db";
-import { requireStaff } from "@/server/guards";
-import { confirmBill, latestBill } from "@/server/leads";
+import { requireAdmin, requireStaff } from "@/server/guards";
+import { confirmBill, eraseLead, latestBill } from "@/server/leads";
 import { advanceStage, appUrl, StageError } from "@/server/projects";
 import { generateQuote, quoteBuilderSchema } from "@/server/quotes";
 
@@ -113,4 +113,12 @@ export async function advanceProjectStage(id: string) {
   revalidatePath(`/staff/projects/${projectId}`);
   revalidatePath("/staff/projects");
   return { ok: true as const };
+}
+
+export async function eraseLeadAction(id: string) {
+  await requireAdmin();
+  await eraseLead(leadId.parse(id));
+  revalidatePath("/staff/leads");
+  revalidatePath("/staff/projects");
+  return { ok: true };
 }
