@@ -61,7 +61,15 @@
     "badType": "That file type won't work. Use a JPG, PNG, WEBP or PDF.",
     "rateLimited": "Too many uploads. Wait a few minutes, then try again.",
     "failed": "The upload did not finish. Check your connection and try again.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "samples": {
+      "clear-home-bill": "Clear home bill, 340 units",
+      "small-home-bill": "Small bill, ₹650",
+      "shop-bill": "Shop on a commercial tariff",
+      "tilted-phone-photo": "Tilted, stained photo",
+      "blurry-photo": "Blurry photo",
+      "not-a-bill": "Not a bill"
+    }
   },
   "check": {
     "title": "Check what we read",

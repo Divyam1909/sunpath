@@ -120,7 +120,7 @@ export function BillUpload({ token }: { token: string }) {
                 onClick={() => sendSample(sample.file)}
                 className="w-full rounded-lg border px-3 py-2.5 text-left text-sm transition-colors hover:border-foreground/40"
               >
-                {sample.label}
+                {t(`samples.${sample.file.replace(".jpg", "")}` as "samples.blurry-photo")}
               </button>
             </li>
           ))}
