@@ -44,14 +44,14 @@ function Choice({
   label: (option: string) => string;
 }) {
   return (
-    <fieldset className="grid gap-2">
+    <fieldset className="grid gap-2 lg:grid-cols-2">
       <legend className="mb-1 text-[1.0625rem] font-medium">{legend}</legend>
       {options.map((option) => (
         <label
           key={option}
           className={cn(
             "flex min-h-13 cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition-colors has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring",
-            value === option ? "border-primary bg-teal-tint" : "border-input hover:border-foreground/40",
+            value === option ? "border-primary bg-teal-tint" : "border-input bg-background hover:border-foreground/40",
           )}
         >
           <input
@@ -65,10 +65,13 @@ function Choice({
           <span>{label(option)}</span>
         </label>
       ))}
-      {error ? <p className="text-[0.8125rem] text-destructive">{error}</p> : null}
+      {error ? <p className="text-[0.8125rem] text-destructive lg:col-span-2">{error}</p> : null}
     </fieldset>
   );
 }
+
+// Answers kept for this tab only, so changing language does not empty the form.
+const DRAFT_KEY = "sunpath-lead-draft";
 
 export function LeadForm({ totalSteps }: { totalSteps: number }) {
   const t = useTranslations("form");
@@ -90,6 +93,22 @@ export function LeadForm({ totalSteps }: { totalSteps: number }) {
     if (firstRender.current) firstRender.current = false;
     else stepHeading.current?.focus();
   }, [step]);
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem(DRAFT_KEY);
+    if (!saved) return;
+    const draft = JSON.parse(saved) as { step: number; values: Values; outline?: LatLng[] };
+    /* eslint-disable react-hooks/set-state-in-effect -- sessionStorage does not exist during server render */
+    setStep(draft.step);
+    setValues(draft.values);
+    setOutline(draft.outline);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(values).length === 0) return;
+    sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ step, values: { ...values, consent: undefined }, outline }));
+  }, [step, values, outline]);
 
   const set = (field: FieldName, value: string | boolean) => {
     setValues((v) => ({ ...v, [field]: value }));
@@ -119,8 +138,10 @@ export function LeadForm({ totalSteps }: { totalSteps: number }) {
     }
     startTransition(async () => {
       const result = await submitLead({ ...values, roofOutline: outline, locale });
-      if (result.ok) router.push(`/l/${result.token}/upload`);
-      else setFormError(t(result.error));
+      if (result.ok) {
+        sessionStorage.removeItem(DRAFT_KEY);
+        router.push(`/l/${result.token}/upload`);
+      } else setFormError(t(result.error));
     });
   }
 

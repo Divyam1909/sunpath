@@ -36,7 +36,7 @@ export default async function MyPage({ params }: PageProps<"/[locale]/my">) {
       <div className="flex items-baseline justify-between gap-4">
         <h1 className="text-[1.75rem] leading-tight font-medium tracking-tight">{t("my.title")}</h1>
         <form action={logoutAction}>
-          <button className="text-sm text-muted-foreground underline-offset-4 hover:underline">{t("nav.signOut")}</button>
+          <button className="py-1 text-sm text-muted-foreground underline-offset-4 hover:underline">{t("nav.signOut")}</button>
         </form>
       </div>
       {leads.length === 0 ? (

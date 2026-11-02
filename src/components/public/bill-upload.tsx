@@ -248,7 +248,7 @@ export function BillUpload({ url, next, manualHref, samples = SAMPLE_BILLS.filte
       ) : null}
 
       {manualHref ? (
-        <Link href={manualHref} className="text-center text-sm font-medium text-primary underline-offset-4 hover:underline">
+        <Link href={manualHref} className="py-1 text-center text-sm font-medium text-primary underline-offset-4 hover:underline">
           {t("manual")}
         </Link>
       ) : null}

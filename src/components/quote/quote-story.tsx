@@ -89,6 +89,12 @@ export function QuoteStory(props: Props) {
         </div>
       </dl>
 
+      {projectToken ? null : (
+        <a href="#go-ahead" className={cn(buttonVariants({ size: "lg" }), "mt-8 w-full")}>
+          {t("payTitle")}
+        </a>
+      )}
+
       {projectToken ? (
         <section className="mt-10 rounded-xl bg-teal-tint p-5">
           <h2 className="font-medium">{t("paid")}</h2>
@@ -197,7 +203,7 @@ export function QuoteStory(props: Props) {
       <FamilyCard facts={cardFacts} />
 
       {projectToken ? null : (
-        <section className="mt-12 border-t pt-8">
+        <section id="go-ahead" className="mt-12 scroll-mt-6 border-t pt-8">
           <h2 className="text-lg font-medium">{t("payTitle")}</h2>
           <p className="tabular mt-1 leading-relaxed text-muted-foreground">
             {t("payLead", { amount: formatINR(advance), kw: formatNumber(option.systemKw) })}

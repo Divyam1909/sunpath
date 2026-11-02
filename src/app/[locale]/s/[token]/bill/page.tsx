@@ -26,7 +26,7 @@ export default async function SavingsBillPage({ params }: PageProps<"/[locale]/s
   });
   const extraction = reading?.status === "READ" ? (reading.ai as unknown as StoredAiRead).extraction : null;
   const back = (
-    <Link href={`/s/${token}`} className="mt-6 block text-center text-sm font-medium text-primary underline-offset-4 hover:underline">
+    <Link href={`/s/${token}`} className="mt-6 block py-1 text-center text-sm font-medium text-primary underline-offset-4 hover:underline">
       {t("back")}
     </Link>
   );

@@ -120,7 +120,7 @@ export default async function StatusPage({ params }: PageProps<"/[locale]/s/[tok
                   <p className="text-sm text-muted-foreground">{doc.url ? t("status.received") : t("status.needed")}</p>
                 </div>
                 {doc.url ? (
-                  <a href={doc.url} target="_blank" rel="noreferrer" className="text-sm font-medium text-primary underline-offset-4 hover:underline">
+                  <a href={doc.url} target="_blank" rel="noreferrer" className="py-1 text-sm font-medium text-primary underline-offset-4 hover:underline">
                     {t("status.viewDoc")}
                   </a>
                 ) : (
