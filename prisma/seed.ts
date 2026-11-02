@@ -4,20 +4,24 @@ import path from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { createTranslator } from "next-intl";
-import { averageUnits, parseBillResponse, type ConfirmedBill, type BillExtraction } from "../src/domain/bill";
+import { billExtractionSchema, parseBillResponse, segmentFromTariff, type ConfirmedBill } from "../src/domain/bill";
+import { findBlockers } from "../src/domain/blockers";
 import { istDate } from "../src/domain/format";
 import { REQUIRED_DOCS, STAGES, type Stage } from "../src/domain/project";
+import { buildBillView } from "../src/domain/projection";
+import { checkPromise } from "../src/domain/promise";
 import { buildQuoteOptions, optionSizes, resolveTariff, type QuoteInputs } from "../src/domain/quote";
 import { assessLead } from "../src/domain/score";
 import { DEFAULT_SETTINGS as settings } from "../src/domain/settings";
 import { sizeSystem, usableRoofSqm } from "../src/domain/sizing";
+import { averageFromUsage, usageFromBill } from "../src/domain/usage";
 import { Prisma, PrismaClient } from "../src/generated/prisma/client";
 import { CONSENT_PURPOSE, CONSENT_VERSION, SQM_PER_SQFT } from "../src/lib/validation";
 import { fileStore } from "../src/server/storage";
 import { newToken } from "../src/server/tokens";
 import fixtures from "../src/server/bill-reader/sample-fixtures.json";
 import { seedConsumerNumber, seedHistory, SEED_LEADS, type SeedLead } from "./seed-data";
-import { PRICE_BANDS, SUBSIDY_SLABS, seedRules } from "./seed-rules";
+import { PRICE_BANDS, SUBSIDY_SLABS, TARIFF_FY2627, seedRules } from "./seed-rules";
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) });
 
@@ -44,7 +48,7 @@ function aiRead(lead: SeedLead) {
   const sample = Object.values(fixtures).find((f) => f.file === lead.sampleBill);
   const history = seedHistory(lead.units);
   const conf = <T,>(value: T, confidence = 0.95) => ({ value, confidence });
-  const extraction: BillExtraction = {
+  const extraction = billExtractionSchema.parse({
     isElectricityBill: true,
     imageQuality: "good",
     consumerNumber: conf(seedConsumerNumber(lead.code)),
@@ -55,7 +59,7 @@ function aiRead(lead: SeedLead) {
     billAmount: conf(lead.bill),
     billingMonth: conf("Sep 2026"),
     monthlyUnitsHistory: history,
-  };
+  });
   const parsed = parseBillResponse(JSON.stringify(sample?.response ?? extraction), settings.score.lowConfidenceBelow);
   if (parsed.kind !== "ok") throw new Error(`Bad seed bill for ${lead.code}`);
   return parsed;
@@ -70,16 +74,28 @@ const DOC_PDF = Buffer.from(
 async function seedLead(row: SeedLead, staffId: string, subsidyId: string, priceId: string) {
   const roofAreaSqm = Number((row.roofSqFt * SQM_PER_SQFT).toFixed(1));
   const parsed = aiRead(row);
-  const history = parsed.extraction.monthlyUnitsHistory;
+  const { extraction } = parsed;
+  const usage = usageFromBill({
+    billingMonth: extraction.billingMonth.value,
+    unitsLatestMonth: row.units,
+    monthlyUsage: extraction.monthlyUsage,
+    monthlyUnitsHistory: extraction.monthlyUnitsHistory,
+  });
   const bill: ConfirmedBill = {
-    consumerNumber: parsed.extraction.consumerNumber.value,
-    tariffCategory: parsed.extraction.tariffCategory.value,
+    consumerNumber: extraction.consumerNumber.value,
+    consumerName: row.billName ?? extraction.consumerName.value ?? row.name,
+    tariffCategory: extraction.tariffCategory.value,
     ratePerUnit: null,
-    sanctionedLoadKw: parsed.extraction.sanctionedLoadKw.value,
+    sanctionedLoadKw: extraction.sanctionedLoadKw.value,
     unitsLatestMonth: row.units,
     billAmount: row.bill,
-    billingMonth: parsed.extraction.billingMonth.value,
-    averageMonthlyUnits: averageUnits(row.units, history),
+    arrearsAmount: row.arrears ?? extraction.arrearsAmount.value,
+    billingMonth: extraction.billingMonth.value,
+    averageMonthlyUnits: averageFromUsage(usage, row.units, settings),
+    connectionPhase: extraction.connectionPhase.value,
+    meterStatus: extraction.meterStatus.value ?? "Normal",
+    solarExportUnits: extraction.solarExportUnits.value,
+    monthlyUsage: usage,
   };
   const hasBill = row.stage !== "NEW";
   const assessment = assessLead(
@@ -94,6 +110,21 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
     },
     settings,
   );
+  const blockers = hasBill
+    ? findBlockers(
+        {
+          leadName: row.name,
+          ownership: row.ownership,
+          segment: segmentFromTariff(bill.tariffCategory),
+          consumerName: bill.consumerName,
+          arrearsAmount: bill.arrearsAmount,
+          solarExportUnits: bill.solarExportUnits,
+          meterStatus: bill.meterStatus,
+          sizing: { demandKw: assessment.sizing.demandKw, recommendedKw: assessment.recommendedKw, reasons: assessment.sizing.reasons },
+        },
+        settings,
+      )
+    : null;
   const surveyedAt = row.surveyDaysAgo === undefined ? null : daysAgo(row.surveyDaysAgo);
   const surveyRoofSqm = surveyedAt ? roofAreaSqm : null;
 
@@ -119,6 +150,7 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
       nextAction: assessment.nextAction,
       recommendedKw: assessment.recommendedKw,
       sizingReasons: json(assessment.sizing.reasons),
+      blockers: blockers ? json(blockers) : Prisma.JsonNull,
       scoredAt: daysAgo(row.receivedDaysAgo),
       surveyBookedFor: row.stage === "SURVEY_BOOKED" ? daysAgo(-1) : surveyedAt,
       surveyedAt,
@@ -170,7 +202,9 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
   };
   const subsidy = { slabs: SUBSIDY_SLABS, capAmount: 78000 };
   const price = { bands: PRICE_BANDS };
-  const options = buildQuoteOptions(optionSizes(kw, sizing.maxKw, settings), inputs, { subsidy, price }, settings);
+  const sizes = optionSizes(kw, sizing.maxKw, settings);
+  const options = buildQuoteOptions(sizes, inputs, { subsidy, price }, settings);
+  const billView = buildBillView({ tariff: TARIFF_FY2627, usage, averageUnits: bill.averageMonthlyUnits, phase: 1, sizes }, settings);
   const sentAt = new Date(surveyedAt.getTime() - row.quoteLagDays * -DAY);
   const quote = await db.quote.create({
     data: {
@@ -189,6 +223,7 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
         generationKwhPerKwYear: settings.generationKwhPerKwYear,
         surplusRatePerUnit: settings.netMetering.surplusRatePerUnit,
         advancePercent: settings.advancePercent,
+        billView,
       }),
     },
   });
@@ -206,14 +241,16 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
 
   if (!row.project) return lead;
 
-  const { code, stage, daysInStage, token, statusViews } = row.project;
+  const { code, stage, daysInStage, token, statusViews, stageDays, bills } = row.project;
   const option = options.find((o) => o.systemKw === kw)!;
   const stageIndex = STAGES.indexOf(stage);
   const paidAt = sentAt.getTime();
   const enteredAt = daysAgo(daysInStage);
   // Spread earlier stages evenly between the advance and the current stage.
   const stepMs = stageIndex === 0 ? 0 : (enteredAt.getTime() - paidAt) / stageIndex;
-  const reachedAt = (i: number) => new Date(paidAt + stepMs * i);
+  // A finished project keeps its true days per stage, counted back from when it finished.
+  const daysLeftFrom = (i: number) => (stageDays ?? []).slice(i).reduce((a, b) => a + b, 0);
+  const reachedAt = (i: number) => (stageDays ? new Date(enteredAt.getTime() - daysLeftFrom(i) * DAY) : new Date(paidAt + stepMs * i));
 
   const project = await db.project.create({
     data: {
@@ -231,6 +268,13 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
       createdAt: reachedAt(0),
     },
   });
+
+  for (const [month, multiple] of bills ?? []) {
+    const promised = checkPromise({ month, currentBillAmount: 0, projection: billView.byKw[String(kw)] }, settings)!;
+    const billAmount = Math.round(promised.promisedBill * multiple);
+    const check = checkPromise({ month, currentBillAmount: billAmount, projection: billView.byKw[String(kw)] }, settings)!;
+    await db.savingsCheck.create({ data: { projectId: project.id, month, billAmount, ...check } });
+  }
 
   for (let i = 0; i <= stageIndex; i++) {
     const at = i === stageIndex ? enteredAt : reachedAt(i);

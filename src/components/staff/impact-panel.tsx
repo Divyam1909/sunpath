@@ -1,3 +1,4 @@
+import { formatINR } from "@/domain/format";
 import { getImpact } from "@/server/impact";
 
 export async function ImpactPanel() {
@@ -18,9 +19,14 @@ export async function ImpactPanel() {
       value: new Intl.NumberFormat("en-IN").format(impact.statusViews),
       note: "Each view stands in for a status call avoided. Target 50% fewer calls.",
     },
+    {
+      label: "Savings delivered against the quote",
+      value: impact.savings.percent === null ? "No bills yet" : `${impact.savings.percent}%`,
+      note: `From ${impact.savings.bills} bills after solar. Promised ${formatINR(impact.savings.promisedSaving)}, delivered ${formatINR(impact.savings.actualSaving)}.`,
+    },
   ];
   return (
-    <section aria-label="Impact against client targets" className="grid gap-x-10 gap-y-5 border-b pb-6 sm:grid-cols-3">
+    <section aria-label="Impact against client targets" className="grid gap-x-10 gap-y-5 border-b pb-6 sm:grid-cols-2 lg:grid-cols-4">
       {metrics.map((metric) => (
         <div key={metric.label}>
           <p className="text-sm text-muted-foreground">{metric.label}</p>

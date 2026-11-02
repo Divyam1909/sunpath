@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { roofOutlineSchema } from "@/domain/geo";
 import { locales } from "@/i18n/routing";
 
 export const OWNERSHIPS = ["OWNER", "TENANT"] as const;
@@ -11,6 +12,7 @@ export const leadInputSchema = z.object({
   ownership: z.enum(OWNERSHIPS, { error: "choose" }),
   roofType: z.enum(ROOF_TYPES, { error: "choose" }),
   roofAreaSqFt: z.coerce.number({ error: "roofArea" }).int("roofArea").min(50, "roofArea").max(100000, "roofArea"),
+  roofOutline: roofOutlineSchema.optional(),
   monthlyBill: z.coerce.number({ error: "monthlyBill" }).int("monthlyBill").min(100, "monthlyBill").max(1000000, "monthlyBill"),
   pincode: z.string({ error: "pincode" }).trim().regex(/^[1-9]\d{5}$/, "pincode"),
   name: z.string({ error: "name" }).trim().min(2, "name").max(80, "name"),
@@ -21,10 +23,10 @@ export const leadInputSchema = z.object({
 
 export type LeadInput = z.infer<typeof leadInputSchema>;
 
-export const CONSENT_VERSION = "2026-11-v1";
+export const CONSENT_VERSION = "2026-11-v2";
 export const CONSENT_PURPOSE =
-  "Company A uses your name, phone, address details and electricity bill to check if solar suits your home, " +
-  "prepare your quote, and update you on your project.";
+  "Company A uses your name, phone, address details, electricity bill and any roof you mark on the map " +
+  "to check if solar suits your home, prepare your quote, and update you on your project.";
 
 // Upload limits. Vercel rejects request bodies over 4.5 MB; the browser compresses photos first.
 export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;

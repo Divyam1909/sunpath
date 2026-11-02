@@ -1,11 +1,14 @@
 import { z } from "zod";
+import type { ConfirmedBill } from "@/domain/bill";
 import { istDate } from "@/domain/format";
+import { buildBillView, type BillView } from "@/domain/projection";
 import { buildQuoteOptions, type QuoteInputs, type QuoteOption } from "@/domain/quote";
 import type { PriceRule, SubsidyRule } from "@/domain/rules";
 import type { Settings } from "@/domain/settings";
 import { Prisma } from "@/generated/prisma/client";
 import { db } from "@/server/db";
-import { loadRules, rulesFor } from "@/server/estimate";
+import { loadRules, phaseOf, rulesFor, tariffFor } from "@/server/estimate";
+import { latestBill } from "@/server/leads";
 import { queueMessage } from "@/server/outbox";
 import { getSettings } from "@/server/settings";
 import { newProjectCode, newToken } from "@/server/tokens";
@@ -28,6 +31,8 @@ export interface QuoteSnapshot {
   generationKwhPerKwYear: number;
   surplusRatePerUnit: number;
   advancePercent: number;
+  /** Missing on quotes older than this feature, and where no tariff rule applies. */
+  billView?: BillView | null;
 }
 
 export type StoredQuote = {
@@ -40,7 +45,7 @@ export const readQuote = (quote: { inputs: unknown; options: unknown; snapshot: 
 
 const json = (value: unknown) => value as Prisma.InputJsonValue;
 
-function buildSnapshot(subsidy: SubsidyRule | null, price: PriceRule, settings: Settings): QuoteSnapshot {
+function buildSnapshot(subsidy: SubsidyRule | null, price: PriceRule, settings: Settings, billView: BillView | null): QuoteSnapshot {
   return {
     subsidyRule: subsidy && {
       id: subsidy.id,
@@ -60,6 +65,7 @@ function buildSnapshot(subsidy: SubsidyRule | null, price: PriceRule, settings: 
     generationKwhPerKwYear: settings.generationKwhPerKwYear,
     surplusRatePerUnit: settings.netMetering.surplusRatePerUnit,
     advancePercent: settings.advancePercent,
+    billView,
   };
 }
 
@@ -69,7 +75,7 @@ export async function generateQuote(leadId: string, input: QuoteBuilderInput, ac
   if (lead.project) throw new Error("This lead already has a project");
 
   const quoteDate = istDate();
-  const [settings, rules] = await Promise.all([getSettings(), loadRules()]);
+  const [settings, rules, reading] = await Promise.all([getSettings(), loadRules(), latestBill(leadId)]);
   const { subsidy, price } = rulesFor(rules, quoteDate, input.segment);
   if (!price) throw new Error("No price rule is active today");
 
@@ -82,6 +88,11 @@ export async function generateQuote(leadId: string, input: QuoteBuilderInput, ac
   };
   const options = buildQuoteOptions(sizes, inputs, { subsidy, price }, settings);
   const selectedKw = sizes.includes(input.selectedKw) ? input.selectedKw : sizes[0];
+  const bill = (reading?.confirmed ?? null) as ConfirmedBill | null;
+  const tariff = tariffFor(rules, quoteDate, input.segment);
+  const billView = tariff
+    ? buildBillView({ tariff, usage: bill?.monthlyUsage ?? [], averageUnits: input.monthlyUnits, phase: phaseOf(bill), sizes }, settings)
+    : null;
 
   return db.$transaction(async (tx) => {
     const quote = await tx.quote.create({
@@ -94,7 +105,7 @@ export async function generateQuote(leadId: string, input: QuoteBuilderInput, ac
         inputs: json(inputs),
         options: json(options),
         selectedKw,
-        snapshot: json(buildSnapshot(subsidy, price, settings)),
+        snapshot: json(buildSnapshot(subsidy, price, settings, billView)),
         createdById: actorId,
       },
     });

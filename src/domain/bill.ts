@@ -3,7 +3,7 @@ import { z } from "zod";
 const field = <T extends z.ZodType>(value: T) =>
   z.object({ value: value.nullable(), confidence: z.number().min(0).max(1) });
 
-const optional = <T extends z.ZodType>(value: T) => field(value).default({ value: null, confidence: 0 });
+const optional = <T extends z.ZodType>(value: T) => field(value).default({ value: null, confidence: 0 } as never);
 
 /** The exact shape the vision model must return. Anything else is treated as a failed read. */
 export const billExtractionSchema = z.object({

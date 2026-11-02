@@ -1,5 +1,6 @@
 import type { Settings } from "./settings";
 import { calculateBill, type BillTariff } from "./tariff";
+import { buildUsageYear, type MonthUsage, type UsageBasis } from "./usage";
 
 export interface ProjectionInput {
   /** Units used in each calendar month. Index 0 is January. */
@@ -75,6 +76,25 @@ export function projectBills(input: ProjectionInput, settings: ProjectionSetting
     monthlyBefore: Math.round(yearlyBefore / 12),
     monthlyAfter: Math.round(yearlyAfter / 12),
   };
+}
+
+/** A37: the year of real bills behind each quote option, frozen with the quote. The promise tracker checks against this. */
+export interface BillView {
+  tariff: BillTariff;
+  basis: UsageBasis;
+  monthlyUnits: number[];
+  byKw: Record<string, BillProjection>;
+}
+
+export function buildBillView(
+  input: { tariff: BillTariff; usage: MonthUsage[]; averageUnits: number; phase: 1 | 3; sizes: number[] },
+  settings: ProjectionSettings & Pick<Settings, "seasonalUseFactor">,
+): BillView {
+  const { tariff, usage, averageUnits, phase, sizes } = input;
+  const year = buildUsageYear(usage, averageUnits, settings);
+  const monthlyUnits = year.months.map((m) => m.units);
+  const byKw = Object.fromEntries(sizes.map((systemKw) => [String(systemKw), projectBills({ monthlyUnits, systemKw, tariff, phase }, settings)]));
+  return { tariff, basis: year.basis, monthlyUnits, byKw };
 }
 
 export interface WorthCheck {

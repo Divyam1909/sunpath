@@ -7,6 +7,10 @@ export interface SeedProject {
   /** Fixed token so the README can link straight to a status page. */
   token: string;
   statusViews: number;
+  /** Real-looking days per stage for finished projects. These feed the forecast. */
+  stageDays?: number[];
+  /** Monthly bills after solar: month, and the bill as a multiple of what was promised. */
+  bills?: [string, number][];
 }
 
 export interface SeedLead {
@@ -34,6 +38,9 @@ export interface SeedLead {
   quoteLagDays?: number;
   quoteToken?: string;
   project?: SeedProject;
+  /** Lookalike bills only: the name printed on the bill and the arrears on it. */
+  billName?: string;
+  arrears?: number;
 }
 
 const RES = "LT I - Residential";
@@ -61,7 +68,27 @@ export const SEED_LEADS: SeedLead[] = [
   { code: "LD-31018", name: "Vaishali Raut", phone: "9000031018", ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 800, bill: 4700, units: 490, loadKw: 6, pincode: "444602", town: "Amravati", tariff: RES, locale: "mr", stage: "WON", receivedDaysAgo: 46, surveyDaysAgo: 40, surveyQualified: true, shading: "NONE", quoteLagDays: 1, project: { code: "PR-1005", stage: "INSTALLED", daysInStage: 9, token: "demo-status-pr-1005", statusViews: 11 } },
   { code: "LD-31019", name: "Nitin Chaudhari", phone: "9000031019", ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 600, bill: 3250, units: 345, loadKw: 5, pincode: "441001", town: "Kamptee", tariff: RES, locale: "hi", stage: "WON", receivedDaysAgo: 75, surveyDaysAgo: 68, surveyQualified: true, shading: "NONE", quoteLagDays: 0, project: { code: "PR-1006", stage: "NET_METERING_APPLIED", daysInStage: 30, token: "demo-status-pr-1006", statusViews: 14 } },
   { code: "LD-31020", name: "Swati Dhoke", phone: "9000031020", ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 400, bill: 2200, units: 235, loadKw: 3, pincode: "442101", town: "Hinganghat", tariff: RES, locale: "en", stage: "WON", receivedDaysAgo: 90, surveyDaysAgo: 84, surveyQualified: true, shading: "NONE", quoteLagDays: 0, project: { code: "PR-1007", stage: "SUBSIDY_APPLIED", daysInStage: 12, token: "demo-status-pr-1007", statusViews: 9 } },
-  { code: "LD-31021", name: "Deepak Nagpure", phone: "9000031021", ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 900, bill: 5200, units: 540, loadKw: 7, pincode: "440025", town: "Nagpur", tariff: RES, locale: "en", stage: "WON", receivedDaysAgo: 150, surveyDaysAgo: 142, surveyQualified: true, shading: "NONE", quoteLagDays: 0, project: { code: "PR-1008", stage: "SUBSIDY_CREDITED", daysInStage: 20, token: "demo-status-pr-1008", statusViews: 16 } },
+  { code: "LD-31021", name: "Deepak Nagpure", phone: "9000031021", ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 900, bill: 5200, units: 540, loadKw: 7, pincode: "440025", town: "Nagpur", tariff: RES, locale: "en", stage: "WON", receivedDaysAgo: 150, surveyDaysAgo: 142, surveyQualified: true, shading: "NONE", quoteLagDays: 0, project: { code: "PR-1008", stage: "SUBSIDY_CREDITED", daysInStage: 20, token: "demo-status-pr-1008", statusViews: 16, stageDays: [3, 6, 12, 4, 33, 6, 28], bills: [["2026-09", 1.02], ["2026-10", 1.05]] } },
+
+  // Peak-month and paperwork examples for the new bill checks. Both use lookalike bills.
+  { code: "LD-31022", name: "Vinod Bobde", phone: "9000031022", ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 700, bill: 8230, units: 610, loadKw: 6, pincode: "440015", town: "Nagpur", tariff: RES, locale: "mr", stage: "SCORED", receivedDaysAgo: 1, sampleBill: "peak-may-bill.jpg" },
+  { code: "LD-31023", name: "Pooja Tiwari", phone: "9000031023", ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 650, bill: 8670, units: 420, loadKw: 2, pincode: "440010", town: "Nagpur", tariff: RES, locale: "hi", stage: "SCORED", receivedDaysAgo: 0, sampleBill: "name-and-arrears-bill.jpg", billName: "RAMESH K TIWARI", arrears: 2986.44 },
+
+  // Finished jobs. Their stage history is what the completion forecast learns from.
+  ...[
+    { code: "LD-31101", name: "Harish Bhagat", town: "Nagpur", pin: "440027", units: 360, bill: 3500, ago: 40, days: [2, 7, 13, 4, 41, 7, 26], bills: [["2026-08", 0.97], ["2026-09", 1.01], ["2026-10", 0.99]] },
+    { code: "LD-31102", name: "Leena Sonkusare", town: "Bhandara", pin: "441904", units: 310, bill: 2950, ago: 61, days: [3, 9, 11, 5, 38, 6, 31], bills: [["2026-08", 1.03], ["2026-09", 1.2], ["2026-10", 1.12]] },
+    { code: "LD-31103", name: "Rajesh Katre", town: "Wardha", pin: "442001", units: 420, bill: 4200, ago: 84, days: [2, 5, 15, 3, 52, 8, 24], bills: [["2026-08", 2.4], ["2026-09", 2.6]] },
+    { code: "LD-31104", name: "Nanda Borkar", town: "Nagpur", pin: "440034", units: 290, bill: 2750, ago: 102, days: [3, 6, 10, 4, 44, 5, 29], bills: [] },
+    { code: "LD-31105", name: "Arvind Tembhurne", town: "Chandrapur", pin: "442401", units: 380, bill: 3700, ago: 127, days: [4, 8, 14, 6, 36, 7, 33], bills: [] },
+  ].map((row, i): SeedLead => {
+    const worked = row.days.reduce((a, b) => a + b, 0);
+    return {
+      code: row.code, name: row.name, phone: `90000311${String(i + 1).padStart(2, "0")}`, ownership: "OWNER", roofType: "RCC_FLAT", roofSqFt: 700, bill: row.bill, units: row.units, loadKw: 5,
+      pincode: row.pin, town: row.town, tariff: RES, locale: "en", stage: "WON", receivedDaysAgo: row.ago + worked + 9, surveyDaysAgo: row.ago + worked + 1, surveyQualified: true, shading: "NONE", quoteLagDays: 0,
+      project: { code: `PR-09${String(i + 1).padStart(2, "0")}`, stage: "SUBSIDY_CREDITED", daysInStage: row.ago, token: `demo-status-pr-09${String(i + 1).padStart(2, "0")}`, statusViews: 8 + i, stageDays: row.days, bills: row.bills as [string, number][] },
+    };
+  }),
 ];
 
 /** A year of consumption with seasons, adjusted so the average is exactly `units`. */

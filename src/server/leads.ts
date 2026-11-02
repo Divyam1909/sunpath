@@ -1,7 +1,10 @@
 import { createHash } from "node:crypto";
-import { averageUnits, type ConfirmedBill, BILL_FIELDS, type BillExtraction } from "@/domain/bill";
+import { findBlockers } from "@/domain/blockers";
+import { BILL_FIELDS, EXTRA_BILL_FIELDS, segmentFromTariff, type BillExtraction, type ConfirmedBill } from "@/domain/bill";
+import { polygonAreaSqm } from "@/domain/geo";
 import { assessLead, type LeadAssessment, type LeadFacts } from "@/domain/score";
 import type { Settings } from "@/domain/settings";
+import { averageFromUsage, usageFromBill } from "@/domain/usage";
 import { Prisma } from "@/generated/prisma/client";
 import { CONSENT_PURPOSE, CONSENT_VERSION, SQM_PER_SQFT, type LeadInput } from "@/lib/validation";
 import { readBill } from "@/server/bill-reader";
@@ -31,7 +34,9 @@ export const estimateUnits = (monthlyBill: number, settings: Settings) =>
 
 export async function createLead(input: LeadInput) {
   const settings = await getSettings();
-  const roofAreaSqm = Number((input.roofAreaSqFt * SQM_PER_SQFT).toFixed(1));
+  // A map outline is measured here again: the area the browser sent is not trusted.
+  const outline = input.roofOutline ?? null;
+  const roofAreaSqm = Number((outline ? polygonAreaSqm(outline) : input.roofAreaSqFt * SQM_PER_SQFT).toFixed(1));
   // Scored straight away, so a lead who stops at the bill step still reaches sales.
   const assessment = assessLead(
     {
@@ -53,6 +58,7 @@ export async function createLead(input: LeadInput) {
     ownership: input.ownership,
     roofType: input.roofType,
     roofAreaSqm,
+    roofOutline: outline ? json(outline) : Prisma.JsonNull,
     monthlyBill: input.monthlyBill,
     pincode: input.pincode,
     locale: input.locale,
@@ -89,14 +95,14 @@ export function sniffMimeType(bytes: Buffer) {
 }
 
 /** Stores the bill, then reads it. Whatever the reader does, the lead and the file are kept. */
-export async function uploadBill(leadId: string, bytes: Buffer, mimeType: string) {
+export async function uploadBill(leadId: string, bytes: Buffer, mimeType: string, purpose: "INTAKE" | "AFTER_SOLAR" = "INTAKE") {
   const settings = await getSettings();
   const sha256 = createHash("sha256").update(bytes).digest("hex");
   const storageKey = `bills/${leadId}/${newToken()}.${EXTENSIONS[mimeType]}`;
   await fileStore.put(storageKey, bytes, mimeType);
 
   const outcome = await readBill({ bytes, mimeType, sha256 }, settings.score.lowConfidenceBelow);
-  const base = { leadId, storageKey, mimeType, sizeBytes: bytes.length, sha256 };
+  const base = { leadId, purpose, storageKey, mimeType, sizeBytes: bytes.length, sha256 };
 
   if (outcome.status === "read") {
     const { extraction, confidence, lowConfidence } = outcome.result;
@@ -144,7 +150,24 @@ export function factsFromConfirmed(
 /** Compares what a person agreed to against what the AI read. This is the accuracy audit trail. */
 export function editedFields(ai: StoredAiRead | null, confirmed: ConfirmedBill) {
   if (!ai) return [];
-  return BILL_FIELDS.filter((field) => (ai.extraction[field].value ?? null) !== (confirmed[field] ?? null));
+  return [...BILL_FIELDS, ...EXTRA_BILL_FIELDS].filter((field) => (ai.extraction[field]?.value ?? null) !== (confirmed[field] ?? null));
+}
+
+/** A41: everything that would stop this lead later, worked out from the confirmed bill. */
+function blockersFor(lead: { name: string; ownership: "OWNER" | "TENANT" }, bill: ConfirmedBill, assessment: LeadAssessment, settings: Settings) {
+  return findBlockers(
+    {
+      leadName: lead.name,
+      ownership: lead.ownership,
+      segment: segmentFromTariff(bill.tariffCategory),
+      consumerName: bill.consumerName ?? null,
+      arrearsAmount: bill.arrearsAmount ?? null,
+      solarExportUnits: bill.solarExportUnits ?? null,
+      meterStatus: bill.meterStatus ?? null,
+      sizing: { demandKw: assessment.sizing.demandKw, recommendedKw: assessment.recommendedKw, reasons: assessment.sizing.reasons },
+    },
+    settings,
+  );
 }
 
 /** Records the confirmed values and scores the lead on them. `actor` is "HOMEOWNER" or a staff user id. */
@@ -155,6 +178,7 @@ export async function confirmBill(leadId: string, readingId: string | null, bill
   const ai = (reading?.ai ?? null) as StoredAiRead | null;
 
   const assessment = assessLead(factsFromConfirmed(lead, bill, ai?.confidence ?? null), settings);
+  const blockers = blockersFor(lead, bill, assessment, settings);
   const data = {
     status: "CONFIRMED" as const,
     confirmed: json(bill),
@@ -175,6 +199,7 @@ export async function confirmBill(leadId: string, readingId: string | null, bill
       where: { id: leadId },
       data: {
         ...assessmentFields(assessment),
+        blockers: json(blockers),
         monthlyBill: bill.billAmount,
         stage: lead.stage === "NEW" ? "SCORED" : lead.stage,
       },
@@ -187,19 +212,35 @@ export async function confirmBill(leadId: string, readingId: string | null, bill
 }
 
 export const latestBill = (leadId: string) =>
-  db.billReading.findFirst({ where: { leadId }, orderBy: { createdAt: "desc" } });
+  db.billReading.findFirst({ where: { leadId, purpose: "INTAKE" }, orderBy: { createdAt: "desc" } });
 
 export function prefillBill(ai: StoredAiRead | null, lead: { monthlyBill: number }, settings: Settings): ConfirmedBill {
-  const units = ai?.extraction.unitsLatestMonth.value ?? estimateUnits(lead.monthlyBill, settings);
+  const extraction = ai?.extraction;
+  const units = extraction?.unitsLatestMonth.value ?? estimateUnits(lead.monthlyBill, settings);
+  const billingMonth = extraction?.billingMonth.value ?? null;
+  const usage = extraction
+    ? usageFromBill({
+        billingMonth,
+        unitsLatestMonth: units,
+        monthlyUsage: extraction.monthlyUsage,
+        monthlyUnitsHistory: extraction.monthlyUnitsHistory,
+      })
+    : [];
   return {
-    consumerNumber: ai?.extraction.consumerNumber.value ?? null,
-    tariffCategory: ai?.extraction.tariffCategory.value ?? null,
-    ratePerUnit: ai?.extraction.ratePerUnit.value ?? null,
-    sanctionedLoadKw: ai?.extraction.sanctionedLoadKw.value ?? null,
+    consumerNumber: extraction?.consumerNumber.value ?? null,
+    consumerName: extraction?.consumerName?.value ?? null,
+    tariffCategory: extraction?.tariffCategory.value ?? null,
+    ratePerUnit: extraction?.ratePerUnit.value ?? null,
+    sanctionedLoadKw: extraction?.sanctionedLoadKw.value ?? null,
     unitsLatestMonth: units,
-    billAmount: Math.round(ai?.extraction.billAmount.value ?? lead.monthlyBill),
-    billingMonth: ai?.extraction.billingMonth.value ?? null,
-    averageMonthlyUnits: averageUnits(units, ai?.extraction.monthlyUnitsHistory ?? []),
+    billAmount: Math.round(extraction?.billAmount.value ?? lead.monthlyBill),
+    arrearsAmount: extraction?.arrearsAmount?.value ?? null,
+    billingMonth,
+    averageMonthlyUnits: extraction ? averageFromUsage(usage, units, settings) : units,
+    connectionPhase: extraction?.connectionPhase?.value ?? null,
+    meterStatus: extraction?.meterStatus?.value ?? null,
+    solarExportUnits: extraction?.solarExportUnits?.value ?? null,
+    monthlyUsage: usage,
   };
 }
 
