@@ -61,7 +61,7 @@ test("when solar will not pay back in time, the homeowner is told so", async ({ 
   await page.goto("/en/l/demo-lead-ld-30915/result");
   await expect(page.getByTestId("poor-worth")).toHaveCount(0);
 
-  // With the subsidy even a small home pays back in about 6 years, so the limit is tightened to show the message.
+  // With the subsidy even a small home pays back in about 5 years, so the limit is tightened to show the message.
   await signInAsAdmin(page);
   await page.goto("/staff/admin");
   await page.getByLabel("Say solar may not pay above, years").fill("3");

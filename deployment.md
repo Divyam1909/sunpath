@@ -63,10 +63,12 @@ export DATABASE_URL=postgresql://sunpath:sunpath@localhost:5433/sunpath_test
 export DIRECT_URL=$DATABASE_URL
 pnpm prisma migrate deploy && pnpm db:seed && pnpm build
 pnpm exec playwright install chromium
-pnpm test:e2e --project=desktop --project=mobile --project=security
+pnpm test:e2e --project=desktop --project=mobile --project=security --project=features
 ```
 
 `pnpm exec tsx scripts/try-gemini.ts` runs the real Gemini reader over every sample bill, if a key is set.
+
+`pnpm eval:bills` measures the reader on the real and lookalike bills in `eval/` and rewrites `docs/BILL_ACCURACY.md`. It makes 21 requests, more than the main model's free daily limit, so run it with `GEMINI_MODEL=gemini-3.5-flash-lite` to keep the main model's quota for the demo.
 
 ## How it is deployed
 
@@ -108,6 +110,7 @@ Re-seeding replaces the demo records only, and leaves anything real untouched.
 | `BLOB_READ_WRITE_TOKEN` | Production | Private Blob store. Unset means disk storage |
 | `GEMINI_API_KEY` | For real reading | Unset means mock reader and manual entry |
 | `GEMINI_MODEL` | Optional | Default `gemini-3.5-flash` |
+| `GEMINI_FALLBACK_MODEL` | Optional | Used when the main model is over its limit. Default `gemini-3.5-flash-lite` |
 | `BILL_READER` | Optional | `auto` (default), `gemini` or `mock` |
 | `APP_URL` | Outside Vercel | Base URL for links in messages |
 | `SEED_ENV_FILE` | Remote seeding | Env file to seed from |

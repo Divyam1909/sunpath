@@ -44,4 +44,4 @@ jobs:
       - run: pnpm db:seed
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:e2e --project=desktop --project=mobile --project=security
+      - run: pnpm test:e2e --project=desktop --project=mobile --project=security --project=features

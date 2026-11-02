@@ -115,6 +115,21 @@ erDiagram
     date effectiveFrom
     date effectiveTo
   }
+  TariffRule {
+    json slabs
+    float fixedSinglePhase
+    float wheelingPerUnit
+    float dutyPercent
+    date effectiveFrom
+    date effectiveTo
+  }
+  SavingsCheck {
+    string month
+    int billAmount
+    int promisedSaving
+    int actualSaving
+    string verdict
+  }
   Setting {
     string key
     json value
@@ -126,6 +141,7 @@ Decisions worth defending:
 - **`BillReading` keeps `ai` and `confirmed` side by side**, plus `editedFields`. This is the audit trail for measuring AI accuracy later.
 - **`Quote.snapshot` copies the rules used.** There is no foreign key to a rule on purpose: a later edit cannot reach an old quote. An E2E test proves it.
 - **Money is whole rupees, dates in rule tables are date-only**, and "same day" means the Indian calendar day.
+- **A quote freezes its year of bills too.** `Quote.snapshot.billView` holds the tariff and the month-by-month projection for each option, so the promise tracker compares a later bill with what was actually promised, even after tariffs change.
 - **`RateLimit` is a table**, because in-memory counters do not survive across serverless instances.
 
 ## 4. Main flows
@@ -189,7 +205,14 @@ The AI does one job: it reads a bill. It never sets a price, a subsidy, generati
 
 **Reading.** `GeminiBillReader` sends the image with a strict response schema. The model returns a value and a confidence per field, plus `isElectricityBill` and an image-quality flag. The prompt forbids estimating, tells the model to return null for anything it cannot see, and treats text in the image as data, which guards against prompt injection from an uploaded image. Zod then validates the reply again in `parseBillResponse`.
 
-**Tested on the real API.** All six samples went through `gemini-3.5-flash`. The three clear bills gave every value correctly in about 6 seconds. The deliberately stained bill varies between runs, as a model will: it read the rest and either returned null for the hidden fields or gave a value with low confidence. Both land in front of a person as a highlighted field, which is why the design relies on confirmation rather than on the model being right. The blurry photo and the shop receipt were both rejected. This is synthetic data only: **accuracy on real MSEDCL phone photos is unmeasured** and is the first thing to check in a pilot.
+**Measured on real bills.** `pnpm eval:bills` runs the reader over documents with known answers and writes [BILL_ACCURACY.md](BILL_ACCURACY.md). On 7 images of 5 real MSEDCL bills, including a Marathi bill, net-meter bills and a stamped, hand-marked scan, the light model read **79 of 83 fields (95%)** and 84 of 85 months of history. Fields hidden by masks must come back blank: it invented one value out of 83, taking a DTC code for a blacked-out consumer number. On 14 lookalike images it read 196 of 196. The main model read the real Marathi bill 13 of 13 before its daily limit ran out, so it has not been measured across the full set. This is a small test: it proves the reader copes with real layouts, not its accuracy on thousands of phone photos. The stored AI-versus-confirmed values answer that in a pilot.
+
+**Finding the bills.** MSEDCL publishes real bills as format guides, and a college published one for accreditation. No homeowner's forum post was used. MSEDCL's masks cover the page image only: the real customer's name and address are still in those PDFs' text layer. So the test set is flattened pixels, redacted further by hand, and the PDFs are never committed or sent to the model.
+
+**Prompt lessons from real bills.** Real bills print three totals (prompt-payment, due, late), carry arrears inside the headline amount, and print meter readings beside the units. The first run confused these, so the prompt now names each, and the arrears are taken out before any rate is worked out (A42). That raised the real-bill score from 93% to 95%.
+
+**Poor photos.** People photograph bills on a table, in dim rooms, one side only. Three things handle this. The browser checks the photo for blur, darkness and size before it is sent, and only advises, because Gemini still reads surprisingly soft photos. A second photo of the back can be added, and the two are joined into one image, as arrears and charges are usually on the back. The model is told to expect tilt, folds and stamps, and simulated tilted, dim and soft shots score the same as clean ones in the lookalike set.
+
 
 | Failure | What the app does |
 |---|---|
@@ -197,7 +220,8 @@ The AI does one job: it reads a bill. It never sets a price, a subsidy, generati
 | Value not found | Left blank, never guessed |
 | Blurry, cropped, dark or not a bill | A specific message with photo tips and a re-upload |
 | Model returns bad JSON or wrong shape | Treated as a failed read, then manual entry |
-| API down, over quota, or no key | The lead is kept, with a clear message and manual entry |
+| Over the daily limit on the main model | The reader moves to the lighter model (A30) |
+| API down, or no key | The lead is kept, with a clear message and manual entry |
 | Model wrong but confident | A person sees every value before it is used, and corrections are stored |
 | Low score | A short call replaces the visit. Only a person can close a lead |
 
@@ -249,6 +273,37 @@ The 4 kW row shows why the surplus rate matters. Valuing every unit at full tari
 
 The other two sample rows also come out as specified: LD-30902 (tenant) gets Low and no size, and LD-30915 (₹650, 85 units) gets 1 kW and Low. `score.test.ts` asserts all three.
 
+### Real bills, not one rate
+
+The quote keeps the brief's one-rate formula so its sample rows still reproduce (A38). Beside it, the app shows the homeowner's real bills, because one rate hides what matters. Solar removes the dearest slabs first, and the fixed charge never goes.
+
+**The tariff engine is proven on real bills.** `calculateBill` uses the dated `TariffRule` table, taken from MERC Case 75 of 2025, and reproduces two published MSEDCL bills line by line, to the paisa:
+
+| Bill | Units | Fixed | Energy | Wheeling | FAC | Other | Duty | Total |
+|---|---|---|---|---|---|---|---|---|
+| October 2026 | 146 | 130.00 | 892.80 | 233.60 | 48.00 | -34.00 | 203.26 | **1,473.66** |
+| September 2022 (1.03 months) | 202 | 105.00 | 1,072.74 | 272.70 | 210.50 | 0.00 | 265.75 | **1,926.69** |
+
+The 2022 bill shows a detail no guide mentions: slabs widen with the billing period, so 1.03 months puts the first slab at 103 units. The October bill also shows a daytime rebate of ₹0.85 a unit, which the projection leaves out as it depends on a smart meter (A40).
+
+**Seasons.** Bills print a year of history, in a table or a bar chart, and the reader now returns it with month labels. Sizing uses the year. One peak bill would mislead: a May bill of 610 units, on a home averaging 365, would size the system on a month. Both the homeowner and sales are told when this happens, and sales sees the size each basis gives. Months the bill omits are filled from a seasonal pattern and drawn lighter (A36).
+
+**Month by month.** `projectBills` walks April to March: generation from Nagpur's PVGIS monthly shape, netted against use, with spare units banked through the monsoon and the balance paid on 31 March (A35, A37). For a 340-unit home with 3 kW the average bill falls from ₹4,619 to ₹288, and the yearly saving is ₹53,021 against ₹38,753 on the quote's one-rate formula.
+
+**An honest result that disproved an idea.** I expected this to tell small users solar is not worth it. It does not: with the subsidy, an 85-unit home pays back in about 5 years, because a 1 kW system is cheap. The warning exists (A39) but rarely shows, and I would rather report that than force it.
+
+### Catching problems early
+
+**Blockers (A41).** When a bill is confirmed, `findBlockers` looks for what stops a subsidy or net meter weeks later: a connection in someone else's name, overdue arrears, a sanctioned load below the wanted size, a non-home tariff, a tenant, existing solar export, a faulty meter. Name matching allows for titles, word order, initials and one-letter spelling changes, and says nothing rather than guess at a Devanagari name. Each item says what to do. None changes the score.
+
+**Promise tracker (A43).** After the net meter is in, a homeowner adds a bill to the status page. The same reader reads import, export and bank. The bill is compared with the promise for that same month, as a monsoon bill is meant to be higher. A bill far behind messages the customer and appears for staff before the customer has to complain. The impact panel gains a fourth number: savings delivered against the quote.
+
+**Real completion dates (A44).** `forecastProject` learns how long each stage really took from finished projects, and gives a likely date, a late date and the slip against the promised date. A project can be flagged weeks before any stage limit is broken, with the reason, such as net metering usually taking 40 days, not 21.
+
+**Roof map (A45).** Homeowners rarely know their roof area. They can tap its corners on a satellite photo. The browser only draws: the server measures the outline again and never trusts a sent area. The surveyor sees the same outline. An outline that crosses itself or is larger than a house is refused.
+
+**Family card.** The decision is often made by relatives who never saw the sales chat. One image carries the size, the bill before and after, the cost and the payback. It is drawn on a canvas in the browser, as browsers shape Marathi correctly and server image libraries often do not. It carries a first name only.
+
 ## 7. UI and design decisions
 
 The direction is calm and minimal: white space, one deep teal accent, neutral greys, and red kept for "stuck" and errors. Latin text is Geist, with Noto Sans Devanagari for Marathi and Hindi.
@@ -275,6 +330,10 @@ Every screen was captured at 390 px and 1280 px, then reviewed and corrected. Th
 
 ![Admin rule tables with the verify note](screenshots/16-admin-1280.png){width=640}
 
+![A peak month flagged, with a year of bills in Marathi](screenshots/05c-result-marathi-bill-390.png){width=180}
+![Blockers found on a bill](screenshots/05d-result-blockers-390.png){width=180}
+![Roof measured on satellite imagery](screenshots/08-roof-map-390.png){width=180}
+
 ## 8. Security and DPDP handling
 
 **Access.** Auth.js with hashed passwords and three roles. The proxy gives a fast redirect, and every server action, route and page checks the role again on the server. Homeowners only ever read leads linked to their own account. Public links carry 192 random bits. Signing in a homeowner never links a lead by phone number alone, because the number is unverified.
@@ -300,6 +359,8 @@ Every screen was captured at 390 px and 1280 px, then reviewed and corrected. Th
 - Bills go to a third-party AI on Google's free tier, and free-tier data may be used to improve Google's products. A paid tier with a data-processing agreement is needed before real customer bills are sent.
 - The demo database sits in `us-east-1` (A22). Production should move to an Indian region.
 - A bill's consumer number and any name on it reach Gemini, so the consent notice must name this processor at launch.
+- A roof outline is the customer's exact home location, and map tiles and search reveal the area to Esri and OpenStreetMap. It is optional, named in the consent notice (v2), staff-only, and removed on erasure.
+- MSEDCL's published sample PDFs leak a real customer's name under their masks. Sunpath keeps only flattened, redacted images. MSEDCL should be told.
 - Seeded demo links use readable tokens (A29), and the demo logins are public.
 
 ## 9. Testing strategy
@@ -308,11 +369,11 @@ The riskiest logic gets the most tests.
 
 | Layer | Tool | Count | Covers |
 |---|---|---|---|
-| Domain and reader | Vitest | 117 | Subsidy slabs, cap and date selection, overlap rejection, sizing, payback, all three sample rows, bill parser, stuck detector, translation key and placeholder parity |
-| End to end | Playwright | 18 | Lead to result on a 390 px phone, re-upload, quote and PDF, stage change to outbox to status page, document gating, old quotes unchanged after rule edits, role and PII checks, erasure |
+| Domain and reader | Vitest | 218 | Everything before, plus real-bill tariff reproduction, usage years, bill projection, blockers and name matching, the savings promise, forecasts, roof geometry, photo check and accuracy scoring |
+| End to end | Playwright | 30 | Everything before, plus a Marathi bill to a year of bills, a peak May bill, blockers for homeowner and staff, the photo check and two-sided upload, roof map to surveyor, the family card, a bill after solar through to staff, forecasts, and tariff overlap |
 | CI | GitHub Actions | On every push | Lint, typecheck, unit tests, migrations, seed, build and E2E against Postgres with the mock reader |
 
-Real Gemini is exercised by `scripts/try-gemini.ts` and was also checked through production, not in CI, because CI must not depend on a live API or use a key. Marathi and Hindi PDFs were rendered and inspected by eye, since a test cannot judge glyph shaping.
+Bill reading is measured by `pnpm eval:bills`, outside CI, as it needs a key and uses daily quota. Real Gemini is also exercised by `scripts/try-gemini.ts` and was also checked through production, not in CI, because CI must not depend on a live API or use a key. Marathi and Hindi PDFs were rendered and inspected by eye, since a test cannot judge glyph shaping.
 
 ## 10. All assumptions
 
@@ -335,7 +396,7 @@ Real Gemini is exercised by `scripts/try-gemini.ts` and was also checked through
 
 ## 12. What I would do next
 
-1. **Pilot on real bills** to measure read accuracy using the stored AI-vs-confirmed values, and tune the confidence threshold.
+1. **Pilot on real phone photos** to measure read accuracy from the stored AI-vs-confirmed values, tune the confidence threshold, and replace the assumed seasonal pattern with confirmed history.
 2. **Real WhatsApp Business API**, draining the existing outbox, with delivery status and customer replies.
 3. **DISCOM integrations** for net-metering status where MSEDCL allows it.
 4. **Accuracy dashboard**: edits per field, by bill layout.
