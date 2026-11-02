@@ -375,7 +375,7 @@ The riskiest logic gets the most tests.
 | End to end | Playwright | 31 | Everything before, plus a Marathi bill to a year of bills, a peak May bill, blockers for homeowner and staff, the photo check and two-sided upload, roof map to surveyor, the family card, a bill after solar through to staff, forecasts, and tariff overlap |
 | CI | GitHub Actions | On every push | Lint, typecheck, unit tests, migrations, seed, build and E2E against Postgres with the mock reader |
 
-Bill reading is measured by `pnpm eval:bills`, outside CI, as it needs a key and uses daily quota. Real Gemini is also exercised by `scripts/try-gemini.ts` and was also checked through production, not in CI, because CI must not depend on a live API or use a key. Marathi and Hindi PDFs were rendered and inspected by eye, since a test cannot judge glyph shaping.
+Bill reading is measured by `pnpm eval:bills`, outside CI, as it needs a key and uses daily quota. Real Gemini was also checked through production, not in CI, because CI must not depend on a live API or use a key. Marathi and Hindi PDFs were rendered and inspected by eye, since a test cannot judge glyph shaping.
 
 ## 10. All assumptions
 

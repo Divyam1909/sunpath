@@ -15,6 +15,6 @@ function migrationUrl() {
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
-  migrations: { path: "prisma/migrations", seed: "tsx prisma/seed.ts" },
+  migrations: { path: "prisma/migrations", seed: "tsx prisma/seed/index.ts" },
   datasource: { url: migrationUrl() },
 });

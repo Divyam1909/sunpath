@@ -7,9 +7,9 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { config } from "dotenv";
-import { compareField, compareHistory, percentOf, scoreFields, type FieldOutcome, type TruthValue, type UsageRow } from "../src/domain/accuracy";
-import { parseBillResponse } from "../src/domain/bill";
-import { GeminiBillReader } from "../src/server/bill-reader/gemini";
+import { compareField, compareHistory, percentOf, scoreFields, type FieldOutcome, type TruthValue, type UsageRow } from "../../src/domain/accuracy";
+import { parseBillResponse } from "../../src/domain/bill";
+import { GeminiBillReader } from "../../src/server/bill-reader/gemini";
 
 config({ path: [".env.local", ".env"], quiet: true });
 
@@ -165,7 +165,6 @@ async function main() {
     return;
   }
   writeFileSync("docs/BILL_ACCURACY.md", report(results, model));
-  writeFileSync("eval/results.json", `${JSON.stringify(results, null, 2)}\n`);
 }
 
 main();

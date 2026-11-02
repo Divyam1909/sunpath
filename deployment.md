@@ -66,8 +66,6 @@ pnpm exec playwright install chromium
 pnpm test:e2e --project=desktop --project=mobile --project=security --project=features
 ```
 
-`pnpm exec tsx scripts/try-gemini.ts` runs the real Gemini reader over every sample bill, if a key is set.
-
 `pnpm eval:bills` measures the reader on the real and lookalike bills in `eval/` and rewrites `docs/BILL_ACCURACY.md`. It makes 21 requests, more than the main model's free daily limit, so run it with `GEMINI_MODEL=gemini-3.5-flash-lite` to keep the main model's quota for the demo.
 
 ## How it is deployed
@@ -92,7 +90,7 @@ To set up a new copy on Vercel:
 
    ```bash
    vercel env pull .env.vercel
-   SEED_ENV_FILE=.env.vercel SEED_APP_URL=https://your-app.vercel.app pnpm exec tsx prisma/seed.ts
+   SEED_ENV_FILE=.env.vercel SEED_APP_URL=https://your-app.vercel.app pnpm exec tsx prisma/seed/index.ts
    ```
 
 Re-seeding replaces the demo records only, and leaves anything real untouched.

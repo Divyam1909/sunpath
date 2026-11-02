@@ -3,8 +3,8 @@
  * worked out from the real tariff. Each carries a printed notice and a SAMPLE stamp, has no logo, QR
  * code, barcode or real identifier, and so cannot pass for a bill. They exist to test the reader.
  */
-import { calculateBill, type BillTariff } from "../src/domain/tariff";
-import { monthsBefore } from "../src/domain/usage";
+import { calculateBill, type BillTariff } from "../../src/domain/tariff";
+import { monthsBefore } from "../../src/domain/usage";
 
 export interface Lookalike {
   key: string;

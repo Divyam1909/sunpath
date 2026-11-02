@@ -1,27 +1,27 @@
-import "./seed-env";
+import "./env";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import { createTranslator } from "next-intl";
-import { billExtractionSchema, billForThisMonth, parseBillResponse, segmentFromTariff, type ConfirmedBill } from "../src/domain/bill";
-import { findBlockers } from "../src/domain/blockers";
-import { istDate } from "../src/domain/format";
-import { REQUIRED_DOCS, STAGES, type Stage } from "../src/domain/project";
-import { buildBillView } from "../src/domain/projection";
-import { checkPromise } from "../src/domain/promise";
-import { buildQuoteOptions, optionSizes, resolveTariff, type QuoteInputs } from "../src/domain/quote";
-import { assessLead } from "../src/domain/score";
-import { DEFAULT_SETTINGS as settings } from "../src/domain/settings";
-import { sizeSystem, usableRoofSqm } from "../src/domain/sizing";
-import { averageFromUsage, usageFromBill } from "../src/domain/usage";
-import { Prisma, PrismaClient } from "../src/generated/prisma/client";
-import { CONSENT_PURPOSE, CONSENT_VERSION, SQM_PER_SQFT } from "../src/lib/validation";
-import { fileStore } from "../src/server/storage";
-import { newToken } from "../src/server/tokens";
-import fixtures from "../src/server/bill-reader/sample-fixtures.json";
-import { seedConsumerNumber, seedHistory, SEED_LEADS, type SeedLead } from "./seed-data";
-import { PRICE_BANDS, SUBSIDY_SLABS, TARIFF_FY2627, seedRules } from "./seed-rules";
+import { billExtractionSchema, billForThisMonth, parseBillResponse, segmentFromTariff, type ConfirmedBill } from "../../src/domain/bill";
+import { findBlockers } from "../../src/domain/blockers";
+import { istDate } from "../../src/domain/format";
+import { REQUIRED_DOCS, STAGES, type Stage } from "../../src/domain/project";
+import { buildBillView } from "../../src/domain/projection";
+import { checkPromise } from "../../src/domain/promise";
+import { buildQuoteOptions, optionSizes, resolveTariff, type QuoteInputs } from "../../src/domain/quote";
+import { assessLead } from "../../src/domain/score";
+import { DEFAULT_SETTINGS as settings } from "../../src/domain/settings";
+import { sizeSystem, usableRoofSqm } from "../../src/domain/sizing";
+import { averageFromUsage, usageFromBill } from "../../src/domain/usage";
+import { Prisma, PrismaClient } from "../../src/generated/prisma/client";
+import { CONSENT_PURPOSE, CONSENT_VERSION, SQM_PER_SQFT } from "../../src/lib/validation";
+import { fileStore } from "../../src/server/storage";
+import { newToken } from "../../src/server/tokens";
+import fixtures from "../../src/server/bill-reader/sample-fixtures.json";
+import { seedConsumerNumber, seedHistory, SEED_LEADS, type SeedLead } from "./data";
+import { PRICE_BANDS, SUBSIDY_SLABS, TARIFF_FY2627, seedRules } from "./rules";
 
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) });
 
@@ -164,7 +164,7 @@ async function seedLead(row: SeedLead, staffId: string, subsidyId: string, price
   });
 
   if (hasBill) {
-    const file = row.sampleBill ? path.join("public/samples", row.sampleBill) : path.join("prisma/seed-bills", `${row.code}.jpg`);
+    const file = row.sampleBill ? path.join("public/samples", row.sampleBill) : path.join("prisma/seed/bills", `${row.code}.jpg`);
     const bytes = readFileSync(file);
     const storageKey = `bills/${lead.id}/${newToken()}.jpg`;
     await fileStore.put(storageKey, bytes, "image/jpeg");
