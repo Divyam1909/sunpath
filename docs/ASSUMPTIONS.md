@@ -24,7 +24,7 @@ Anything not stated in the client brief is listed here. Code comments and the TD
 | A18 | Staff screens are English only; homeowner screens, the quote PDF and customer messages are English, Marathi and Hindi. | The brief allows this. Staff read English in the existing Excel workflow. | i18n |
 | A19 | Marathi and Hindi copy is machine-drafted and needs a native review before launch. | No translator in a zero-cost build. | `messages/*.json` |
 | A20 | The subsidy table is residential only. Bills on commercial tariffs (LT II and above) get the COMMERCIAL segment, which has no subsidy rule, so subsidy is ₹0. Sales can override the segment. | The brief's scheme is "central residential", yet the client also serves small businesses. | `domain/bill.ts` |
-| A21 | Retention: lead data and bills 24 months after last activity for unconverted leads; project records 8 years for tax. | Placeholder for legal review. See the TDD. | TDD |
+| A21 | Retention: lead data and bills 24 months after last activity for unconverted leads; project records 8 years for tax; rejected bill photos 90 days. | Placeholder for legal review. See the TDD. | TDD |
 | A22 | The demo runs in Vercel `iad1` next to Neon `us-east-1` because that is what the free provisioning gave. Production should move to `ap-south-1`/`bom1`. | Latency and data-location concerns for a real launch. | `vercel.json` |
 | A23 | Survey shading reduces usable roof: partial 20%, heavy 50%. It does not change generation. | The brief fixes generation to one formula. Shading therefore affects how much roof is usable. | Quote builder |
 | A24 | Monthly units for sizing are the average of the bill's history when present, else the latest month. | The sample column is "Avg Units/Month", and one month can be seasonal. | `domain/bill.ts` |
@@ -32,3 +32,9 @@ Anything not stated in the client brief is listed here. Code comments and the TD
 | A26 | "Sunpath" is the working product name, and the customer-facing brand shows "Company A Solar". | The brief names no product. | UI |
 | A27 | Every outbound update is a mock WhatsApp row in `MessageOutbox`. | The brief says to mock messages. | `server/outbox.ts` |
 | A28 | "Same day" is measured on the Indian calendar day. | A UTC day boundary would misreport evening surveys. | `domain/format.ts` |
+| A29 | Seeded records use fixed, readable link tokens (for example `demo-quote-ld-31007`) so the README can link straight to them. Real records always get 192 random bits. | A reviewer needs one-click links. Only fictional demo data has guessable links. | `prisma/seed.ts` |
+| A30 | The default model is `gemini-3.5-flash`, overridable with `GEMINI_MODEL`. | The brief's `gemini-2.5-flash` returns 404 for new keys. `gemini-3.5-flash` read all six samples correctly in about 5 seconds; newer models timed out on the free tier. | `server/bill-reader` |
+| A31 | If Gemini fails on a known sample bill, the mock reader answers and the reading records `mock`. Unknown bills go to manual entry. | Keeps the demo working through a free-tier outage without inventing values for a real bill. | `server/bill-reader` |
+| A32 | A quote can only be built once a survey is recorded. | The brief says the quote follows the survey. | Lead detail |
+| A33 | A deletion request is handled by an admin using "Erase customer data", which removes the lead, files, quotes, project and messages. | The consent notice promises deletion, so there has to be a way to do it. | `server/leads.ts` |
+| A34 | Unknown quote and status links show the not-found page with `noindex`, over a 200 status, because the loading skeleton has already streamed. | Keeping skeletons on navigation mattered more than the status code. No data is exposed either way. | `app/[locale]/loading.tsx` |
