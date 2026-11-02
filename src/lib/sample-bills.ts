@@ -13,6 +13,18 @@ export const SAMPLE_BILLS = [
     "label": "Shop on a commercial tariff"
   },
   {
+    "file": "marathi-home-bill.jpg",
+    "label": "Marathi home bill, in the real layout"
+  },
+  {
+    "file": "peak-may-bill.jpg",
+    "label": "May bill, far above a normal month"
+  },
+  {
+    "file": "name-and-arrears-bill.jpg",
+    "label": "Bill in another name, with arrears"
+  },
+  {
     "file": "tilted-phone-photo.jpg",
     "label": "Tilted, stained photo"
   },
@@ -23,5 +35,9 @@ export const SAMPLE_BILLS = [
   {
     "file": "not-a-bill.jpg",
     "label": "Not a bill"
+  },
+  {
+    "file": "after-solar-bill.jpg",
+    "label": "Bill after solar, with a net meter"
   }
 ];

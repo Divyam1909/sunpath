@@ -8,6 +8,8 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { chromium, type Page } from "@playwright/test";
 import { seedConsumerNumber, seedHistory, SEED_LEADS } from "../prisma/seed-data";
+import { TARIFF_FY2627 } from "../prisma/seed-rules";
+import { LOOKALIKE_CSS, LOOKALIKES, lookalikeHtml, lookalikeTruth, PHONE_EFFECTS, type Lookalike } from "./lookalike-bills";
 
 interface Bill {
   name: string;
@@ -199,8 +201,58 @@ const samples: Sample[] = [
   { file: "not-a-bill.jpg", label: "Not a bill", html: receipt, wrapper: "padding:50px;background:#d7d3cc;width:fit-content", response: emptyRead({ isElectricityBill: false, imageQuality: "good" }) },
 ];
 
+const lookalikeBill = (key: string) => LOOKALIKES.find((b) => b.key === key)!;
+
+function lookalikeResponse(bill: Lookalike) {
+  const { monthlyUsage, ...values } = lookalikeTruth(bill, TARIFF_FY2627);
+  const read = Object.fromEntries(Object.entries(values).map(([field, value]) => [field, conf(value, value === null ? 0 : 0.96)]));
+  return { isElectricityBill: true, imageQuality: "good", ratePerUnit: conf(null, 0), connectionPhase: conf(bill.phase), monthlyUsage, ...read };
+}
+
+const lookalikeSample = (file: string, key: string, label: string): Sample => ({
+  file,
+  label,
+  html: lookalikeHtml(lookalikeBill(key), TARIFF_FY2627),
+  response: lookalikeResponse(lookalikeBill(key)),
+});
+
+samples.splice(
+  3,
+  0,
+  lookalikeSample("marathi-home-bill.jpg", "typical-marathi", "Marathi home bill, in the real layout"),
+  lookalikeSample("peak-may-bill.jpg", "peak-may-marathi", "May bill, far above a normal month"),
+  lookalikeSample("name-and-arrears-bill.jpg", "arrears-other-name", "Bill in another name, with arrears"),
+);
+samples.push(lookalikeSample("after-solar-bill.jpg", "after-solar-march", "Bill after solar, with a net meter"));
+
+/** Every lookalike, clean and as phone photos, with the answers the accuracy test marks against. */
+async function makeEvalLookalikes(page: Page) {
+  const dir = path.resolve("eval/lookalike");
+  mkdirSync(dir, { recursive: true });
+  const truth: Record<string, unknown> = {};
+  const phoneShots: [string, keyof typeof PHONE_EFFECTS][] = [
+    ["typical-marathi", "tilted"],
+    ["peak-may-marathi", "dim"],
+    ["arrears-other-name", "soft"],
+    ["three-phase-english", "tilted"],
+    ["after-solar-july", "dim"],
+    ["after-solar-march", "soft"],
+  ];
+  for (const bill of LOOKALIKES) {
+    const html = lookalikeHtml(bill, TARIFF_FY2627);
+    await shoot(page, { file: "", label: "", html, response: null }, path.join(dir, `${bill.key}.jpg`));
+    truth[`${bill.key}.jpg`] = lookalikeTruth(bill, TARIFF_FY2627);
+    for (const [key, effect] of phoneShots.filter(([key]) => key === bill.key)) {
+      const file = `${key}-${effect}.jpg`;
+      await shoot(page, { file: "", label: "", html, wrapper: PHONE_EFFECTS[effect], response: null }, path.join(dir, file));
+      truth[file] = lookalikeTruth(bill, TARIFF_FY2627);
+    }
+  }
+  writeFileSync(path.join(dir, "truth.json"), `${JSON.stringify(truth, null, 2)}\n`);
+}
+
 async function shoot(page: Page, sample: Sample, out: string) {
-  await page.setContent(`<!doctype html><style>${css}</style><div id="shot" style="width:fit-content;background:#6e675f"><div style="${sample.wrapper ?? ""}">${sample.html}</div></div>`);
+  await page.setContent(`<!doctype html><style>${css}${LOOKALIKE_CSS}</style><div id="shot" style="width:fit-content;background:#6e675f"><div style="${sample.wrapper ?? ""}">${sample.html}</div></div>`);
   await page.locator("#shot").screenshot({ path: out, type: "jpeg", quality: 82 });
 }
 
@@ -216,6 +268,7 @@ async function main() {
     const sha = createHash("sha256").update(readFileSync(out)).digest("hex");
     fixtures[sha] = { label: sample.label, file: sample.file, response: sample.response };
   }
+  await makeEvalLookalikes(page);
   // One bill per seeded lead, so what staff see beside each lead's values actually matches.
   mkdirSync("prisma/seed-bills", { recursive: true });
   for (const lead of SEED_LEADS) {

@@ -1,5 +1,5 @@
 {
-  "f834021e82e2752150a79e7743b044001df6c285f082eeb575898c23159f3a44": {
+  "87d11f8025c2d43c5e15c5deaf40bead1ddf304348dab22f4d318092e15aeab7": {
     "label": "Clear home bill, 340 units",
     "file": "clear-home-bill.jpg",
     "response": {
@@ -49,7 +49,7 @@
       ]
     }
   },
-  "2b661dcd21e893de81b639149ba5fcb2ab0f48aa65caf4c5b54bc0a96f63d587": {
+  "edae77e90a79edbd328d064bef48bfe7f4aac49a76633d617b8aac272d54a607": {
     "label": "Small bill, ₹650",
     "file": "small-home-bill.jpg",
     "response": {
@@ -99,7 +99,7 @@
       ]
     }
   },
-  "99e43028fa561cb226b9b357a2227e60295a160296f7e0159787ef0964145982": {
+  "962e51fa31c1488d658e1518345c56884b9cc2190cafb1ecd4c11734f6f98dc8": {
     "label": "Shop on a commercial tariff",
     "file": "shop-bill.jpg",
     "response": {
@@ -149,7 +149,361 @@
       ]
     }
   },
-  "1bca36454791b2eba89c90a37e89008cea48a33ecdc163638eea13aaf9511192": {
+  "f591b80c511f73bb477613d9e99d8565245665cee8642f0f378d74c77f4b3e17": {
+    "label": "Marathi home bill, in the real layout",
+    "file": "marathi-home-bill.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "connectionPhase": {
+        "value": 1,
+        "confidence": 0.96
+      },
+      "monthlyUsage": [
+        {
+          "month": "Aug 2026",
+          "units": 301
+        },
+        {
+          "month": "Jul 2026",
+          "units": 308
+        },
+        {
+          "month": "Jun 2026",
+          "units": 352
+        },
+        {
+          "month": "May 2026",
+          "units": 431
+        },
+        {
+          "month": "Apr 2026",
+          "units": 402
+        },
+        {
+          "month": "Mar 2026",
+          "units": 330
+        },
+        {
+          "month": "Feb 2026",
+          "units": 278
+        },
+        {
+          "month": "Jan 2026",
+          "units": 250
+        },
+        {
+          "month": "Dec 2025",
+          "units": 241
+        },
+        {
+          "month": "Nov 2025",
+          "units": 262
+        },
+        {
+          "month": "Oct 2025",
+          "units": 298
+        }
+      ],
+      "consumerNumber": {
+        "value": "999900012345",
+        "confidence": 0.96
+      },
+      "consumerName": {
+        "value": "PRASAD M DESHPANDE",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": "LT I",
+        "confidence": 0.96
+      },
+      "sanctionedLoadKw": {
+        "value": 5,
+        "confidence": 0.96
+      },
+      "unitsLatestMonth": {
+        "value": 310,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 4020,
+        "confidence": 0.96
+      },
+      "currentBillAmount": {
+        "value": 4018.01,
+        "confidence": 0.96
+      },
+      "arrearsAmount": {
+        "value": 4.62,
+        "confidence": 0.96
+      },
+      "billingMonth": {
+        "value": "Sep 2026",
+        "confidence": 0.96
+      },
+      "meterStatus": {
+        "value": "Normal",
+        "confidence": 0.96
+      },
+      "solarImportUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarExportUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarBankedUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarBilledUnits": {
+        "value": null,
+        "confidence": 0
+      }
+    }
+  },
+  "06a60fe591c71766a77a7a558c410d2c82721c7cf83d9ec54b4d0c65b262b9e4": {
+    "label": "May bill, far above a normal month",
+    "file": "peak-may-bill.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "connectionPhase": {
+        "value": 1,
+        "confidence": 0.96
+      },
+      "monthlyUsage": [
+        {
+          "month": "Apr 2026",
+          "units": 498
+        },
+        {
+          "month": "Mar 2026",
+          "units": 412
+        },
+        {
+          "month": "Feb 2026",
+          "units": 335
+        },
+        {
+          "month": "Jan 2026",
+          "units": 290
+        },
+        {
+          "month": "Dec 2025",
+          "units": 276
+        },
+        {
+          "month": "Nov 2025",
+          "units": 288
+        },
+        {
+          "month": "Oct 2025",
+          "units": 300
+        },
+        {
+          "month": "Sep 2025",
+          "units": 318
+        },
+        {
+          "month": "Aug 2025",
+          "units": 330
+        },
+        {
+          "month": "Jul 2025",
+          "units": 355
+        },
+        {
+          "month": "Jun 2025",
+          "units": 372
+        }
+      ],
+      "consumerNumber": {
+        "value": "999900023456",
+        "confidence": 0.96
+      },
+      "consumerName": {
+        "value": "SHRI VINOD S BOBDE",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": "LT I",
+        "confidence": 0.96
+      },
+      "sanctionedLoadKw": {
+        "value": 6,
+        "confidence": 0.96
+      },
+      "unitsLatestMonth": {
+        "value": 610,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 10360,
+        "confidence": 0.96
+      },
+      "currentBillAmount": {
+        "value": 10356.83,
+        "confidence": 0.96
+      },
+      "arrearsAmount": {
+        "value": null,
+        "confidence": 0
+      },
+      "billingMonth": {
+        "value": "May 2026",
+        "confidence": 0.96
+      },
+      "meterStatus": {
+        "value": "Normal",
+        "confidence": 0.96
+      },
+      "solarImportUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarExportUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarBankedUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarBilledUnits": {
+        "value": null,
+        "confidence": 0
+      }
+    }
+  },
+  "db61046a87f1b33795c153ffca6b88db5716f1411fe05812de39a201c316f251": {
+    "label": "Bill in another name, with arrears",
+    "file": "name-and-arrears-bill.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "connectionPhase": {
+        "value": 1,
+        "confidence": 0.96
+      },
+      "monthlyUsage": [
+        {
+          "month": "Aug 2026",
+          "units": 404
+        },
+        {
+          "month": "Jul 2026",
+          "units": 418
+        },
+        {
+          "month": "Jun 2026",
+          "units": 465
+        },
+        {
+          "month": "May 2026",
+          "units": 548
+        },
+        {
+          "month": "Apr 2026",
+          "units": 512
+        },
+        {
+          "month": "Mar 2026",
+          "units": 445
+        },
+        {
+          "month": "Feb 2026",
+          "units": 372
+        },
+        {
+          "month": "Jan 2026",
+          "units": 338
+        },
+        {
+          "month": "Dec 2025",
+          "units": 330
+        },
+        {
+          "month": "Nov 2025",
+          "units": 365
+        },
+        {
+          "month": "Oct 2025",
+          "units": 398
+        }
+      ],
+      "consumerNumber": {
+        "value": "999900034567",
+        "confidence": 0.96
+      },
+      "consumerName": {
+        "value": "RAMESH K TIWARI",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": "LT I",
+        "confidence": 0.96
+      },
+      "sanctionedLoadKw": {
+        "value": 2,
+        "confidence": 0.96
+      },
+      "unitsLatestMonth": {
+        "value": 420,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 9210,
+        "confidence": 0.96
+      },
+      "currentBillAmount": {
+        "value": 6222.94,
+        "confidence": 0.96
+      },
+      "arrearsAmount": {
+        "value": 2986.44,
+        "confidence": 0.96
+      },
+      "billingMonth": {
+        "value": "Sep 2026",
+        "confidence": 0.96
+      },
+      "meterStatus": {
+        "value": "Normal",
+        "confidence": 0.96
+      },
+      "solarImportUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarExportUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarBankedUnits": {
+        "value": null,
+        "confidence": 0
+      },
+      "solarBilledUnits": {
+        "value": null,
+        "confidence": 0
+      }
+    }
+  },
+  "56966f74f616cfb974c7e44ae173d57a1a3d1fd89a9ff695a697d891a66d899e": {
     "label": "Tilted, stained photo",
     "file": "tilted-phone-photo.jpg",
     "response": {
@@ -199,7 +553,7 @@
       ]
     }
   },
-  "061f953414d6ccb6391b43a0d86d112d754a28b1fc40577ea54072ecd76e8625": {
+  "24eded78816dfa518077eba738af98a7a7ce44d0dba3d4cd3446e091d3953458": {
     "label": "Blurry photo",
     "file": "blurry-photo.jpg",
     "response": {
@@ -271,6 +625,124 @@
         "confidence": 0
       },
       "monthlyUnitsHistory": []
+    }
+  },
+  "f3928fdd97f3135dfc9cf038032587d2d1847efdb9c727e8b8ac828a9ede2612": {
+    "label": "Bill after solar, with a net meter",
+    "file": "after-solar-bill.jpg",
+    "response": {
+      "isElectricityBill": true,
+      "imageQuality": "good",
+      "ratePerUnit": {
+        "value": null,
+        "confidence": 0
+      },
+      "connectionPhase": {
+        "value": 1,
+        "confidence": 0.96
+      },
+      "monthlyUsage": [
+        {
+          "month": "Feb 2026",
+          "units": 118
+        },
+        {
+          "month": "Jan 2026",
+          "units": 102
+        },
+        {
+          "month": "Dec 2025",
+          "units": 74
+        },
+        {
+          "month": "Nov 2025",
+          "units": 36
+        },
+        {
+          "month": "Oct 2025",
+          "units": 0
+        },
+        {
+          "month": "Sep 2025",
+          "units": 0
+        },
+        {
+          "month": "Aug 2025",
+          "units": 42
+        },
+        {
+          "month": "Jul 2025",
+          "units": 88
+        },
+        {
+          "month": "Jun 2025",
+          "units": 460
+        },
+        {
+          "month": "May 2025",
+          "units": 498
+        },
+        {
+          "month": "Apr 2025",
+          "units": 540
+        }
+      ],
+      "consumerNumber": {
+        "value": "999900078901",
+        "confidence": 0.96
+      },
+      "consumerName": {
+        "value": "Deepak Nagpure",
+        "confidence": 0.96
+      },
+      "tariffCategory": {
+        "value": "LT I",
+        "confidence": 0.96
+      },
+      "sanctionedLoadKw": {
+        "value": 7,
+        "confidence": 0.96
+      },
+      "unitsLatestMonth": {
+        "value": 96,
+        "confidence": 0.96
+      },
+      "billAmount": {
+        "value": 800,
+        "confidence": 0.96
+      },
+      "currentBillAmount": {
+        "value": 797.8,
+        "confidence": 0.96
+      },
+      "arrearsAmount": {
+        "value": null,
+        "confidence": 0
+      },
+      "billingMonth": {
+        "value": "Mar 2026",
+        "confidence": 0.96
+      },
+      "meterStatus": {
+        "value": "Normal",
+        "confidence": 0.96
+      },
+      "solarImportUnits": {
+        "value": 402,
+        "confidence": 0.96
+      },
+      "solarExportUnits": {
+        "value": 306,
+        "confidence": 0.96
+      },
+      "solarBankedUnits": {
+        "value": 0,
+        "confidence": 0.96
+      },
+      "solarBilledUnits": {
+        "value": 96,
+        "confidence": 0.96
+      }
     }
   }
 }

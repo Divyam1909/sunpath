@@ -14,7 +14,8 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "submission": "tsx scripts/submission.ts"
+    "submission": "tsx scripts/submission.ts",
+    "eval:bills": "tsx scripts/eval-bills.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

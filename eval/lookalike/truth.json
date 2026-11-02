@@ -1,0 +1,870 @@
+{
+  "typical-marathi.jpg": {
+    "consumerNumber": "999900012345",
+    "consumerName": "PRASAD M DESHPANDE",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 5,
+    "unitsLatestMonth": 310,
+    "billAmount": 4020,
+    "currentBillAmount": 4018.01,
+    "arrearsAmount": 4.62,
+    "billingMonth": "Sep 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Aug 2026",
+        "units": 301
+      },
+      {
+        "month": "Jul 2026",
+        "units": 308
+      },
+      {
+        "month": "Jun 2026",
+        "units": 352
+      },
+      {
+        "month": "May 2026",
+        "units": 431
+      },
+      {
+        "month": "Apr 2026",
+        "units": 402
+      },
+      {
+        "month": "Mar 2026",
+        "units": 330
+      },
+      {
+        "month": "Feb 2026",
+        "units": 278
+      },
+      {
+        "month": "Jan 2026",
+        "units": 250
+      },
+      {
+        "month": "Dec 2025",
+        "units": 241
+      },
+      {
+        "month": "Nov 2025",
+        "units": 262
+      },
+      {
+        "month": "Oct 2025",
+        "units": 298
+      }
+    ]
+  },
+  "typical-marathi-tilted.jpg": {
+    "consumerNumber": "999900012345",
+    "consumerName": "PRASAD M DESHPANDE",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 5,
+    "unitsLatestMonth": 310,
+    "billAmount": 4020,
+    "currentBillAmount": 4018.01,
+    "arrearsAmount": 4.62,
+    "billingMonth": "Sep 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Aug 2026",
+        "units": 301
+      },
+      {
+        "month": "Jul 2026",
+        "units": 308
+      },
+      {
+        "month": "Jun 2026",
+        "units": 352
+      },
+      {
+        "month": "May 2026",
+        "units": 431
+      },
+      {
+        "month": "Apr 2026",
+        "units": 402
+      },
+      {
+        "month": "Mar 2026",
+        "units": 330
+      },
+      {
+        "month": "Feb 2026",
+        "units": 278
+      },
+      {
+        "month": "Jan 2026",
+        "units": 250
+      },
+      {
+        "month": "Dec 2025",
+        "units": 241
+      },
+      {
+        "month": "Nov 2025",
+        "units": 262
+      },
+      {
+        "month": "Oct 2025",
+        "units": 298
+      }
+    ]
+  },
+  "peak-may-marathi.jpg": {
+    "consumerNumber": "999900023456",
+    "consumerName": "SHRI VINOD S BOBDE",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 6,
+    "unitsLatestMonth": 610,
+    "billAmount": 10360,
+    "currentBillAmount": 10356.83,
+    "arrearsAmount": null,
+    "billingMonth": "May 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Apr 2026",
+        "units": 498
+      },
+      {
+        "month": "Mar 2026",
+        "units": 412
+      },
+      {
+        "month": "Feb 2026",
+        "units": 335
+      },
+      {
+        "month": "Jan 2026",
+        "units": 290
+      },
+      {
+        "month": "Dec 2025",
+        "units": 276
+      },
+      {
+        "month": "Nov 2025",
+        "units": 288
+      },
+      {
+        "month": "Oct 2025",
+        "units": 300
+      },
+      {
+        "month": "Sep 2025",
+        "units": 318
+      },
+      {
+        "month": "Aug 2025",
+        "units": 330
+      },
+      {
+        "month": "Jul 2025",
+        "units": 355
+      },
+      {
+        "month": "Jun 2025",
+        "units": 372
+      }
+    ]
+  },
+  "peak-may-marathi-dim.jpg": {
+    "consumerNumber": "999900023456",
+    "consumerName": "SHRI VINOD S BOBDE",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 6,
+    "unitsLatestMonth": 610,
+    "billAmount": 10360,
+    "currentBillAmount": 10356.83,
+    "arrearsAmount": null,
+    "billingMonth": "May 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Apr 2026",
+        "units": 498
+      },
+      {
+        "month": "Mar 2026",
+        "units": 412
+      },
+      {
+        "month": "Feb 2026",
+        "units": 335
+      },
+      {
+        "month": "Jan 2026",
+        "units": 290
+      },
+      {
+        "month": "Dec 2025",
+        "units": 276
+      },
+      {
+        "month": "Nov 2025",
+        "units": 288
+      },
+      {
+        "month": "Oct 2025",
+        "units": 300
+      },
+      {
+        "month": "Sep 2025",
+        "units": 318
+      },
+      {
+        "month": "Aug 2025",
+        "units": 330
+      },
+      {
+        "month": "Jul 2025",
+        "units": 355
+      },
+      {
+        "month": "Jun 2025",
+        "units": 372
+      }
+    ]
+  },
+  "arrears-other-name.jpg": {
+    "consumerNumber": "999900034567",
+    "consumerName": "RAMESH K TIWARI",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 2,
+    "unitsLatestMonth": 420,
+    "billAmount": 9210,
+    "currentBillAmount": 6222.94,
+    "arrearsAmount": 2986.44,
+    "billingMonth": "Sep 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Aug 2026",
+        "units": 404
+      },
+      {
+        "month": "Jul 2026",
+        "units": 418
+      },
+      {
+        "month": "Jun 2026",
+        "units": 465
+      },
+      {
+        "month": "May 2026",
+        "units": 548
+      },
+      {
+        "month": "Apr 2026",
+        "units": 512
+      },
+      {
+        "month": "Mar 2026",
+        "units": 445
+      },
+      {
+        "month": "Feb 2026",
+        "units": 372
+      },
+      {
+        "month": "Jan 2026",
+        "units": 338
+      },
+      {
+        "month": "Dec 2025",
+        "units": 330
+      },
+      {
+        "month": "Nov 2025",
+        "units": 365
+      },
+      {
+        "month": "Oct 2025",
+        "units": 398
+      }
+    ]
+  },
+  "arrears-other-name-soft.jpg": {
+    "consumerNumber": "999900034567",
+    "consumerName": "RAMESH K TIWARI",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 2,
+    "unitsLatestMonth": 420,
+    "billAmount": 9210,
+    "currentBillAmount": 6222.94,
+    "arrearsAmount": 2986.44,
+    "billingMonth": "Sep 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Aug 2026",
+        "units": 404
+      },
+      {
+        "month": "Jul 2026",
+        "units": 418
+      },
+      {
+        "month": "Jun 2026",
+        "units": 465
+      },
+      {
+        "month": "May 2026",
+        "units": 548
+      },
+      {
+        "month": "Apr 2026",
+        "units": 512
+      },
+      {
+        "month": "Mar 2026",
+        "units": 445
+      },
+      {
+        "month": "Feb 2026",
+        "units": 372
+      },
+      {
+        "month": "Jan 2026",
+        "units": 338
+      },
+      {
+        "month": "Dec 2025",
+        "units": 330
+      },
+      {
+        "month": "Nov 2025",
+        "units": 365
+      },
+      {
+        "month": "Oct 2025",
+        "units": 398
+      }
+    ]
+  },
+  "three-phase-english.jpg": {
+    "consumerNumber": "999900045678",
+    "consumerName": "Dr Meera A Joshi",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 9,
+    "unitsLatestMonth": 480,
+    "billAmount": 7770,
+    "currentBillAmount": 7779.42,
+    "arrearsAmount": -12.3,
+    "billingMonth": "Aug 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Jul 2026",
+        "units": 505
+      },
+      {
+        "month": "Jun 2026",
+        "units": 598
+      },
+      {
+        "month": "May 2026",
+        "units": 612
+      },
+      {
+        "month": "Apr 2026",
+        "units": 548
+      },
+      {
+        "month": "Mar 2026",
+        "units": 440
+      },
+      {
+        "month": "Feb 2026",
+        "units": 362
+      },
+      {
+        "month": "Jan 2026",
+        "units": 350
+      },
+      {
+        "month": "Dec 2025",
+        "units": 378
+      },
+      {
+        "month": "Nov 2025",
+        "units": 421
+      },
+      {
+        "month": "Oct 2025",
+        "units": 462
+      },
+      {
+        "month": "Sep 2025",
+        "units": 455
+      }
+    ]
+  },
+  "three-phase-english-tilted.jpg": {
+    "consumerNumber": "999900045678",
+    "consumerName": "Dr Meera A Joshi",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 9,
+    "unitsLatestMonth": 480,
+    "billAmount": 7770,
+    "currentBillAmount": 7779.42,
+    "arrearsAmount": -12.3,
+    "billingMonth": "Aug 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Jul 2026",
+        "units": 505
+      },
+      {
+        "month": "Jun 2026",
+        "units": 598
+      },
+      {
+        "month": "May 2026",
+        "units": 612
+      },
+      {
+        "month": "Apr 2026",
+        "units": 548
+      },
+      {
+        "month": "Mar 2026",
+        "units": 440
+      },
+      {
+        "month": "Feb 2026",
+        "units": 362
+      },
+      {
+        "month": "Jan 2026",
+        "units": 350
+      },
+      {
+        "month": "Dec 2025",
+        "units": 378
+      },
+      {
+        "month": "Nov 2025",
+        "units": 421
+      },
+      {
+        "month": "Oct 2025",
+        "units": 462
+      },
+      {
+        "month": "Sep 2025",
+        "units": 455
+      }
+    ]
+  },
+  "small-user.jpg": {
+    "consumerNumber": "999900056789",
+    "consumerName": "Sunanda P Khobragade",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 1,
+    "unitsLatestMonth": 78,
+    "billAmount": 680,
+    "currentBillAmount": 676.49,
+    "arrearsAmount": null,
+    "billingMonth": "Sep 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Aug 2026",
+        "units": 76
+      },
+      {
+        "month": "Jul 2026",
+        "units": 80
+      },
+      {
+        "month": "Jun 2026",
+        "units": 88
+      },
+      {
+        "month": "May 2026",
+        "units": 104
+      },
+      {
+        "month": "Apr 2026",
+        "units": 96
+      },
+      {
+        "month": "Mar 2026",
+        "units": 82
+      },
+      {
+        "month": "Feb 2026",
+        "units": 71
+      },
+      {
+        "month": "Jan 2026",
+        "units": 66
+      },
+      {
+        "month": "Dec 2025",
+        "units": 62
+      },
+      {
+        "month": "Nov 2025",
+        "units": 70
+      },
+      {
+        "month": "Oct 2025",
+        "units": 74
+      }
+    ]
+  },
+  "faulty-meter.jpg": {
+    "consumerNumber": "999900067890",
+    "consumerName": "Ashok T Meshram",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 4,
+    "unitsLatestMonth": 240,
+    "billAmount": 2920,
+    "currentBillAmount": 2919.72,
+    "arrearsAmount": null,
+    "billingMonth": "Jul 2026",
+    "meterStatus": "Faulty",
+    "solarImportUnits": null,
+    "solarExportUnits": null,
+    "solarBankedUnits": null,
+    "solarBilledUnits": null,
+    "monthlyUsage": [
+      {
+        "month": "Jun 2026",
+        "units": 240
+      },
+      {
+        "month": "May 2026",
+        "units": 255
+      },
+      {
+        "month": "Apr 2026",
+        "units": 291
+      },
+      {
+        "month": "Mar 2026",
+        "units": 342
+      },
+      {
+        "month": "Feb 2026",
+        "units": 318
+      },
+      {
+        "month": "Jan 2026",
+        "units": 268
+      },
+      {
+        "month": "Dec 2025",
+        "units": 222
+      },
+      {
+        "month": "Nov 2025",
+        "units": 198
+      },
+      {
+        "month": "Oct 2025",
+        "units": 205
+      },
+      {
+        "month": "Sep 2025",
+        "units": 228
+      },
+      {
+        "month": "Aug 2025",
+        "units": 212
+      }
+    ]
+  },
+  "after-solar-march.jpg": {
+    "consumerNumber": "999900078901",
+    "consumerName": "Deepak Nagpure",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 7,
+    "unitsLatestMonth": 96,
+    "billAmount": 800,
+    "currentBillAmount": 797.8,
+    "arrearsAmount": null,
+    "billingMonth": "Mar 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": 402,
+    "solarExportUnits": 306,
+    "solarBankedUnits": 0,
+    "solarBilledUnits": 96,
+    "monthlyUsage": [
+      {
+        "month": "Feb 2026",
+        "units": 118
+      },
+      {
+        "month": "Jan 2026",
+        "units": 102
+      },
+      {
+        "month": "Dec 2025",
+        "units": 74
+      },
+      {
+        "month": "Nov 2025",
+        "units": 36
+      },
+      {
+        "month": "Oct 2025",
+        "units": 0
+      },
+      {
+        "month": "Sep 2025",
+        "units": 0
+      },
+      {
+        "month": "Aug 2025",
+        "units": 42
+      },
+      {
+        "month": "Jul 2025",
+        "units": 88
+      },
+      {
+        "month": "Jun 2025",
+        "units": 460
+      },
+      {
+        "month": "May 2025",
+        "units": 498
+      },
+      {
+        "month": "Apr 2025",
+        "units": 540
+      }
+    ]
+  },
+  "after-solar-march-soft.jpg": {
+    "consumerNumber": "999900078901",
+    "consumerName": "Deepak Nagpure",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 7,
+    "unitsLatestMonth": 96,
+    "billAmount": 800,
+    "currentBillAmount": 797.8,
+    "arrearsAmount": null,
+    "billingMonth": "Mar 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": 402,
+    "solarExportUnits": 306,
+    "solarBankedUnits": 0,
+    "solarBilledUnits": 96,
+    "monthlyUsage": [
+      {
+        "month": "Feb 2026",
+        "units": 118
+      },
+      {
+        "month": "Jan 2026",
+        "units": 102
+      },
+      {
+        "month": "Dec 2025",
+        "units": 74
+      },
+      {
+        "month": "Nov 2025",
+        "units": 36
+      },
+      {
+        "month": "Oct 2025",
+        "units": 0
+      },
+      {
+        "month": "Sep 2025",
+        "units": 0
+      },
+      {
+        "month": "Aug 2025",
+        "units": 42
+      },
+      {
+        "month": "Jul 2025",
+        "units": 88
+      },
+      {
+        "month": "Jun 2025",
+        "units": 460
+      },
+      {
+        "month": "May 2025",
+        "units": 498
+      },
+      {
+        "month": "Apr 2025",
+        "units": 540
+      }
+    ]
+  },
+  "after-solar-july.jpg": {
+    "consumerNumber": "999900089012",
+    "consumerName": "Swati Dhoke",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 3,
+    "unitsLatestMonth": 188,
+    "billAmount": 2450,
+    "currentBillAmount": 2141.59,
+    "arrearsAmount": 310,
+    "billingMonth": "Jul 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": 281,
+    "solarExportUnits": 93,
+    "solarBankedUnits": 0,
+    "solarBilledUnits": 188,
+    "monthlyUsage": [
+      {
+        "month": "Jun 2026",
+        "units": 120
+      },
+      {
+        "month": "May 2026",
+        "units": 92
+      },
+      {
+        "month": "Apr 2026",
+        "units": 44
+      },
+      {
+        "month": "Mar 2026",
+        "units": 29
+      },
+      {
+        "month": "Feb 2026",
+        "units": 18
+      },
+      {
+        "month": "Jan 2026",
+        "units": 22
+      },
+      {
+        "month": "Dec 2025",
+        "units": 41
+      },
+      {
+        "month": "Nov 2025",
+        "units": 58
+      },
+      {
+        "month": "Oct 2025",
+        "units": 96
+      },
+      {
+        "month": "Sep 2025",
+        "units": 228
+      },
+      {
+        "month": "Aug 2025",
+        "units": 235
+      }
+    ]
+  },
+  "after-solar-july-dim.jpg": {
+    "consumerNumber": "999900089012",
+    "consumerName": "Swati Dhoke",
+    "tariffCategory": "LT I",
+    "sanctionedLoadKw": 3,
+    "unitsLatestMonth": 188,
+    "billAmount": 2450,
+    "currentBillAmount": 2141.59,
+    "arrearsAmount": 310,
+    "billingMonth": "Jul 2026",
+    "meterStatus": "Normal",
+    "solarImportUnits": 281,
+    "solarExportUnits": 93,
+    "solarBankedUnits": 0,
+    "solarBilledUnits": 188,
+    "monthlyUsage": [
+      {
+        "month": "Jun 2026",
+        "units": 120
+      },
+      {
+        "month": "May 2026",
+        "units": 92
+      },
+      {
+        "month": "Apr 2026",
+        "units": 44
+      },
+      {
+        "month": "Mar 2026",
+        "units": 29
+      },
+      {
+        "month": "Feb 2026",
+        "units": 18
+      },
+      {
+        "month": "Jan 2026",
+        "units": 22
+      },
+      {
+        "month": "Dec 2025",
+        "units": 41
+      },
+      {
+        "month": "Nov 2025",
+        "units": 58
+      },
+      {
+        "month": "Oct 2025",
+        "units": 96
+      },
+      {
+        "month": "Sep 2025",
+        "units": 228
+      },
+      {
+        "month": "Aug 2025",
+        "units": 235
+      }
+    ]
+  }
+}

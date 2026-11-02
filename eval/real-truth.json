@@ -1,0 +1,123 @@
+{
+  "lt-residential-2022.jpg": {
+    "source": "MSEDCL, Know your Bill Format, LT bill (Sep 2022), a real bill MSEDCL masked for publication",
+    "url": "https://www.mahadiscom.in/consumer/wp-content/uploads/2022/09/LT-E-Bill-202209-for-webr.pdf",
+    "truth": {
+      "consumerNumber": null,
+      "consumerName": null,
+      "tariffCategory": "LT I",
+      "sanctionedLoadKw": null,
+      "unitsLatestMonth": 202,
+      "billAmount": 1930,
+      "currentBillAmount": 1926.69,
+      "arrearsAmount": -1.46,
+      "billingMonth": "Sep 2022",
+      "meterStatus": "NORMAL",
+      "solarImportUnits": null,
+      "solarExportUnits": null,
+      "solarBankedUnits": null,
+      "solarBilledUnits": null,
+      "monthlyUsage": [
+        { "month": "Aug 2022", "units": 180 }, { "month": "Jul 2022", "units": 215 }, { "month": "Jun 2022", "units": 229 },
+        { "month": "May 2022", "units": 236 }, { "month": "Apr 2022", "units": 142 }, { "month": "Mar 2022", "units": 83 },
+        { "month": "Feb 2022", "units": 112 }, { "month": "Jan 2022", "units": 114 }, { "month": "Dec 2021", "units": 124 },
+        { "month": "Nov 2021", "units": 165 }, { "month": "Oct 2021", "units": 176 }, { "month": "Sep 2021", "units": 194 }
+      ]
+    }
+  },
+  "lt-residential-2026-marathi.jpg": {
+    "source": "MSEDCL, Know your Bill Format, LT bill (Oct 2026), in Marathi",
+    "url": "https://www.mahadiscom.in/wp-content/uploads/2026/10/ltbill-2610-FOR-WEB.pdf",
+    "truth": {
+      "consumerNumber": null,
+      "consumerName": null,
+      "sanctionedLoadKw": 0.5,
+      "unitsLatestMonth": 146,
+      "billAmount": 1470,
+      "currentBillAmount": 1473.66,
+      "arrearsAmount": -1.9,
+      "billingMonth": "Oct 2026",
+      "meterStatus": "Normal",
+      "solarImportUnits": null,
+      "solarExportUnits": null,
+      "solarBankedUnits": null,
+      "solarBilledUnits": null,
+      "monthlyUsage": [
+        { "month": "Sep 2026", "units": 89 }, { "month": "Aug 2026", "units": 80 }, { "month": "Jul 2026", "units": 116 },
+        { "month": "Jun 2026", "units": 152 }, { "month": "May 2026", "units": 114 }, { "month": "Apr 2026", "units": 88 },
+        { "month": "Mar 2026", "units": 58 }, { "month": "Feb 2026", "units": 93 }, { "month": "Jan 2026", "units": 176 },
+        { "month": "Dec 2025", "units": 28 }, { "month": "Nov 2025", "units": 98 }
+      ]
+    }
+  },
+  "lt-solar-2026-08.jpg": {
+    "source": "MSEDCL, Know your Bill Format, LTIP bill with net meter (Aug 2026)",
+    "url": "https://www.mahadiscom.in/wp-content/uploads/2026/08/ltip-solar-2608-for-web.pdf",
+    "truth": {
+      "consumerNumber": null,
+      "consumerName": null,
+      "tariffCategory": "LT III A",
+      "sanctionedLoadKw": null,
+      "unitsLatestMonth": 270,
+      "billAmount": 4520,
+      "currentBillAmount": 1526.66,
+      "arrearsAmount": 2998.17,
+      "billingMonth": "Aug 2026",
+      "solarImportUnits": 359,
+      "solarExportUnits": 62,
+      "solarBankedUnits": 0,
+      "solarBilledUnits": 270,
+      "monthlyUsage": [
+        { "month": "Jul 2026", "units": 540 }, { "month": "Jun 2026", "units": 704 }, { "month": "May 2026", "units": 566 },
+        { "month": "Apr 2026", "units": 170 }, { "month": "Mar 2026", "units": 179 }, { "month": "Feb 2026", "units": 294 },
+        { "month": "Jan 2026", "units": 336 }, { "month": "Dec 2025", "units": 400 }, { "month": "Nov 2025", "units": 338 },
+        { "month": "Oct 2025", "units": 469 }, { "month": "Sep 2025", "units": 239 }, { "month": "Aug 2025", "units": 314 },
+        { "month": "Jul 2025", "units": 315 }
+      ]
+    }
+  },
+  "lt-solar-2026-10.jpg": {
+    "source": "MSEDCL, Know your Bill Format, LTIP bill with net meter (Oct 2026)",
+    "url": "https://www.mahadiscom.in/wp-content/uploads/2026/10/ltipsolar-2610for-web.pdf",
+    "truth": {
+      "consumerNumber": null,
+      "consumerName": null,
+      "sanctionedLoadKw": null,
+      "unitsLatestMonth": 160,
+      "billAmount": 1220,
+      "currentBillAmount": 1237.31,
+      "arrearsAmount": -21.18,
+      "billingMonth": "Oct 2026",
+      "solarImportUnits": 160,
+      "solarExportUnits": 0,
+      "solarBankedUnits": 135,
+      "solarBilledUnits": 160,
+      "monthlyUsage": [
+        { "month": "Sep 2026", "units": 1 }, { "month": "Aug 2026", "units": 40 }, { "month": "Jul 2026", "units": 0 },
+        { "month": "Jun 2026", "units": 166 }, { "month": "May 2026", "units": 554 }, { "month": "Apr 2026", "units": 368 },
+        { "month": "Mar 2026", "units": 279 }, { "month": "Feb 2026", "units": 242 }, { "month": "Jan 2026", "units": 124 },
+        { "month": "Dec 2025", "units": 282 }, { "month": "Nov 2025", "units": 279 }, { "month": "Oct 2025", "units": 167 },
+        { "month": "Sep 2025", "units": 100 }
+      ]
+    }
+  },
+  "institution-solar-scan-2023.jpg": {
+    "source": "A scanned, hand-annotated MSEDCL net meter bill a college published for accreditation (May 2023), first page only",
+    "url": "https://kbacw.edu.in/naac/criterion7/7.1.2-Solar-Net-Meter-Bill.pdf",
+    "truth": {
+      "consumerNumber": null,
+      "consumerName": null,
+      "tariffCategory": "LT VII B",
+      "billAmount": 109010,
+      "billingMonth": "May 2023",
+      "monthlyUsage": [
+        { "month": "Apr 2023", "units": 7084 }, { "month": "Mar 2023", "units": 6174 }, { "month": "Feb 2023", "units": 5050 },
+        { "month": "Jan 2023", "units": 3293 }, { "month": "Dec 2022", "units": 3751 }, { "month": "Nov 2022", "units": 4630 },
+        { "month": "Oct 2022", "units": 3933 }, { "month": "Sep 2022", "units": 5123 }, { "month": "Aug 2022", "units": 5883 },
+        { "month": "Jul 2022", "units": 4345 }, { "month": "Jun 2022", "units": 6392 }, { "month": "May 2022", "units": 4947 }
+      ]
+    }
+  },
+  "lt-residential-2026-marathi-phone.jpg": { "copyOf": "lt-residential-2026-marathi.jpg" },
+  "lt-solar-2026-08-phone.jpg": { "copyOf": "lt-solar-2026-08.jpg" }
+}
