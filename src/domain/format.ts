@@ -10,3 +10,5 @@ export const formatNumber = (n: number) => numberFormat.format(n);
 export function istDate(at: Date = new Date()) {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(at);
 }
+
+export const daysAgo = (days: number, from: Date = new Date()) => new Date(from.getTime() - days * 86_400_000);

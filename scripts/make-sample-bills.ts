@@ -7,6 +7,7 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { chromium, type Page } from "@playwright/test";
+import { seedConsumerNumber, seedHistory, SEED_LEADS } from "../prisma/seed-data";
 
 interface Bill {
   name: string;
@@ -214,6 +215,23 @@ async function main() {
     await shoot(page, sample, out);
     const sha = createHash("sha256").update(readFileSync(out)).digest("hex");
     fixtures[sha] = { label: sample.label, file: sample.file, response: sample.response };
+  }
+  // One bill per seeded lead, so what staff see beside each lead's values actually matches.
+  mkdirSync("prisma/seed-bills", { recursive: true });
+  for (const lead of SEED_LEADS) {
+    if (lead.sampleBill || lead.stage === "NEW") continue;
+    const bill: Bill = {
+      name: lead.name,
+      address: `Plot 7, Sample Road, ${lead.town} ${lead.pincode}`,
+      consumer: seedConsumerNumber(lead.code),
+      tariff: lead.tariff,
+      load: lead.loadKw,
+      units: lead.units,
+      amount: lead.bill,
+      month: "Sep 2026",
+      history: history(seedHistory(lead.units)),
+    };
+    await shoot(page, { file: "", label: "", html: billHtml(bill), response: null }, path.join("prisma/seed-bills", `${lead.code}.jpg`));
   }
   await browser.close();
   writeFileSync("src/server/bill-reader/sample-fixtures.json", `${JSON.stringify(fixtures, null, 2)}\n`);
