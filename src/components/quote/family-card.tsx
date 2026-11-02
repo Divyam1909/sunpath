@@ -100,7 +100,9 @@ export function FamilyCard({ facts }: { facts: CardFacts }) {
       const element = canvas.current;
       if (!element) return;
       const fontFamily = getComputedStyle(document.body).fontFamily;
-      await Promise.all([500, 600].map((weight) => document.fonts.load(`${weight} 40px ${fontFamily}`, "सौर ₹")));
+      // A slow or failed font must not cost the customer the card: after a moment it draws with what has loaded.
+      const fonts = Promise.allSettled([500, 600].map((weight) => document.fonts.load(`${weight} 40px ${fontFamily}`, "सौर ₹")));
+      await Promise.race([fonts, new Promise((resolve) => setTimeout(resolve, 1500))]);
       if (cancelled) return;
       drawCard(element, facts, (key, values) => t(key as "heading", values as never), fontFamily);
       element.toBlob((blob) => {
