@@ -130,3 +130,13 @@ test("an old quote keeps its numbers after the rules change", async ({ page }) =
   await page.getByRole("button", { name: "Save settings" }).click();
   await expect(page.getByText("Settings saved.")).toBeVisible();
 });
+
+test("admin can erase a customer's data on request", async ({ page }) => {
+  await signInAsAdmin(page);
+  await page.goto("/staff/leads");
+  await page.getByRole("link", { name: "Ganesh Pawar" }).first().click();
+  await page.getByRole("button", { name: "Erase customer data" }).click();
+  await page.getByRole("button", { name: "Yes, erase permanently" }).click();
+  await expect(page).toHaveURL(/\/staff\/leads$/);
+  await expect(page.getByRole("link", { name: "Ganesh Pawar" })).toHaveCount(0);
+});

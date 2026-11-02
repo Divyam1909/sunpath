@@ -27,7 +27,7 @@ test("lists mask consumer numbers to the last 4 digits", async ({ page }) => {
   await signInAsSales(page);
   await page.goto("/staff/leads");
   await expect(page.getByTestId("lead-row").first()).toBeVisible();
-  const text = await page.locator("table").innerText();
+  const text = await page.locator("table").first().innerText();
   expect(text).not.toContain("410019900881");
   expect(text).toContain("•••• 0881");
 });

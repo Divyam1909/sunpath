@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: sunpath
+          POSTGRES_PASSWORD: sunpath
+          POSTGRES_DB: sunpath
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sunpath"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://sunpath:sunpath@localhost:5432/sunpath
+      DIRECT_URL: postgresql://sunpath:sunpath@localhost:5432/sunpath
+      AUTH_SECRET: ci-only-not-a-real-secret-0123456789
+      AUTH_TRUST_HOST: "true"
+      FILE_SIGNING_SECRET: ci-only-not-a-real-secret-9876543210
+      BILL_READER: mock
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm db:deploy
+      - run: pnpm db:seed
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e --project=desktop --project=mobile --project=security
