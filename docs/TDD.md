@@ -189,7 +189,7 @@ The AI does one job: it reads a bill. It never sets a price, a subsidy, generati
 
 **Reading.** `GeminiBillReader` sends the image with a strict response schema. The model returns a value and a confidence per field, plus `isElectricityBill` and an image-quality flag. The prompt forbids estimating, tells the model to return null for anything it cannot see, and treats text in the image as data, which guards against prompt injection from an uploaded image. Zod then validates the reply again in `parseBillResponse`.
 
-**Tested on the real API.** All six samples went through `gemini-3.5-flash`. The three clear bills gave every value correctly in about 6 seconds. On the deliberately stained bill the model read the rest and returned null for the two hidden fields rather than guessing. The blurry photo and the shop receipt were both rejected. This is synthetic data only: **accuracy on real MSEDCL phone photos is unmeasured** and is the first thing to check in a pilot.
+**Tested on the real API.** All six samples went through `gemini-3.5-flash`. The three clear bills gave every value correctly in about 6 seconds. The deliberately stained bill varies between runs, as a model will: it read the rest and either returned null for the hidden fields or gave a value with low confidence. Both land in front of a person as a highlighted field, which is why the design relies on confirmation rather than on the model being right. The blurry photo and the shop receipt were both rejected. This is synthetic data only: **accuracy on real MSEDCL phone photos is unmeasured** and is the first thing to check in a pilot.
 
 | Failure | What the app does |
 |---|---|
