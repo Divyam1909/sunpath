@@ -49,3 +49,5 @@ next-env.d.ts
 submission.zip
 .claude/
 .playwright-mcp/
+/TDD.pdf
+docs/.tdd.html
