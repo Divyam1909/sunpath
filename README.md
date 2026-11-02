@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sunpath
 
-## Getting Started
+From a rooftop solar enquiry to the subsidy landing in the bank. Built for a Vidarbha solar installer that runs on WhatsApp and Excel: homeowners answer a few questions and upload a bill, AI reads it, sales sees who is worth a visit and what size fits, and the quote goes out the same day as the survey.
 
-First, run the development server:
+**Live app: https://sunpath-virid.vercel.app**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![The sales inbox: leads sorted by score, with reasons and the next step, under the impact panel](docs/screenshots/10-leads-1280.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Demo logins
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Role | Login | Password |
+|---|---|---|
+| Sales | `sales@sunpath.demo` | `sales-demo-1` |
+| Admin | `admin@sunpath.demo` | `admin-demo-1` |
+| Homeowner | `9000030881` | `home-demo-1` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How to review this in 60 seconds
 
-## Learn More
+1. **Be a homeowner.** Open the [live app](https://sunpath-virid.vercel.app) on your phone. Answer the questions, then pick **Clear home bill** under "Trying this out?". Real Gemini reads it in about 10 seconds. Confirm the values and see the result. Try **Tilted, stained photo** to see doubtful fields highlighted, and **Blurry photo** for the re-upload prompt.
+2. **See the quote story.** Open [a sample quote](https://sunpath-virid.vercel.app/en/q/demo-quote-ld-31007), then the same one [in Marathi](https://sunpath-virid.vercel.app/mr/q/demo-quote-ld-31007). Open "How we calculated this" and download the PDF.
+3. **Be sales.** [Sign in](https://sunpath-virid.vercel.app/en/login) as Sales and open **Prashant Wankhede**. Change the tariff and watch the numbers update, then send the quote. Check **Messages** for the mock WhatsApp, and **Projects** for the stuck dashboard.
+4. **See a customer's project.** Open [a status page](https://sunpath-virid.vercel.app/mr/s/demo-status-pr-1002).
+5. **Change the rules.** Sign in as Admin and open **Rules**. Try adding a subsidy rule with overlapping dates.
 
-To learn more about Next.js, take a look at the following resources:
+The live data is shared, so someone else may have already quoted Prashant.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What is real and what is mocked
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Real | Mocked or assumed |
+|---|---|
+| Gemini bill reading, including poor-photo and outage handling | WhatsApp and SMS: rows in an outbox, shown in the app |
+| Subsidy, sizing, payback and scoring from dated rule tables | Payments: the advance is recorded with no money moving |
+| Auth with server-side role checks, private file storage | Prices are placeholders (A05 in the assumptions) |
+| PDF quotes in English, Marathi and Hindi | Sample bills are fictional. Real-bill accuracy is unmeasured |
 
-## Deploy on Vercel
+## Where to look
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| | |
+|---|---|
+| The hard part: pure, tested rules and maths | [src/domain](src/domain) |
+| AI reader and its failure handling | [src/server/bill-reader](src/server/bill-reader) |
+| Design and reasoning | [docs/TDD.md](docs/TDD.md) |
+| Every assumption, with IDs | [docs/ASSUMPTIONS.md](docs/ASSUMPTIONS.md) |
+| Run it yourself | [deployment.md](deployment.md) |
+| Sample bills, served at `/samples` | [public/samples](public/samples) |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Stack
+
+Next.js 16, TypeScript, Tailwind, shadcn/ui, Postgres on Neon, Prisma, Auth.js, Vercel Blob, Gemini, react-pdf, next-intl, Vitest and Playwright. Everything runs on free tiers.
+
+`pnpm submission` builds `submission.zip` with `TDD.pdf` and `deployment.md`.
