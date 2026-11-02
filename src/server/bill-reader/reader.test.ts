@@ -1,8 +1,8 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
-import { readBill, type BillFile, type BillReader } from "./index";
+import { describe, expect, it, vi } from "vitest";
+import { readBill, readerChain, type BillFile, type BillReader } from "./index";
 import { MockBillReader } from "./mock";
 
 const sample = (name: string): BillFile => {
@@ -35,6 +35,24 @@ describe("readBill with the mock reader", () => {
   it("refuses to invent values for a file it does not know", async () => {
     const unknown = { bytes: Buffer.from("x"), mimeType: "image/jpeg", sha256: "nope" };
     expect(await readBill(unknown, 0.75, mock)).toMatchObject({ status: "unavailable" });
+  });
+});
+
+describe("reader order", () => {
+  it("tries the saved sample readings before spending a model request", () => {
+    vi.stubEnv("GEMINI_API_KEY", "test-key");
+    vi.stubEnv("BILL_READER", "auto");
+    expect(readerChain().map((reader) => reader.name)).toEqual(["mock", "gemini", "gemini"]);
+    vi.unstubAllEnvs();
+  });
+
+  it("does not call the model for a sample, and does for anything else", async () => {
+    const read = vi.fn(async () => "not json");
+    const chain = [...mock, fake(read)];
+    await readBill(sample("clear-home-bill.jpg"), 0.75, chain);
+    expect(read).not.toHaveBeenCalled();
+    await readBill({ bytes: Buffer.from("x"), mimeType: "image/jpeg", sha256: "nope" }, 0.75, chain);
+    expect(read).toHaveBeenCalledOnce();
   });
 });
 

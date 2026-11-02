@@ -22,15 +22,15 @@ export type BillReadOutcome =
   | { status: "poor"; reader: string; model: string | null; reason: Extract<BillParseResult, { kind: "poor" }>["reason"] }
   | { status: "unavailable"; detail: string };
 
-function readerChain(): BillReader[] {
+export function readerChain(): BillReader[] {
   const mode = process.env.BILL_READER || "auto";
   const key = process.env.GEMINI_API_KEY;
   if (mode === "mock" || !key) return [new MockBillReader()];
   // The free tier allows few requests a day per model, so a busy day moves on to the lighter model.
   const models = [process.env.GEMINI_MODEL || "gemini-3.5-flash", process.env.GEMINI_FALLBACK_MODEL || "gemini-3.5-flash-lite"];
   const gemini = [...new Set(models)].map((model) => new GeminiBillReader(key, model));
-  // In auto mode a Gemini outage still lets sample bills work; real bills fall through to manual entry.
-  return mode === "gemini" ? gemini : [...gemini, new MockBillReader()];
+  // In auto mode a sample bill is answered from its saved reading, so trying the demo spends no quota.
+  return mode === "gemini" ? gemini : [new MockBillReader(), ...gemini];
 }
 
 /** Never throws: a read that cannot be done becomes `unavailable`, and the lead goes to manual entry. */

@@ -8,14 +8,19 @@ import { averageFromUsage, usageFromBill } from "@/domain/usage";
 import { Prisma } from "@/generated/prisma/client";
 import { CONSENT_PURPOSE, CONSENT_VERSION, SQM_PER_SQFT, type LeadInput } from "@/lib/validation";
 import { readBill } from "@/server/bill-reader";
+import { isSampleBill } from "@/server/bill-reader/mock";
 import { db } from "@/server/db";
 import { queueMessage } from "@/server/outbox";
+import { allowRequest, clientIp } from "@/server/rate-limit";
 import { getSettings } from "@/server/settings";
 import { fileStore } from "@/server/storage";
 import { FILE_EXTENSIONS } from "@/server/uploads";
 import { newLeadCode, newToken } from "@/server/tokens";
 
 const json = (value: unknown) => value as Prisma.InputJsonValue;
+
+// The free tier allows few reads a day, so one address cannot use them all up.
+const REAL_READS_PER_DAY = 5;
 
 function assessmentFields(assessment: LeadAssessment) {
   return {
@@ -86,7 +91,10 @@ export async function uploadBill(leadId: string, bytes: Buffer, mimeType: string
   const storageKey = `bills/${leadId}/${newToken()}.${FILE_EXTENSIONS[mimeType]}`;
   await fileStore.put(storageKey, bytes, mimeType);
 
-  const outcome = await readBill({ bytes, mimeType, sha256 }, settings.score.lowConfidenceBelow);
+  const withinLimit = isSampleBill(sha256) || (await allowRequest(`read:ip:${await clientIp()}`, REAL_READS_PER_DAY, 86_400));
+  const outcome = withinLimit
+    ? await readBill({ bytes, mimeType, sha256 }, settings.score.lowConfidenceBelow)
+    : ({ status: "unavailable", detail: "Daily read limit reached" } as const);
   const base = { leadId, purpose, storageKey, mimeType, sizeBytes: bytes.length, sha256 };
 
   if (outcome.status === "read") {

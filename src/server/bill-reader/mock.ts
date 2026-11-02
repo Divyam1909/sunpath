@@ -2,6 +2,8 @@ import type { BillFile, BillReader } from "./index";
 import { BillReaderUnavailable } from "./index";
 import fixtures from "./sample-fixtures.json";
 
+export const isSampleBill = (sha256: string) => sha256 in fixtures;
+
 /**
  * Deterministic reader for tests, CI and a missing API key. It recognises the sample bills by hash.
  * It refuses anything else rather than inventing values for a real bill.
